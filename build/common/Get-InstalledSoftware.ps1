@@ -1,3 +1,11 @@
+<#
+#>
+[CmdletBinding()]
+param (
+    [Parameter()]
+    [System.String] $Path = $PWD
+)
+
 Function Get-InstalledSoftware {
     <#
         .SYNOPSIS
@@ -52,6 +60,11 @@ Function Get-InstalledSoftware {
     }
 }
 
-# Output the installed software
-$software = Get-InstalledSoftware
-$software | Sort-Object -Property Publisher, Version
+# Output the installed software to the pipeline for Packer output
+$software = Get-InstalledSoftware | Sort-Object -Property Publisher, @{ Expression = { [System.Version]$_.Version }; Descending = $true }
+Write-Host $software
+
+# Output the software list to a CSV file that Packer can upload back to the runner
+$OutFile = Join-Path -Path $Path -ChildPath "InstalledSoftware.csv"
+Write-Host "================ Export software list to: $OutFile."
+$software | ConvertTo-Csv -Delimiter ","  -NoTypeInformation | Out-File -FilePath $OutFile -Force
