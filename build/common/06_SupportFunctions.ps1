@@ -89,12 +89,18 @@ Function Set-Repository {
 
 Function Install-RequiredModules {
     # Install the Evergreen module; https://github.com/aaronparker/Evergreen
-    Write-Host "================ Installing module: Evergreen"
-    Install-Module -Name Evergreen -AllowClobber
-
     # Install the VcRedist module; https://docs.stealthpuppy.com/vcredist/
-    Write-Host "================ Installing module: VcRedist"
-    Install-Module -Name VcRedist -AllowClobber
+    ForEach ($module in "Evergreen", "VcRedist") {
+        Write-Host "================ Checking module: $module"
+        $installedModule = Get-Module -Name $module -ListAvailable | `
+            Sort-Object -Property @{ Expression = { [System.Version]$_.Version }; Descending = $true } | `
+            Select-Object -First 1
+        $publishedModule = Find-Module -Name $module
+        If (($Null -eq $installedModule) -or ([System.Version]$publishedModule.Version -gt [System.Version]$installedModule.Version)) {
+            Write-Host "================ Installing module: $module"
+            Install-Module -Name $module -Force
+        }
+    }
 }
 #endregion Functions
 

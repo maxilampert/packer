@@ -21,30 +21,35 @@ Function Install-FSLogix ($Path) {
         If (!(Test-Path $Path)) { New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null }
 
         # Download
-        $OutFile = $(Split-Path -Path $FSLogix.URI -Leaf)
-        Write-Host "================ Downloading to: $Path\$OutFile"
+        $OutFile = Join-Path -Path $Path -ChildPath (Split-Path -Path $FSLogix.URI -Leaf)
+        Write-Host "================ Downloading to: $OutFile"
         try {
-            Invoke-WebRequest -Uri $FSLogix.URI -OutFile "$Path\$OutFile" -UseBasicParsing
+            Invoke-WebRequest -Uri $FSLogix.URI -OutFile $OutFile -UseBasicParsing
             If (Test-Path -Path $OutFile) { Write-Host "================ Downloaded: $OutFile." }
         }
         catch {
             Throw "Failed to download FSLogix Apps"
         }
 
-        # Unpack and install
-        Expand-Archive -Path "$Path\$OutFile" -DestinationPath $Path -Force
-        Write-Host "================ Installing FSLogix agent"
+        # Unpack
         try {
-            Invoke-Process -FilePath "$Path\x64\Release\FSLogixAppsSetup.exe" -ArgumentList "/install /quiet /norestart" -Verbose
+            Write-Host "================ Unpacking: $OutFile."
+            Expand-Archive -Path $OutFile -DestinationPath $Path -Force
         }
         catch {
-            Throw "Failed to install the FSlogix Apps agent."
+            Throw "Failed to unpack: $OutFile."
         }
-        try {
-            Invoke-Process -FilePath "$Path\x64\Release\FSLogixAppsRuleEditorSetup.exe" -ArgumentList "/install /quiet /norestart" -Verbose
-        }
-        catch {
-            Throw "Failed to install the FSlogix Apps Rules Editor."
+        
+        # Install
+        ForEach ($file in "FSLogixAppsSetup.exe", "FSLogixAppsRuleEditorSetup.exe") {
+            try {
+                $installer = (Get-ChildItem -Path $Path -Recurse -Filter $file) -match "x64"
+                Write-Host "================ Installing: $($installer.FullName)."
+                Invoke-Process -FilePath $installer.FullName -ArgumentList "/install /quiet /norestart" -Verbose
+            }
+            catch {
+                Throw "Failed to install: $($installer.FullName)."
+            }
         }
         Write-Host "================ Done"
     }
