@@ -137,5 +137,5 @@ If (Test-Path -Path env:AppsUrl) {
 
 # Stop Logging
 Stop-Transcript -ErrorAction SilentlyContinue
-Write-Host "Complete: $($MyInvocation.MyCommand)."
+Write-Host "================ Complete: LoBApps."
 #endregion

@@ -243,5 +243,5 @@ Install-MicrosoftOneDrive -Path "$Target\OneDrive"
 
 # Stop Logging
 Stop-Transcript -ErrorAction SilentlyContinue
-Write-Host "================ Complete: $($MyInvocation.MyCommand)."
+Write-Host "================ Complete: Microsoft365Apps."
 #endregion

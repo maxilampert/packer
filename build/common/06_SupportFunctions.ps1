@@ -3,16 +3,10 @@
         Install evergreen core applications.
 #>
 [CmdletBinding()]
-Param (
-    [Parameter(Mandatory = $False)]
-    [System.String] $Log = "$env:SystemRoot\Logs\PackerImagePrep.log",
-
-    [Parameter(Mandatory = $False)]
-    [System.String] $Target = "$env:SystemDrive\Apps"
-)
+Param ()
 
 #region Functions
-Function Invoke-Process {
+Function Global:Invoke-Process {
     <#PSScriptInfo 
     .VERSION 1.4 
     .GUID b787dc5d-8d11-45e9-aeef-5cf3a1f690de 
@@ -87,40 +81,27 @@ Function Invoke-Process {
 Function Set-Repository {
     # Trust the PSGallery for modules
     If (Get-PSRepository | Where-Object { $_.Name -eq "PSGallery" -and $_.InstallationPolicy -ne "Trusted" }) {
-        Write-Verbose "Trusting the repository: PSGallery"
+        Write-Host "================ Trusting the repository: PSGallery"
         Install-PackageProvider -Name "NuGet" -MinimumVersion 2.8.5.208 -Force
         Set-PSRepository -Name "PSGallery" -InstallationPolicy "Trusted"
     }
 }
 
 Function Install-RequiredModules {
-    Write-Host "================ Installing required modules"
     # Install the Evergreen module; https://github.com/aaronparker/Evergreen
+    Write-Host "================ Installing module: Evergreen"
     Install-Module -Name Evergreen -AllowClobber
 
     # Install the VcRedist module; https://docs.stealthpuppy.com/vcredist/
+    Write-Host "================ Installing module: VcRedist"
     Install-Module -Name VcRedist -AllowClobber
 }
 #endregion Functions
 
 
 #region Script logic
-# Set $VerbosePreference so full details are sent to the log; Make Invoke-WebRequest faster
-$VerbosePreference = "Continue"
-$ProgressPreference = "SilentlyContinue"
-
-# Start logging
-Start-Transcript -Path $Log -Append -ErrorAction SilentlyContinue
-
-# Set TLS to 1.2; Create target folder
-[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-New-Item -Path $Target -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
-
 # Run tasks/install apps
 Set-Repository
 Install-RequiredModules
-
-# Stop Logging
-Stop-Transcript -ErrorAction SilentlyContinue
-Write-Host "================ Complete: $($MyInvocation.MyCommand)."
+Write-Host "================ Complete: SupportFunctions."
 #endregion

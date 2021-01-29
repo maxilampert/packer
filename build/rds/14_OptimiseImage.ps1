@@ -25,7 +25,7 @@ Function Invoke-CitrixOptimizer ($Path) {
     If (!(Test-Path $Path)) { New-Item -Path $Path -ItemType Directory -Force -ErrorAction SilentlyContinue > $Null }
 
     Write-Host "=============== Downloading Citrix Optimizer"
-    $url = "https://raw.githubusercontent.com/aaronparker/build-azure/main/tools/rds/CitrixOptimizer.zip"
+    $url = "https://raw.githubusercontent.com/aaronparker/packer/main/tools/rds/optimizer/CitrixOptimizer.zip"
     Invoke-WebRequest -Uri $url -OutFile "$Path\$(Split-Path $url -Leaf)" -UseBasicParsing
     Expand-Archive -Path "$Path\$(Split-Path $url -Leaf)" -DestinationPath $Path -Force
 
@@ -34,13 +34,13 @@ Function Invoke-CitrixOptimizer ($Path) {
     If (!(Test-Path $Path)) { New-Item -Path "$Path\Templates" -ItemType Directory -Force -ErrorAction SilentlyContinue > $Null }
     Switch -Regex ((Get-WmiObject Win32_OperatingSystem).Caption) {
         "Microsoft Windows Server*" {
-            $url = "https://raw.githubusercontent.com/aaronparker/build-azure/main/tools/rds/WindowsServer2019-Defender-Azure.xml"
+            $url = "https://raw.githubusercontent.com/aaronparker/packer/main/tools/rds/optimizer/WindowsServer2019-Defender-Azure.xml"
         }
         "Microsoft Windows 10 Enterprise for Virtual Desktops" {
-            $url = "https://raw.githubusercontent.com/aaronparker/build-azure/main/tools/rds/Windows101909-Defender-Azure.xml"
+            $url = "https://raw.githubusercontent.com/aaronparker/packer/main/tools/rds/optimizer/Windows101909-Defender-Azure.xml"
         }
         "Microsoft Windows 10*" {
-            $url = "https://raw.githubusercontent.com/aaronparker/build-azure/main/tools/rds/Windows101909-Defender-Azure.xml"
+            $url = "https://raw.githubusercontent.com/aaronparker/packer/main/tools/rds/optimizer/Windows101909-Defender-Azure.xml"
         }
     }
     Invoke-WebRequest -Uri $url -OutFile "$Path\Templates\$(Split-Path $url -Leaf)" -UseBasicParsing
@@ -59,7 +59,7 @@ Function Invoke-Bisf ($Path) {
     Invoke-WebRequest -Uri $url -OutFile "$Path\$(Split-Path $url -Leaf)" -UseBasicParsing
     Expand-Archive -Path "$Path\$(Split-Path $url -Leaf)" -DestinationPath "$Path" -Force
 
-    $url = "https://raw.githubusercontent.com/aaronparker/build-azure/main/tools/rds/BisfConfig.zip"
+    $url = "https://raw.githubusercontent.com/aaronparker/packer/main/tools/rds/bisf/BisfConfig.zip"
     Invoke-WebRequest -Uri $url -OutFile "$Path\$(Split-Path $url -Leaf)" -UseBasicParsing
     Expand-Archive -Path "$Path\$(Split-Path $url -Leaf)" -DestinationPath "$Path" -Force
 
@@ -76,25 +76,23 @@ Function Invoke-Bisf ($Path) {
 
 Function Disable-ScheduledTasks {
     <#
-- NOTE:           Original script details here:
-- TITLE:          Microsoft Windows 1909  VDI/WVD Optimization Script
-- AUTHORED BY:    Robert M. Smith and Tim Muessig (Microsoft Premier Services)
-- AUTHORED DATE:  11/19/2019
-- LAST UPDATED:   04/10/2020
-- PURPOSE:        To automatically apply setting referenced in white paper:
-                  "Optimizing Windows 10, Build 1909, for a Virtual Desktop Infrastructure (VDI) role"
-                  URL: TBD
+        - NOTE:           Original script details here:
+        - TITLE:          Microsoft Windows 1909  VDI/WVD Optimization Script
+        - AUTHORED BY:    Robert M. Smith and Tim Muessig (Microsoft Premier Services)
+        - AUTHORED DATE:  11/19/2019
+        - LAST UPDATED:   04/10/2020
+        - PURPOSE:        To automatically apply setting referenced in white paper:
+                        "Optimizing Windows 10, Build 1909, for a Virtual Desktop Infrastructure (VDI) role"
+                        URL: TBD
 
-- REFERENCES:
-https://social.technet.microsoft.com/wiki/contents/articles/7703.powershell-running-executables.aspx
-https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.management/remove-item?view=powershell-6
-https://blogs.technet.microsoft.com/secguide/2016/01/21/lgpo-exe-local-group-policy-object-utility-v1-0/
-https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.management/set-service?view=powershell-6
-https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.management/remove-item?view=powershell-6
-https://msdn.microsoft.com/en-us/library/cc422938.aspx
-#>
-
-    #Set-Location $PSScriptRoot
+        - REFERENCES:
+        https://social.technet.microsoft.com/wiki/contents/articles/7703.powershell-running-executables.aspx
+        https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.management/remove-item?view=powershell-6
+        https://blogs.technet.microsoft.com/secguide/2016/01/21/lgpo-exe-local-group-policy-object-utility-v1-0/
+        https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.management/set-service?view=powershell-6
+        https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.management/remove-item?view=powershell-6
+        https://msdn.microsoft.com/en-us/library/cc422938.aspx
+    #>
 
     #region Disable Scheduled Tasks
     # This section is for disabling scheduled tasks.  If you find a task that should not be disabled
@@ -111,7 +109,7 @@ https://msdn.microsoft.com/en-us/library/cc422938.aspx
         $EnabledScheduledTasks = Get-ScheduledTask | Where-Object { $_.State -ne "Disabled" }
         Foreach ($Item in $SchTasksList) {
             $Task = (($Item -split ":")[0]).Trim()
-            $EnabledScheduledTasks | Where-Object { $_.TaskName -like "*$Task*" } | Disable-ScheduledTask
+            $EnabledScheduledTasks | Where-Object { $_.TaskName -like "*$Task*" } | Disable-ScheduledTask -ErrorAction "SilentlyContinue"
         }
     }
     #endregion
@@ -131,8 +129,7 @@ Function Disable-WindowsTraces {
         "HKLM:\SYSTEM\CurrentControlSet\Control\WMI\Autologger\WinPhoneCritical\")
     If ($DisableAutologgers.count -gt 0) {
         Foreach ($Item in $DisableAutologgers) {
-            Write-Host "Processing $Item"
-            New-ItemProperty -Path "$Item" -Name "Start" -PropertyType "DWORD" -Value "0" -Force
+            New-ItemProperty -Path "$Item" -Name "Start" -PropertyType "DWORD" -Value "0" -Force -ErrorAction "SilentlyContinue"
         }
     }
     #endregion
@@ -149,16 +146,15 @@ Function Disable-Services {
         "XblGameSave", "XboxGipSvc", "XboxNetApiSvc", "AdobeARMservice")
     If ($ServicesToDisable.count -gt 0) {
         Foreach ($Item in $ServicesToDisable) {
-            Write-Host "Processing $Item"
-            Stop-Service $Item -Force -ErrorAction SilentlyContinue
-            Set-Service $Item -StartupType Disabled 
+            Stop-Service -Name $Item -Force -ErrorAction "SilentlyContinue"
+            Set-Service -Name $Item -StartupType "Disabled" -ErrorAction "SilentlyContinue"
         }
     }
     #endregion
 }
 
 Function Disable-SystemRestore {
-    Disable-ComputerRestore -Drive "$($env:SystemDrive)\"
+    Disable-ComputerRestore -Drive "$($env:SystemDrive)\" -ErrorAction "SilentlyContinue"
 }
 
 Function Optimize-Network {
@@ -173,7 +169,6 @@ Function Optimize-Network {
 
     # NIC Advanced Properties performance settings for network biased environments
     # Set-NetAdapterAdvancedProperty -DisplayName "Send Buffer Size" -DisplayValue 4MB
-
     <#
         Note that the above setting is for a Microsoft Hyper-V VM.  You can adjust these values in your environment...
         by querying in PowerShell using Get-NetAdapterAdvancedProperty, and then adjusting values using the...
@@ -213,8 +208,7 @@ Function Invoke-Cleanmgr {
         "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VolumeCaches\Windows Upgrade Log Files\")
     If ($DiskCleanupSettings.count -gt 0) {
         Foreach ($Item in $DiskCleanupSettings) {
-            Write-Host "Processing $Item"
-            New-ItemProperty -Path "$Item" -Name "StateFlags0011" -PropertyType "DWORD" -Value "2" -Force
+            New-ItemProperty -Path "$Item" -Name "StateFlags0011" -PropertyType "DWORD" -Value "2" -Force -ErrorAction "SilentlyContinue"
         }
     }
     Write-Host "=============== Running Disk Cleanup"
@@ -230,15 +224,15 @@ Function Remove-TempFiles {
 
     Write-Host "========== Remove temp files."
     $FilesToRemove = Get-ChildItem -Path "$env:SystemDrive\" -Include *.tmp, *.etl, *.evtx -Recurse -Force -ErrorAction SilentlyContinue
-    $FilesToRemove | Remove-Item -ErrorAction SilentlyContinue
+    $FilesToRemove | Remove-Item -ErrorAction "SilentlyContinue"
 
     # Delete not in-use anything in the C:\Windows\Temp folder
     Write-Host "========== Clean $env:SystemRoot\Temp."
-    Remove-Item -Path $env:windir\Temp\* -Recurse -Force -ErrorAction SilentlyContinue
+    Remove-Item -Path $env:windir\Temp\* -Recurse -Force -ErrorAction "SilentlyContinue"
 
     # Delete not in-use anything in your %temp% folder
     Write-Host "========== Clean $env:Temp."
-    Remove-Item -Path $env:TEMP\* -Recurse -Force -ErrorAction SilentlyContinue
+    Remove-Item -Path $env:TEMP\* -Recurse -Force -ErrorAction "SilentlyContinue"
     #endregion
 }
 
@@ -271,6 +265,7 @@ New-Item -Path $Target -ItemType "Directory" -Force -ErrorAction "SilentlyContin
 # Seal image tasks
 Invoke-WindowsDefender
 # Invoke-CitrixOptimizer -Path "$Target\CitrixOptimizer"
+# Invoke-Bisf -Path "$Target\Bisf"
 Disable-ScheduledTasks
 Disable-WindowsTraces
 Disable-SystemRestore
@@ -289,4 +284,5 @@ reg delete HKLM\Software\Policies\Microsoft\WindowsStore /v AutoDownload /f
 
 # Stop Logging
 Stop-Transcript -ErrorAction SilentlyContinue
+Write-Host "================ Complete: OptimiseImage."
 #endregion

@@ -223,4 +223,4 @@ Set-RegionSettings -Path $Target -Locale $Locale
 
 # Stop Logging
 Stop-Transcript -ErrorAction SilentlyContinue
-Write-Host "Complete: Rds-RegionLanguage.ps1."
+Write-Host "================ Complete: RegionLanguage."

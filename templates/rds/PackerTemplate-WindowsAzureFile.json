@@ -116,7 +116,7 @@
         {
             "type": "powershell",
             "scripts": [
-                "build/rds/14_Optimise-Image.ps1"
+                "build/rds/14_OptimiseImage.ps1"
             ]
         },
         {

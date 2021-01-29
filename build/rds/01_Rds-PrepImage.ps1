@@ -13,4 +13,4 @@ Write-Output "====== Disable Windows Store updates"
 reg add HKLM\Software\Policies\Microsoft\Windows\CloudContent /v DisableWindowsConsumerFeatures /d 1 /t REG_DWORD /f
 reg add HKLM\Software\Policies\Microsoft\WindowsStore /v AutoDownload /d 2 /t REG_DWORD /f
 
-Write-Host "Complete: Rds-PrepImage.ps1."
+Write-Host "================ Complete: PrepImage."

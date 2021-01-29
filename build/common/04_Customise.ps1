@@ -49,5 +49,5 @@ Set-Customise -Path "$Target\Customise"
 
 # Stop Logging
 Stop-Transcript -ErrorAction SilentlyContinue
-Write-Host "Complete: Rds-Customise.ps1."
+Write-Host "================ Complete: Customise."
 #endregion

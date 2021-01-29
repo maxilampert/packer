@@ -95,5 +95,5 @@ Install-MicrosoftEdge -Path "$Target\Edge"
 
 # Stop Logging
 Stop-Transcript -ErrorAction SilentlyContinue
-Write-Host "================ Complete: $($MyInvocation.MyCommand)."
+Write-Host "================ Complete: MicrosoftEdge."
 #endregion

@@ -92,4 +92,4 @@ Set-Roles
 
 # Stop Logging
 Stop-Transcript -ErrorAction SilentlyContinue
-Write-Host "Complete: Rds-Roles.ps1."
+Write-Host "================ Complete: Roles."

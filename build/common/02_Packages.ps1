@@ -170,4 +170,4 @@ Install-Packages -Path $Target -PackagesUrl $Env:PackagesUrl
 
 # Stop Logging
 Stop-Transcript -ErrorAction SilentlyContinue
-Write-Host "Complete: Rds-Packages.ps1."
+Write-Host "================ Complete: Packages."
