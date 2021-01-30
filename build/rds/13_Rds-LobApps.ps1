@@ -123,9 +123,6 @@ Function Install-LobApps ($Path, $AppsUrl) {
 $VerbosePreference = "Continue"
 $ProgressPreference = "SilentlyContinue"
 
-# Start logging
-Start-Transcript -Path $Log -Append -ErrorAction SilentlyContinue
-
 # Set TLS to 1.2; Create target folder
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 New-Item -Path $Target -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
@@ -134,8 +131,5 @@ New-Item -Path $Target -ItemType "Directory" -Force -ErrorAction "SilentlyContin
 If (Test-Path -Path env:AppsUrl) {
     Install-LobApps -Path $Target -AppsUrl $env:AppsUrl
 }
-
-# Stop Logging
-Stop-Transcript -ErrorAction SilentlyContinue
 Write-Host "================ Complete: LoBApps."
 #endregion

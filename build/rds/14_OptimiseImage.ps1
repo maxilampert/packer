@@ -327,9 +327,6 @@ Function Global:Clear-WinEvent {
 $VerbosePreference = "Continue"
 $ProgressPreference = "SilentlyContinue"
 
-# Start logging
-Start-Transcript -Path $Log -Append -ErrorAction SilentlyContinue
-
 # Set TLS to 1.2; Create target folder
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 New-Item -Path $Target -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
@@ -353,8 +350,5 @@ Set-MpPreference -DisableRealtimeMonitoring $false
 Write-Output "====== Enable Windows Store updates"
 reg delete HKLM\Software\Policies\Microsoft\Windows\CloudContent /v DisableWindowsConsumerFeatures /f
 reg delete HKLM\Software\Policies\Microsoft\WindowsStore /v AutoDownload /f
-
-# Stop Logging
-Stop-Transcript -ErrorAction SilentlyContinue
 Write-Host "================ Complete: OptimiseImage."
 #endregion

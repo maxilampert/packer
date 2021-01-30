@@ -27,6 +27,12 @@
             "tenant_id": "{{user `tenant_id`}}",
             "managed_image_name": "{{user `image_offer`}}-{{user `image_sku`}}-{{user `image_date`}}",
             "managed_image_resource_group_name": "{{user `managed_image_resource_group_name`}}",
+            "build_resource_group_name": "rg-ImageBuild-AustraliaEast",
+            "build_key_vault_name": "stpyimageaustraliaeast",
+            "private_virtual_network_with_public_ip": "vnet-ImageBuild-AustraliaEast",
+            "virtual_network_name": "vnet-ImageBuild-AustraliaEast",
+            "virtual_network_subnet_name": "subnet-Packer",
+            "virtual_network_resource_group_name": "rg-ImageBuild-AustraliaEast",
             "os_type": "Windows",
             "image_publisher": "{{user `image_publisher`}}",
             "image_offer": "{{user `image_offer`}}",
@@ -55,17 +61,12 @@
                 "Locale={{user `Locale`}}",
                 "PackagesUrl={{user `PackagesUrl`}}"
             ],
-            "inline": [
-                "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12",
-                "Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/aaronparker/packer/main/build/rds/01_Rds-PrepImage.ps1'))",
-                "Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/aaronparker/packer/main/build/common/02_Packages.ps1'))",
-                "Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/aaronparker/packer/main/build/common/03_RegionLanguage.ps1'))",
-                "Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/aaronparker/packer/main/build/common/04_Customise.ps1'))",
-                "Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/aaronparker/packer/main/build/rds/05_Rds-Roles.ps1'))"
+            "scripts": [
+                "build/rds/01_Rds-PrepImage.ps1",
+                "build/common/02_Packages.ps1",
+                "build/common/03_RegionLanguage.ps1",
+                "build/rds/05_Rds-Roles.ps1"
             ]
-        },
-        {
-            "type": "windows-restart"
         },
         {
             "type": "windows-update",
@@ -79,15 +80,14 @@
         },
         {
             "type": "powershell",
-            "inline": [
-                "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12",
-                "Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/aaronparker/packer/main/build/common/06_SupportFunctions.ps1'))",
-                "Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/aaronparker/packer/main/build/rds/07_MicrosoftVcRedists.ps1'))",
-                "Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/aaronparker/packer/main/build/rds/08_MicrosoftFSLogixApps.ps1'))",
-                "Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/aaronparker/packer/main/build/rds/09_MicrosoftEdge.ps1'))",
-                "Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/aaronparker/packer/main/build/rds/10_Microsoft365Apps.ps1'))",
-                "Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/aaronparker/packer/main/build/rds/11_Wvd-Agents.ps1'))",
-                "Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/aaronparker/packer/main/build/rds/12_AdobeAcrobatReaderDC.ps1'))"
+            "scripts": [
+                "build/common/06_SupportFunctions.ps1",
+                "build/rds/07_MicrosoftVcRedists.ps1",
+                "build/rds/08_MicrosoftFSLogixApps.ps1",
+                "build/rds/09_MicrosoftEdge.ps1",
+                "build/rds/10_Microsoft365Apps.ps1",
+                "build/rds/11_Wvd-Agents.ps1",
+                "build/rds/12_AdobeAcrobatReaderDC.ps1"
             ]
         },
         {
@@ -98,9 +98,8 @@
             "environment_vars": [
                 "AppsUrl={{user `AppsUrl`}}"
             ],
-            "inline": [
-                "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12",
-                "Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/aaronparker/packer/main/build/rds/13_Rds-LobApps.ps1'))"
+            "scripts": [
+                "build/rds/13_Rds-LobApps.ps1"
             ]
         },
         {
@@ -118,9 +117,13 @@
         },
         {
             "type": "powershell",
+            "scripts": [
+                "build/rds/14_OptimiseImage.ps1"
+            ]
+        },
+        {
+            "type": "powershell",
             "inline": [
-                "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12",
-                "Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/aaronparker/packer/main/build/rds/14_OptimiseImage.ps1'))",
                 "If (Get-Service -Name RdAgent -ErrorAction SilentlyContinue) { Set-Service RdAgent -StartupType Disabled }",
                 "If (Get-Service -Name WindowsAzureTelemetryService -ErrorAction SilentlyContinue) { Set-Service WindowsAzureTelemetryService -StartupType Disabled }",
                 "If (Get-Service -Name WindowsAzureGuestAgent -ErrorAction SilentlyContinue) { Set-Service WindowsAzureGuestAgent -StartupType Disabled }",
@@ -132,21 +135,16 @@
         },
         {
             "type": "powershell",
-            "inline": [
-                "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12",
-                "Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/aaronparker/packer/main/build/common/Get-InstalledSoftware.ps1'))",
-                "Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/aaronparker/packer/main/build/common/Sysprep-Image.ps1'))"
+            "scripts": [
+                "build/common/Get-InstalledSoftware.ps1",
+                "build/common/Sysprep-Image.ps1"
             ]
         }
     ],
     "post-processors": [
         {
             "type": "manifest",
-            "output": "packer-manifest-{{user `image_publisher`}}-{{user `image_offer`}}-{{user `image_sku`}}-{{user `image_date`}}.json",
-            "strip_path": true,
-            "custom_data": {
-                "software": "{{user `software`}}"
-            }
+            "output": "packer-manifest-{{user `image_publisher`}}-{{user `image_offer`}}-{{user `image_sku`}}-{{user `image_date`}}.json"
         }
     ]
 }

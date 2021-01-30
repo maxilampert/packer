@@ -158,16 +158,10 @@ Function Install-Packages ($Path, $PackagesUrl) {
 $VerbosePreference = "Continue"
 $ProgressPreference = "SilentlyContinue"
 
-# Start logging
-Start-Transcript -Path $Log -Append -ErrorAction SilentlyContinue
-
 # Set TLS to 1.2; Create target folder
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 New-Item -Path $Target -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
 
 # Run tasks
 Install-Packages -Path $Target -PackagesUrl $Env:PackagesUrl
-
-# Stop Logging
-Stop-Transcript -ErrorAction SilentlyContinue
 Write-Host "================ Complete: Packages."

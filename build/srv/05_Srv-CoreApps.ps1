@@ -182,8 +182,6 @@ Function Install-MicrosoftEdge ($Path) {
 $VerbosePreference = "Continue"
 $ProgressPreference = "SilentlyContinue"
 
-# Start logging
-Start-Transcript -Path $Log -Append -ErrorAction SilentlyContinue
 If (!(Test-Path $Target)) { New-Item -Path $Target -Type Directory -Force -ErrorAction SilentlyContinue }
 
 # Set TLS to 1.2; Create target folder
@@ -195,8 +193,5 @@ Set-Repository
 Install-RequiredModules
 Install-VcRedistributables -Path "$Target\VcRedist"
 Install-MicrosoftEdge -Path "$Target\Edge"
-
-# Stop Logging
-Stop-Transcript -ErrorAction SilentlyContinue
 Write-Host "================ Complete: $($MyInvocation.MyCommand)."
 #endregion
