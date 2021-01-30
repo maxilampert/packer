@@ -41,20 +41,13 @@ Function Install-FSLogix ($Path) {
         }
         
         # Install
-        If (Test-Path -Path "$Path\x64\Release\FSLogixAppsSetup.exe") {
-            Write-Host "Found: $Path\x64\Release\FSLogixAppsSetup.exe"
-        }
-        Else {
-            Write-Host "Failed to find: $Path\x64\Release\FSLogixAppsSetup.exe"
-        }
         ForEach ($file in "FSLogixAppsSetup.exe", "FSLogixAppsRuleEditorSetup.exe") {
-            $installer = (Get-ChildItem -Path $Path -Recurse -Filter $file) -match "x64"
+            $installer = Get-ChildItem -Path $Path -Recurse -Include $file | Where-Object { $_.Directory -match "x64" }
             If ($Null -eq $installer) {
                 Write-Host "================ Failed to find installer: $file in $Path."
             }
             Else {
                 try {
-                    Write-Host $installer
                     Write-Host "================ Installing: $($installer.FullName)."
                     Invoke-Process -FilePath $installer.FullName -ArgumentList "/install /quiet /norestart" -Verbose
                 }
