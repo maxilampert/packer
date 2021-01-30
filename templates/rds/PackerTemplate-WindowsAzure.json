@@ -47,6 +47,7 @@
             "winrm_timeout": "5m",
             "winrm_username": "{{user `winrmuser`}}",
             "azure_tags": {
+                "CreatedDate": "{{user `image_date`}}",
                 "Function": "Gold image",
                 "Type": "WindowsVirtualDesktop",
                 "Operating System": "{{user `image_publisher`}}-{{user `image_offer`}}-{{user `image_sku`}}",
@@ -67,6 +68,7 @@
                 "build/rds/01_Rds-PrepImage.ps1",
                 "build/common/02_Packages.ps1",
                 "build/common/03_RegionLanguage.ps1",
+                "build/common/04_Customise.ps1",
                 "build/rds/05_Rds-Roles.ps1"
             ]
         },
