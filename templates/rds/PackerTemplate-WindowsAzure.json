@@ -29,7 +29,7 @@
             "managed_image_resource_group_name": "{{user `managed_image_resource_group_name`}}",
             "build_resource_group_name": "rg-ImageBuild-AustraliaEast",
             "build_key_vault_name": "stpyimageaustraliaeast",
-            "private_virtual_network_with_public_ip": "vnet-ImageBuild-AustraliaEast",
+            "private_virtual_network_with_public_ip": true,
             "virtual_network_name": "vnet-ImageBuild-AustraliaEast",
             "virtual_network_subnet_name": "subnet-Packer",
             "virtual_network_resource_group_name": "rg-ImageBuild-AustraliaEast",
