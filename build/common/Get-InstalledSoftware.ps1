@@ -3,7 +3,7 @@
 [CmdletBinding()]
 param (
     [Parameter()]
-    [System.String] $Path = $PWD
+    [System.String] $Path = "$env:SystemRoot\Temp\InstalledSoftware.csv"
 )
 
 Function Get-InstalledSoftware {
@@ -65,6 +65,5 @@ $software = Get-InstalledSoftware | Sort-Object -Property Publisher, @{ Expressi
 Write-Host $software
 
 # Output the software list to a CSV file that Packer can upload back to the runner
-$OutFile = Join-Path -Path $Path -ChildPath "InstalledSoftware.csv"
-Write-Host "================ Export software list to: $OutFile."
-$software | ConvertTo-Csv -Delimiter ","  -NoTypeInformation | Out-File -FilePath $OutFile -Force
+Write-Host "================ Export software list to: $Path."
+$software | ConvertTo-Csv -Delimiter ","  -NoTypeInformation | Out-File -FilePath $Path -Force

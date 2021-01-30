@@ -143,6 +143,13 @@
                 "build/common/Get-InstalledSoftware.ps1",
                 "build/common/Sysprep-Image.ps1"
             ]
+        },
+        {
+            "type": "file",
+            "direction": "download",
+            "max_retries": 2,
+            "source": "C:/Windows/Temp/InstalledSoftware.csv",
+            "destination": "{{env `System_DefaultWorkingDirectory`}}\\InstalledSoftware.csv"
         }
     ],
     "post-processors": [
