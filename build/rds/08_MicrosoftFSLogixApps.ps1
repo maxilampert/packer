@@ -49,6 +49,7 @@ Function Install-FSLogix ($Path) {
             }
             Else {
                 try {
+                    Write-Host $installer
                     Write-Host "================ Installing: $($installer.FullName)."
                     Invoke-Process -FilePath $installer.FullName -ArgumentList "/install /quiet /norestart" -Verbose
                 }
