@@ -34,14 +34,19 @@ Function Install-FSLogix ($Path) {
         # Unpack
         try {
             Write-Host "================ Unpacking: $OutFile."
-            Expand-Archive -Path $OutFile -DestinationPath $Path -Force
-            Start-Sleep -Seconds 5
+            Expand-Archive -Path $OutFile -DestinationPath $Path -Force -Verbose
         }
         catch {
             Throw "Failed to unpack: $OutFile."
         }
         
         # Install
+        If (Test-Path -Path "$Path\x64\Release\FSLogixAppsSetup.exe") {
+            Write-Host "Found: $Path\x64\Release\FSLogixAppsSetup.exe"
+        }
+        Else {
+            Write-Host "Failed to find: $Path\x64\Release\FSLogixAppsSetup.exe"
+        }
         ForEach ($file in "FSLogixAppsSetup.exe", "FSLogixAppsRuleEditorSetup.exe") {
             $installer = (Get-ChildItem -Path $Path -Recurse -Filter $file) -match "x64"
             If ($Null -eq $installer) {

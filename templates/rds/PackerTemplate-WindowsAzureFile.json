@@ -59,7 +59,6 @@
                 "build/rds/01_Rds-PrepImage.ps1",
                 "build/common/02_Packages.ps1",
                 "build/common/03_RegionLanguage.ps1",
-                "build/common/04_Customise.ps1",
                 "build/rds/05_Rds-Roles.ps1"
             ]
         },
