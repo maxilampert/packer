@@ -35,6 +35,7 @@ Function Install-FSLogix ($Path) {
         try {
             Write-Host "================ Unpacking: $OutFile."
             Expand-Archive -Path $OutFile -DestinationPath $Path -Force
+            Start-Sleep -Seconds 5
         }
         catch {
             Throw "Failed to unpack: $OutFile."
@@ -42,13 +43,18 @@ Function Install-FSLogix ($Path) {
         
         # Install
         ForEach ($file in "FSLogixAppsSetup.exe", "FSLogixAppsRuleEditorSetup.exe") {
-            try {
-                $installer = (Get-ChildItem -Path $Path -Recurse -Filter $file) -match "x64"
-                Write-Host "================ Installing: $($installer.FullName)."
-                Invoke-Process -FilePath $installer.FullName -ArgumentList "/install /quiet /norestart" -Verbose
+            $installer = (Get-ChildItem -Path $Path -Recurse -Filter $file) -match "x64"
+            If ($Null -eq $installer) {
+                Write-Host "================ Failed to find installer: $file in $Path."
             }
-            catch {
-                Throw "Failed to install: $($installer.FullName)."
+            Else {
+                try {
+                    Write-Host "================ Installing: $($installer.FullName)."
+                    Invoke-Process -FilePath $installer.FullName -ArgumentList "/install /quiet /norestart" -Verbose
+                }
+                catch {
+                    Throw "Failed to install: $($installer.FullName)."
+                }
             }
         }
         Write-Host "================ Done"
