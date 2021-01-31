@@ -90,14 +90,16 @@ Function Get-InstalledHotfixes {
 }
 #endregion
 
-# Output the installed software to the pipeline for Packer output
+# Output the hotfix list to a JSON file that Packer can upload back to the runner
+Write-Host "================ Export hotfix list to: $HotfixFile."
+Get-InstalledHotfixes | Out-File -FilePath $HotfixFile -Force -Encoding "Utf8"
+
+# Get the installed software list
 $software = Get-InstalledSoftware
-$software | Sort-Object -Property Publisher, Version
 
 # Output the software list to a JSON file that Packer can upload back to the runner
 Write-Host "================ Export software list to: $SoftwareFile."
 $software | ConvertTo-Json | Out-File -FilePath $SoftwareFile -Force -Encoding "Utf8"
 
-# Output the hotfix list to a JSON file that Packer can upload back to the runner
-Write-Host "================ Export hotfix list to: $HotfixFile."
-Get-InstalledHotfixes | Out-File -FilePath $HotfixFile -Force -Encoding "Utf8"
+# Output the installed software to the pipeline for Packer output
+$software | Sort-Object -Property Publisher, Version
