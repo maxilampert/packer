@@ -3,9 +3,12 @@
 [CmdletBinding()]
 param (
     [Parameter()]
-    [System.String] $Path = "$env:SystemRoot\Temp\InstalledSoftware.csv"
+    [System.String] $SoftwareFile = "$env:SystemRoot\Temp\InstalledSoftware.json",
+
+    [System.String] $HotfixFile = "$env:SystemRoot\Temp\InstalledHotfix.json"
 )
 
+#region Functions
 Function Get-InstalledSoftware {
     <#
         .SYNOPSIS
@@ -60,10 +63,41 @@ Function Get-InstalledSoftware {
     }
 }
 
+Function Get-InstalledHotfixes {
+    <#
+        .SYNOPSIS
+            Retrieves a list of hotfixes installed
+    #>
+    [OutputType([System.Management.Automation.PSObject])]
+    [CmdletBinding()]
+    param ()
+
+    try {
+        $HotfixList = Get-Hotfix | Select-Object -Property "description", "hotfixid" , "caption" | Sort-Object -Propery "HotFixID"
+    }
+    catch {
+        Throw $_
+    }
+    
+    try {
+        $HotfixJson = $HotfixList | ConvertTo-Json
+    }
+    catch {
+        Throw $_
+    }
+
+    If ($Null -ne $HotfixJson) { Write-Output -InputObject $HotfixJson }
+}
+#endregion
+
 # Output the installed software to the pipeline for Packer output
-$software = Get-InstalledSoftware | Sort-Object -Property Publisher, @{ Expression = { [System.Version]$_.Version }; Descending = $true }
+$software = Get-InstalledSoftware
 Write-Host $software
 
-# Output the software list to a CSV file that Packer can upload back to the runner
-Write-Host "================ Export software list to: $Path."
-$software | ConvertTo-Csv -Delimiter ","  -NoTypeInformation | Out-File -FilePath $Path -Force -Encoding "Utf8"
+# Output the software list to a JSON file that Packer can upload back to the runner
+Write-Host "================ Export software list to: $SoftwareFile."
+$software | ConvertTo-Json | Out-File -FilePath $SoftwareFile -Force -Encoding "Utf8"
+
+# Output the hotfix list to a JSON file that Packer can upload back to the runner
+Write-Host "================ Export hotfix list to: $HotfixFile."
+Get-InstalledHotfixes | Out-File -FilePath $HotfixFile -Force -Encoding "Utf8"

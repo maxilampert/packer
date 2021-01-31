@@ -140,16 +140,28 @@
         {
             "type": "powershell",
             "scripts": [
-                "build/common/Get-InstalledSoftware.ps1",
-                "build/common/Sysprep-Image.ps1"
+                "build/common/Get-InstalledSoftware.ps1"
             ]
         },
         {
             "type": "file",
             "direction": "download",
             "max_retries": 2,
-            "source": "C:/Windows/Temp/InstalledSoftware.csv",
-            "destination": ".\\InstalledSoftware.csv"
+            "source": "C:\\Windows\\Temp\\InstalledSoftware.json",
+            "destination": "InstalledSoftware.json"
+        },
+        {
+            "type": "file",
+            "direction": "download",
+            "max_retries": 2,
+            "source": "C:\\Windows\\Temp\\InstalledHotfix.json",
+            "destination": "InstalledHotfix.json"
+        },
+        {
+            "type": "powershell",
+            "scripts": [
+                "build/common/Sysprep-Image.ps1"
+            ]
         }
     ],
     "post-processors": [

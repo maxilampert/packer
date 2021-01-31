@@ -50,7 +50,7 @@
                 "CreatedDate": "{{user `image_date`}}",
                 "Function": "Gold image",
                 "Type": "WindowsVirtualDesktop",
-                "Operating System": "{{user `image_publisher`}}-{{user `image_offer`}}-{{user `image_sku`}}",
+                "OperatingSystem": "{{user `image_publisher`}}-{{user `image_offer`}}-{{user `image_sku`}}",
                 "Owner": "{{user `Owner`}}",
                 "Billing": "Packer"
             },
@@ -100,8 +100,15 @@
             "type": "file",
             "direction": "download",
             "max_retries": 2,
-            "source": "C:\\Windows\\Temp\\InstalledSoftware.csv",
-            "destination": "InstalledSoftware.csv"
+            "source": "C:\\Windows\\Temp\\InstalledSoftware.json",
+            "destination": "InstalledSoftware.json"
+        },
+        {
+            "type": "file",
+            "direction": "download",
+            "max_retries": 2,
+            "source": "C:\\Windows\\Temp\\InstalledHotfix.json",
+            "destination": "InstalledHotfix.json"
         },
         {
             "type": "powershell",
