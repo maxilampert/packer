@@ -1,0 +1,53 @@
+{
+    "builders": [
+        {
+            "type": "azure-arm",
+            "subscription_id": "{{user `source_gallery_subscription_id`}}",
+            "client_id": "{{user `azure_client_id`}}",
+            "client_secret": "{{user `azure_client_secret`}}",
+            "shared_image_gallery": {
+                "subscription": "{{user `source_gallery_subscription_id`}}",
+                "resource_group": "{{user `source_gallery_resource_group`}}",
+                "gallery_name": "{{user `source_gallery_name`}}",
+                "image_name": "{{user `source_image_name`}}",
+                "image_version": "{{user `source_image_version`}}"
+            },
+            "managed_image_name": "{{user `managed_image_name`}}-{{isotime \"2006-01-02\"}}_{{isotime \"150405MST\"}}",
+            "managed_image_resource_group_name": "{{user `managed_image_resource_group_name`}}",
+            "managed_image_storage_account_type": "Premium_LRS",
+            "shared_image_gallery_destination": {
+                "resource_group": "{{user `destination_gallery_resource_group`}}",
+                "gallery_name": "{{user `destination_gallery_name`}}",
+                "image_name": "{{user `destination_image_name`}}",
+                "image_version": "{{user `destination_image_version`}}",
+                "replication_regions": "{{user `destination_replication_regions`}}"
+            },
+            "vm_size": "{{user `vm_size`}}",
+            "ssh_username": "{{user `packer_ssh_username`}}",
+            "os_type": "{{user `os_type`}}",
+            "os_disk_size_gb": "{{user `os_disk_size_gb`}}",
+            "location": "{{user `azure_location`}}",
+            "virtual_network_name": "my-existing-vnet",
+            "virtual_network_subnet_name": "my-existing-private-subnet-0",
+            "virtual_network_resource_group_name": "my-existing-resgrp"
+        }
+    ],
+    "_comment": "This is a comment",
+    "provisioners": [],
+    "post-processors": [
+        {
+            "type": "shell-local",
+            "inline": [
+                "echo test_command_can_be_used_to_execute_in_post_process"
+            ]
+        },
+        {
+            "type": "manifest",
+            "output": "manifest.json",
+            "strip_path": true,
+            "custom_data": {
+                "pattern": "packerbuild"
+            }
+        }
+    ]
+}

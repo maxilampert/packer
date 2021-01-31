@@ -92,7 +92,7 @@ Function Get-InstalledHotfixes {
 
 # Output the installed software to the pipeline for Packer output
 $software = Get-InstalledSoftware
-Write-Host $software
+$software | Sort-Object -Property Publisher, Version
 
 # Output the software list to a JSON file that Packer can upload back to the runner
 Write-Host "================ Export software list to: $SoftwareFile."
