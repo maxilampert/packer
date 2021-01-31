@@ -65,19 +65,59 @@
                 "PackagesUrl={{user `PackagesUrl`}}"
             ],
             "scripts": [
-                "build/rds/01_Rds-PrepImage.ps1"
+                "build/rds/01_Rds-PrepImage.ps1",
+                "build/common/02_Packages.ps1",
+                "build/common/03_RegionLanguage.ps1",
+                "build/common/04_Customise.ps1",
+                "build/rds/05_Rds-Roles.ps1"
             ]
+        },
+        {
+            "type": "windows-update",
+            "search_criteria": "IsInstalled=0",
+            "filters": [
+                "exclude:$_.Title -like '*Silverlight*'",
+                "exclude:$_.Title -like '*Preview*'",
+                "include:$true"
+            ],
+            "update_limit": 25
         },
         {
             "type": "powershell",
             "scripts": [
                 "build/common/06_SupportFunctions.ps1",
                 "build/rds/07_MicrosoftVcRedists.ps1",
-                "build/rds/08_MicrosoftFSLogixApps.ps1"
+                "build/rds/08_MicrosoftFSLogixApps.ps1",
+                "build/rds/09_MicrosoftEdge.ps1",
+                "build/rds/10_Microsoft365Apps.ps1",
+                "build/rds/11_Wvd-Agents.ps1",
+                "build/rds/12_AdobeAcrobatReaderDC.ps1"
             ]
         },
         {
             "type": "windows-restart"
+        },
+        {
+            "type": "powershell",
+            "environment_vars": [
+                "AppsUrl={{user `AppsUrl`}}"
+            ],
+            "scripts": [
+                "build/rds/13_Rds-LobApps.ps1"
+            ]
+        },
+        {
+            "type": "windows-restart"
+        },
+        {
+            "type": "windows-update",
+            "search_criteria": "IsInstalled=0",
+            "filters": [
+                "exclude:$_.Title -like '*Silverlight*'",
+                "exclude:$_.Title -like '*Preview*'",
+                "include:$true"
+            ],
+            "update_limit": 25
         },
         {
             "type": "powershell",
@@ -102,13 +142,6 @@
             "scripts": [
                 "build/common/Get-InstalledSoftware.ps1",
                 "build/common/Sysprep-Image.ps1"
-            ]
-        },
-        {
-            "type": "powershell",
-            "inline": [
-                "# Set WinRM basic auth so that we can download a file",
-                "winrm set winrm/config/service/auth @{Basic=\"true\"}"
             ]
         },
         {

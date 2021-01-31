@@ -66,4 +66,4 @@ Write-Host $software
 
 # Output the software list to a CSV file that Packer can upload back to the runner
 Write-Host "================ Export software list to: $Path."
-$software | ConvertTo-Csv -Delimiter ","  -NoTypeInformation | Out-File -FilePath $Path -Force
+$software | ConvertTo-Csv -Delimiter ","  -NoTypeInformation | Out-File -FilePath $Path -Force -Encoding "Uft8"
