@@ -61,8 +61,8 @@
         {
             "type": "powershell",
             "environment_vars": [
-                "Locale={{user `Locale`}}",
-                "PackagesUrl={{user `PackagesUrl`}}"
+                "Locale={{user `locale`}}",
+                "PackagesUrl={{user `packages_url`}}"
             ],
             "scripts": [
                 "build/rds/01_Rds-PrepImage.ps1",
