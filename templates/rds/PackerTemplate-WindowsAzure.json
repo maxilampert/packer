@@ -72,18 +72,11 @@
             "type": "powershell",
             "scripts": [
                 "build/common/06_SupportFunctions.ps1",
-                "build/rds/07_MicrosoftVcRedists.ps1",
-                "build/rds/08_MicrosoftFSLogixApps.ps1"
+                "build/rds/07_MicrosoftVcRedists.ps1"
             ]
         },
         {
             "type": "windows-restart"
-        },
-        {
-            "type": "powershell",
-            "scripts": [
-                "build/rds/14_OptimiseImage.ps1"
-            ]
         },
         {
             "type": "powershell",
@@ -105,19 +98,11 @@
             ]
         },
         {
-            "type": "powershell",
-            "inline": [
-                "# Set WinRM basic auth so that we can download a file",
-                "# This is set after Sysprep so we don't leave the image in this state",
-                "winrm set winrm/config/service/auth '@{Basic=\"true\"}'"
-            ]
-        },
-        {
             "type": "file",
             "direction": "download",
             "max_retries": 2,
-            "source": "C:/Windows/Temp/InstalledSoftware.csv",
-            "destination": ".\\InstalledSoftware.csv"
+            "source": "C:\\Windows\\Temp\\InstalledSoftware.csv",
+            "destination": "InstalledSoftware.csv"
         }
     ],
     "post-processors": [
