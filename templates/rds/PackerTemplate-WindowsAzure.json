@@ -93,8 +93,7 @@
         {
             "type": "powershell",
             "scripts": [
-                "build/common/Get-InstalledSoftware.ps1",
-                "build/common/Sysprep-Image.ps1"
+                "build/common/Get-InstalledSoftware.ps1"
             ]
         },
         {
@@ -103,6 +102,12 @@
             "max_retries": 2,
             "source": "C:\\Windows\\Temp\\InstalledSoftware.csv",
             "destination": "InstalledSoftware.csv"
+        },
+        {
+            "type": "powershell",
+            "scripts": [
+                "build/common/Sysprep-Image.ps1"
+            ]
         }
     ],
     "post-processors": [
