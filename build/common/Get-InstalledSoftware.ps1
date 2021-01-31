@@ -73,7 +73,7 @@ Function Get-InstalledHotfixes {
     param ()
 
     try {
-        $HotfixList = Get-Hotfix | Select-Object -Property "description", "hotfixid" , "caption" | Sort-Object -Propery "HotFixID"
+        $HotfixList = Get-Hotfix | Select-Object -Property "description", "hotfixid" , "caption" | Sort-Object -Property "HotFixID"
     }
     catch {
         Throw $_
