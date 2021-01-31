@@ -101,11 +101,15 @@
             "type": "file",
             "direction": "download",
             "max_retries": 2,
-            "sources": [
-                "C:\\Windows\\Temp\\InstalledSoftware.json",
-                "C:\\Windows\\Temp\\InstalledHotfix.json"
-            ],
-            "destination": ".\\"
+            "source": "C:\\Windows\\Temp\\InstalledSoftware.json",
+            "destination": "InstalledSoftware.json"
+        },
+        {
+            "type": "file",
+            "direction": "download",
+            "max_retries": 2,
+            "source": "C:\\Windows\\Temp\\InstalledHotfix.json",
+            "destination": "InstalledHotfix.json"
         },
         {
             "type": "powershell",
