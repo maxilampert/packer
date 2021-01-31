@@ -108,7 +108,8 @@
             "type": "powershell",
             "inline": [
                 "# Set WinRM basic auth so that we can download a file",
-                "winrm set winrm/config/service/auth @{Basic=\"true\"}"
+                "# This is set after Sysprep so we don't leave the image in this state",
+                "winrm set winrm/config/service/auth '@{Basic=\"true\"}'"
             ]
         },
         {
