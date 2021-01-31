@@ -149,7 +149,7 @@
             "direction": "download",
             "max_retries": 2,
             "source": "C:/Windows/Temp/InstalledSoftware.csv",
-            "destination": "{{env `System_DefaultWorkingDirectory`}}\\InstalledSoftware.csv"
+            "destination": ".\\InstalledSoftware.csv"
         }
     ],
     "post-processors": [
