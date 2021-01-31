@@ -102,4 +102,5 @@ Write-Host "================ Export software list to: $SoftwareFile."
 $software | ConvertTo-Json | Out-File -FilePath $SoftwareFile -Force -Encoding "Utf8"
 
 # Output the installed software to the pipeline for Packer output
+$software = Get-InstalledSoftware
 $software | Sort-Object -Property Publisher, Version

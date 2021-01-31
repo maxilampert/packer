@@ -11,15 +11,15 @@
         "image_offer": "Windows-10",
         "image_sku": "20h2-ent",
         "vm_size": "Standard_D2as_v4",
-        "WorkingDirectory": "{{env `System_DefaultWorkingDirectory`}}",
-        "Locale": "en-AU",
-        "AppsUrl": "",
-        "PackagesUrl": "",
-        "Owner": "aaronparker",
-        "BuildResourceGroup": "rg-ImageBuild-AustraliaEast",
-        "BuildKeyVault": "stpyimageaustraliaeast",
-        "BuildVnet": "vnet-ImageBuild-AustraliaEast",
-        "BuildSubnet": "subnet-Packer"
+        "working_directory": "{{env `System_DefaultWorkingDirectory`}}",
+        "locale": "en-AU",
+        "apps_url": "",
+        "packages_url": "",
+        "owner": "aaronparker",
+        "build_resource_group": "rg-ImageBuild-AustraliaEast",
+        "build_key_vault": "stpyimageaustraliaeast",
+        "build_vnet": "vnet-ImageBuild-AustraliaEast",
+        "build_subnet": "subnet-Packer"
     },
     "builders": [
         {
@@ -30,12 +30,12 @@
             "tenant_id": "{{user `tenant_id`}}",
             "managed_image_name": "{{user `image_offer`}}-{{user `image_sku`}}-{{user `image_date`}}",
             "managed_image_resource_group_name": "{{user `managed_image_resource_group_name`}}",
-            "build_resource_group_name": "{{user `BuildResourceGroup`}}",
-            "build_key_vault_name": "{{user `BuildKeyVault`}}",
+            "build_resource_group_name": "{{user `build_resource_group`}}",
+            "build_key_vault_name": "{{user `build_key_vault`}}",
             "private_virtual_network_with_public_ip": true,
-            "virtual_network_name": "{{user `BuildVnet`}}",
-            "virtual_network_subnet_name": "{{user `BuildSubnet`}}",
-            "virtual_network_resource_group_name": "{{user `BuildResourceGroup`}}",
+            "virtual_network_name": "{{user `build_vnet`}}",
+            "virtual_network_subnet_name": "{{user `build_subnet`}}",
+            "virtual_network_resource_group_name": "{{user `build_resource_group`}}",
             "os_type": "Windows",
             "image_publisher": "{{user `image_publisher`}}",
             "image_offer": "{{user `image_offer`}}",
@@ -100,7 +100,7 @@
         {
             "type": "powershell",
             "environment_vars": [
-                "AppsUrl={{user `AppsUrl`}}"
+                "AppsUrl={{user `apps_url`}}"
             ],
             "scripts": [
                 "build/rds/13_Rds-LobApps.ps1"
