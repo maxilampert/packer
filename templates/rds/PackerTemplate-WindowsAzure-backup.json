@@ -122,20 +122,10 @@
         {
             "type": "powershell",
             "scripts": [
-                "build/rds/14_OptimiseImage.ps1"
+                "build/rds/14_MicrosoftOptimise.ps1",
+                "build/rds/14_CitrixOptimizer.ps1",
+                "build/rds/15_Bisf.ps1"
             ]
-        },
-        {
-            "type": "powershell",
-            "inline": [
-                "If (Get-Service -Name RdAgent -ErrorAction SilentlyContinue) { Set-Service RdAgent -StartupType Disabled }",
-                "If (Get-Service -Name WindowsAzureTelemetryService -ErrorAction SilentlyContinue) { Set-Service WindowsAzureTelemetryService -StartupType Disabled }",
-                "If (Get-Service -Name WindowsAzureGuestAgent -ErrorAction SilentlyContinue) { Set-Service WindowsAzureGuestAgent -StartupType Disabled }",
-                "Remove-ItemProperty -Path 'HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Setup\\SysPrepExternal\\Generalize' -Name '*'"
-            ]
-        },
-        {
-            "type": "windows-restart"
         },
         {
             "type": "powershell",
@@ -156,6 +146,18 @@
             "max_retries": 2,
             "source": "C:\\Windows\\Temp\\InstalledHotfix.json",
             "destination": "InstalledHotfix.json"
+        },
+        {
+            "type": "powershell",
+            "inline": [
+                "If (Get-Service -Name RdAgent -ErrorAction SilentlyContinue) { Set-Service RdAgent -StartupType Disabled }",
+                "If (Get-Service -Name WindowsAzureTelemetryService -ErrorAction SilentlyContinue) { Set-Service WindowsAzureTelemetryService -StartupType Disabled }",
+                "If (Get-Service -Name WindowsAzureGuestAgent -ErrorAction SilentlyContinue) { Set-Service WindowsAzureGuestAgent -StartupType Disabled }",
+                "Remove-ItemProperty -Path 'HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Setup\\SysPrepExternal\\Generalize' -Name '*'"
+            ]
+        },
+        {
+            "type": "windows-restart"
         },
         {
             "type": "powershell",

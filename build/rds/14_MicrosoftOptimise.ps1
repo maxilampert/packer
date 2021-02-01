@@ -11,7 +11,7 @@ Param (
     [System.String] $Target = "$env:SystemDrive\Apps"
 )
 
-#region Functions
+#region Individual optimisation functions
 Function Global:Invoke-Process {
     <#PSScriptInfo 
     .VERSION 1.4 
@@ -92,60 +92,6 @@ Function Invoke-WindowsDefender {
     # Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\RemovalTools\MRT" -Name "GUID" -Value ""
 }
 
-Function Invoke-CitrixOptimizer ($Path) {
-    Write-Host "========== Citrix Optimizer"
-    If (!(Test-Path $Path)) { New-Item -Path $Path -ItemType Directory -Force -ErrorAction SilentlyContinue > $Null }
-
-    Write-Host "=============== Downloading Citrix Optimizer"
-    $url = "https://raw.githubusercontent.com/aaronparker/packer/main/tools/rds/optimizer/CitrixOptimizer.zip"
-    Invoke-WebRequest -Uri $url -OutFile "$Path\$(Split-Path $url -Leaf)" -UseBasicParsing
-    Expand-Archive -Path "$Path\$(Split-Path $url -Leaf)" -DestinationPath $Path -Force
-
-    # Download templates
-    Write-Host "=============== Downloading Citrix Optimizer template"
-    If (!(Test-Path $Path)) { New-Item -Path "$Path\Templates" -ItemType Directory -Force -ErrorAction SilentlyContinue > $Null }
-    Switch -Regex ((Get-WmiObject Win32_OperatingSystem).Caption) {
-        "Microsoft Windows Server*" {
-            $url = "https://raw.githubusercontent.com/aaronparker/packer/main/tools/rds/optimizer/WindowsServer2019-Defender-Azure.xml"
-        }
-        "Microsoft Windows 10 Enterprise for Virtual Desktops" {
-            $url = "https://raw.githubusercontent.com/aaronparker/packer/main/tools/rds/optimizer/Windows101909-Defender-Azure.xml"
-        }
-        "Microsoft Windows 10*" {
-            $url = "https://raw.githubusercontent.com/aaronparker/packer/main/tools/rds/optimizer/Windows101909-Defender-Azure.xml"
-        }
-    }
-    Invoke-WebRequest -Uri $url -OutFile "$Path\Templates\$(Split-Path $url -Leaf)" -UseBasicParsing
-
-    Write-Host "=============== Running Citrix Optimizer"
-    & "$Path\CtxOptimizerEngine.ps1" -Source "$Path\Templates\$(Split-Path $url -Leaf)" -Mode execute -OutputHtml "$Path\CitrixOptimizer.html"
-}
-
-Function Invoke-Bisf ($Path) {
-    Write-Host "========== Base Image Script Framework"
-    If (!(Test-Path $Path)) { New-Item -Path $Path -ItemType Directory -Force -ErrorAction SilentlyContinue > $Null }
-
-    Write-Host "=============== Downloading BIS-F"
-    #$url = (Get-BISF).URI
-    $url = "https://github.com/EUCweb/BIS-F/archive/master.zip"
-    Invoke-WebRequest -Uri $url -OutFile "$Path\$(Split-Path $url -Leaf)" -UseBasicParsing
-    Expand-Archive -Path "$Path\$(Split-Path $url -Leaf)" -DestinationPath "$Path" -Force
-
-    $url = "https://raw.githubusercontent.com/aaronparker/packer/main/tools/rds/bisf/BisfConfig.zip"
-    Invoke-WebRequest -Uri $url -OutFile "$Path\$(Split-Path $url -Leaf)" -UseBasicParsing
-    Expand-Archive -Path "$Path\$(Split-Path $url -Leaf)" -DestinationPath "$Path" -Force
-
-    Write-Host "=============== Installing BIS-F"
-    #Start-Process -FilePath "$Path\$(Split-Path $url -Leaf)" -ArgumentList "/SILENT" -Wait
-    Remove-Item -Path "$env:ProgramData\Microsoft\Windows\Start Menu\Programs\Base Image Script Framework (BIS-F).lnk" -Force -ErrorAction SilentlyContinue
-    New-Item -Path "${env:ProgramFiles(x86)}\Base Image Script Framework (BIS-F)" -ItemType Directory -Force -ErrorAction SilentlyContinue > $Null
-    Copy-Item -Path "$Path\BISFSharedConfig.json" -Destination "${env:ProgramFiles(x86)}\Base Image Script Framework (BIS-F)\BISFSharedConfig.json"
-
-    Write-Host "=============== Running BIS-F"
-    & "$Path\BIS-F-master\Framework\PrepBISF_Start.ps1"
-    & "${env:ProgramFiles(x86)}\Base Image Script Framework (BIS-F)\Framework\PrepBISF_Start.ps1"
-}
-
 Function Disable-ScheduledTasks {
     <#
         - NOTE:           Original script details here:
@@ -170,6 +116,8 @@ Function Disable-ScheduledTasks {
     # This section is for disabling scheduled tasks.  If you find a task that should not be disabled
     # comment or delete from the "SchTaskList.txt" file.
     Write-Host "========== Disabling scheduled tasks."
+
+    # Original list
     $SchTasksList = @("BgTaskRegistrationMaintenanceTask", "Consolidator", "Diagnostics", "FamilySafetyMonitor",
         "FamilySafetyRefreshTask", "MapsToastTask", "*Compatibility*", "Microsoft-Windows-DiskDiagnosticDataCollector",
         "*MNO*", "NotificationTask", "PerformRemediation", "ProactiveScan", "ProcessMemoryDiagnosticEvents", "Proxy",
@@ -177,6 +125,13 @@ Function Disable-ScheduledTasks {
         "RunFullMemoryDiagnostic", "Scheduled", "ScheduledDefrag", "SilentCleanup", "SpeechModelDownloadTask",
         "Sqm-Tasks", "SR", "StartupAppTask", "SyspartRepair", "UpdateLibrary", "WindowsActionDialog", "WinSAT",
         "XblGameSaveTask")
+
+    # Safe list - WVD VMs aren't really non-persistent
+    $SchTasksList = @("BgTaskRegistrationMaintenanceTask", "Consolidator", "Diagnostics", "FamilySafetyMonitor",
+        "FamilySafetyRefreshTask", "MapsToastTask", "MNO Metadata Parser", "NotificationTask",
+        "ProcessMemoryDiagnosticEvents", "Proxy", "QueueReporting", "RecommendedTroubleshootingScanner",
+        "RegIdleBackup", "RunFullMemoryDiagnostic", "ScheduledDefrag", "Scheduled", "ScheduledDefrag",
+        "SR", "StartupAppTask", "SyspartRepair", "WindowsActionDialog", "WinSAT", "XblGameSaveTask")
     If ($SchTasksList.count -gt 0) {
         $EnabledScheduledTasks = Get-ScheduledTask | Where-Object { $_.State -ne "Disabled" }
         Foreach ($Item in $SchTasksList) {
@@ -218,8 +173,10 @@ Function Disable-Services {
         "XblGameSave", "XboxGipSvc", "XboxNetApiSvc", "AdobeARMservice")
     If ($ServicesToDisable.count -gt 0) {
         Foreach ($Item in $ServicesToDisable) {
-            Stop-Service -Name $Item -Force -ErrorAction "SilentlyContinue"
-            Set-Service -Name $Item -StartupType "Disabled" -ErrorAction "SilentlyContinue"
+            $service = Get-Service -Name $Item -ErrorAction "SilentlyContinue"
+            Write-Host "========== Disabling service: $($service.DisplayName)."
+            $service | Stop-Service -Force -ErrorAction "SilentlyContinue"
+            $service | Set-Service -StartupType "Disabled" -ErrorAction "SilentlyContinue"
         }
     }
     #endregion
@@ -322,6 +279,49 @@ Function Global:Clear-WinEvent {
 }
 #endregion
 
+#region 
+Function MicrosoftOptimizer {
+    # https://github.com/The-Virtual-Desktop-Team/Virtual-Desktop-Optimization-Tool
+    $Url = "https://github.com/The-Virtual-Desktop-Team/Virtual-Desktop-Optimization-Tool/archive/master.zip"
+    $Path = Join-Path -Path $Target -ChildPath "VirtualDesktopOptimizationTool"
+    New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
+    $OutFile = Join-Path -Path $Path -ChildPath (Split-Path -Path $Url -Leaf)
+    try {
+        $params = @{
+            Uri             = $Url
+            UseBasicParsing = $true
+            OutFile         = $OutFile
+        }
+        Invoke-WebRequest @params
+    }
+    catch {
+        Throw $_
+        Break
+    }
+    try {
+        $params = @{
+            Path        = $OutFile
+            Destination = $Path
+        }
+        Expand-Archive @params
+    }
+    catch {
+        Throw $_
+        Break
+    }
+    try {
+        Push-Location -Path $Path
+        . .\Win10_VirtualDesktop_Optimize.ps1 -WindowsVersion 2004 -AppxPackages:$False -Restart:$False -Verbose
+        Pop-Location
+    }
+    catch {
+        Throw $_
+        Break
+    }
+}
+#endregion
+
+
 #region Script logic
 # Set $VerbosePreference so full details are sent to the log; Make Invoke-WebRequest faster
 $VerbosePreference = "Continue"
@@ -331,24 +331,21 @@ $ProgressPreference = "SilentlyContinue"
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 New-Item -Path $Target -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
 
-# Seal image tasks
+#region Manual seal image tasks
 Invoke-WindowsDefender
-# Invoke-CitrixOptimizer -Path "$Target\CitrixOptimizer"
-# Invoke-Bisf -Path "$Target\Bisf"
 Disable-ScheduledTasks
 Disable-WindowsTraces
 Disable-SystemRestore
 Disable-Services
 Optimize-Network
 # Invoke-Cleanmgr
-# Remove-TempFiles
+Remove-TempFiles
 Get-WinEvent -ListLog * | ForEach-Object { Clear-WinEvent $_.LogName -Confirm:$False }
+#endregion
 
-# Re-enable Defender
-Write-Output "====== Enable Windows Defender real time scan"
-Set-MpPreference -DisableRealtimeMonitoring $false
-Write-Output "====== Enable Windows Store updates"
-reg delete HKLM\Software\Policies\Microsoft\Windows\CloudContent /v DisableWindowsConsumerFeatures /f
-reg delete HKLM\Software\Policies\Microsoft\WindowsStore /v AutoDownload /f
+#region Virtual-Desktop-Optimization-Tool
+# MicrosoftOptimizer
+#endregion
+
 Write-Host "================ Complete: OptimiseImage."
 #endregion

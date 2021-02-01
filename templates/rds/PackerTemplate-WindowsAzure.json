@@ -80,21 +80,14 @@
         },
         {
             "type": "powershell",
-            "inline": [
-                "If (Get-Service -Name RdAgent -ErrorAction SilentlyContinue) { Set-Service RdAgent -StartupType Disabled }",
-                "If (Get-Service -Name WindowsAzureTelemetryService -ErrorAction SilentlyContinue) { Set-Service WindowsAzureTelemetryService -StartupType Disabled }",
-                "If (Get-Service -Name WindowsAzureGuestAgent -ErrorAction SilentlyContinue) { Set-Service WindowsAzureGuestAgent -StartupType Disabled }",
-                "Remove-ItemProperty -Path 'HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Setup\\SysPrepExternal\\Generalize' -Name '*'"
+            "scripts": [
+                "build/rds/14_MicrosoftOptimise.ps1"
             ]
-        },
-        {
-            "type": "windows-restart"
         },
         {
             "type": "powershell",
             "scripts": [
-                "build/common/Get-InstalledSoftware.ps1",
-                "build/common/Get-InstalledHotfixes.ps1"
+                "build/common/Get-InstalledSoftware.ps1"
             ]
         },
         {
@@ -113,10 +106,23 @@
         },
         {
             "type": "powershell",
+            "inline": [
+                "If (Get-Service -Name RdAgent -ErrorAction SilentlyContinue) { Set-Service RdAgent -StartupType Disabled }",
+                "If (Get-Service -Name WindowsAzureTelemetryService -ErrorAction SilentlyContinue) { Set-Service WindowsAzureTelemetryService -StartupType Disabled }",
+                "If (Get-Service -Name WindowsAzureGuestAgent -ErrorAction SilentlyContinue) { Set-Service WindowsAzureGuestAgent -StartupType Disabled }",
+                "Remove-ItemProperty -Path 'HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Setup\\SysPrepExternal\\Generalize' -Name '*'"
+            ]
+        },
+        {
+            "type": "windows-restart"
+        },
+        {
+            "type": "powershell",
             "scripts": [
                 "build/common/Sysprep-Image.ps1"
             ]
         }
+
     ],
     "post-processors": [
         {
