@@ -3,7 +3,7 @@
 [CmdletBinding()]
 param (
     [Parameter()]
-    [System.String] $HotfixFile = "$env:SystemRoot\Temp\InstalledHotfix.json"
+    [System.String] $HotfixFile = "$env:SystemRoot\Temp\InstalledHotfixes.json"
 )
 
 #region Functions

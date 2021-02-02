@@ -124,13 +124,9 @@
             "scripts": [
                 "build/rds/14_MicrosoftOptimise.ps1",
                 "build/rds/14_CitrixOptimizer.ps1",
-                "build/rds/15_Bisf.ps1"
-            ]
-        },
-        {
-            "type": "powershell",
-            "scripts": [
-                "build/common/Get-InstalledSoftware.ps1"
+                "build/rds/15_Bisf.ps1",
+                "build/common/Get-InstalledSoftware.ps1",
+                "build/common/Get-InstalledHotfixes.ps1"
             ]
         },
         {
@@ -144,8 +140,8 @@
             "type": "file",
             "direction": "download",
             "max_retries": 2,
-            "source": "C:\\Windows\\Temp\\InstalledHotfix.json",
-            "destination": "InstalledHotfix.json"
+            "source": "C:\\Windows\\Temp\\InstalledHotfixes.json",
+            "destination": "InstalledHotfixes.json"
         },
         {
             "type": "powershell",
