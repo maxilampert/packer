@@ -10,7 +10,12 @@
     "image_sku": "2019-Datacenter",
     "location": "australiaeast",
     "vm_size": "Standard_D2_v3",
-    "Locale": "en-AU",
-    "AppsUrl": "<storageaccount>",
-    "PackagesUrl": "<storageaccount>"    
+    "locale": "$(locale)",
+    "apps_url": "$(apps_url)",
+    "packages_url": "$(packages_url)",
+    "owner": "$(owner)",
+    "build_resource_group": "rg-ImageBuild-AustraliaEast",
+    "build_key_vault": "stpyimageaustraliaeast",
+    "build_vnet": "vnet-ImageBuild-AustraliaEast",
+    "build_subnet": "subnet-Packer"
 }

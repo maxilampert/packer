@@ -10,8 +10,12 @@
     "image_sku": "20h2-evd",
     "location": "australiaeast",
     "vm_size": "Standard_D2as_v4",
-    "Locale": "en-AU",
-    "AppsUrl": "$(AppsUrl)",
-    "PackagesUrl": "$(PackagesUrl)",
-    "Owner": "$(Owner)"
+    "locale": "$(locale)",
+    "apps_url": "$(apps_url)",
+    "packages_url": "$(packages_url)",
+    "owner": "$(owner)",
+    "build_resource_group": "rg-ImageBuild-AustraliaEast",
+    "build_key_vault": "stpyimageaustraliaeast",
+    "build_vnet": "vnet-ImageBuild-AustraliaEast",
+    "build_subnet": "subnet-Packer"
 }
