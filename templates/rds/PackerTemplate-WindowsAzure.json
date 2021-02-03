@@ -12,10 +12,14 @@
         "working_directory": "{{env `System_DefaultWorkingDirectory`}}",
         "winrmuser": "packer",
         "managed_image_resource_group_name": "",
+        "managed_image_name": "{{user `image_offer`}}-{{user `image_sku`}}-{{user `image_date`}}",
         "locale": "en-AU",
         "apps_url": "",
         "packages_url": "",
-        "owner": "aaronparker",
+        "tag_function": "Gold image",
+        "tag_type": "WindowsVirtualDesktop",
+        "tag_owner": "aaronparker",
+        "tag_created_date": "",
         "build_resource_group": "rg-ImageBuild-AustraliaEast",
         "build_key_vault": "stpyimageaustraliaeast",
         "build_vnet": "vnet-ImageBuild-AustraliaEast",
@@ -23,7 +27,7 @@
         "destination_gallery_resource_group": "rg-Images-AustraliaEast",
         "destination_gallery_name": "sigWindowsVirtualDesktop",
         "destination_image_name": "{{user `image_publisher`}}-{{user `image_offer`}}-{{user `image_sku`}}",
-        "destination_image_version": "",
+        "destination_image_version": "1.0.1",
         "destination_replication_regions": "australiaeast"
     },
     "builders": [
@@ -44,7 +48,7 @@
             "winrm_insecure": true,
             "winrm_timeout": "5m",
             "winrm_username": "{{user `winrmuser`}}",
-            "managed_image_name": "{{user `image_offer`}}-{{user `image_sku`}}-{{user `image_date`}}",
+            "managed_image_name": "{{user `managed_image_name`}}",
             "managed_image_resource_group_name": "{{user `managed_image_resource_group_name`}}",
             "build_resource_group_name": "{{user `build_resource_group`}}",
             "build_key_vault_name": "{{user `build_key_vault`}}",
@@ -53,10 +57,10 @@
             "virtual_network_resource_group_name": "{{user `build_resource_group`}}",
             "private_virtual_network_with_public_ip": true,
             "azure_tags": {
-                "CreatedDate": "{{user `image_date`}}",
-                "Function": "Gold image",
-                "Type": "WindowsVirtualDesktop",
-                "OperatingSystem": "{{user `image_publisher`}}-{{user `image_offer`}}-{{user `image_sku`}}",
+                "CreatedDate": "{{user `tag_created_date`}}",
+                "Function": "{{user `tag_function`}}",
+                "Type": "{{user `tag_function`}}",
+                "OperatingSystem": "{{user `managed_image_name`}}",
                 "Owner": "{{user `Owner`}}",
                 "Billing": "Packer"
             },
@@ -64,8 +68,8 @@
                 "subscription": "{{user `subscription_id`}}",
                 "resource_group": "{{user `destination_gallery_resource_group`}}",
                 "gallery_name": "{{user `destination_gallery_name`}}",
-                "image_name": "{{user `image_offer`}}-{{user `image_sku`}}-{{user `image_date`}}",
-                "image_version": "{{user `image_date`}}",
+                "image_name": "{{user `destination_image_name`}}",
+                "image_version": "{{user `destination_image_version`}}",
                 "replication_regions": "{{user `destination_replication_regions`}}"
             }
         }
