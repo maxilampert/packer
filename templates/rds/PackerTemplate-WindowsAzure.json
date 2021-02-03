@@ -24,10 +24,7 @@
         "destination_gallery_name": "sigWindowsVirtualDesktop",
         "destination_image_name": "{{user `image_publisher`}}-{{user `image_offer`}}-{{user `image_sku`}}",
         "destination_image_version": "",
-        "destination_replication_regions": [
-            "australiaeast",
-            "australiasoutheast"
-        ]
+        "destination_replication_regions": "australiaeast"
     },
     "builders": [
         {
@@ -69,10 +66,7 @@
                 "gallery_name": "{{user `destination_gallery_name`}}",
                 "image_name": "{{user `image_offer`}}-{{user `image_sku`}}-{{user `image_date`}}",
                 "image_version": "{{user `image_date`}}",
-                "replication_regions": [
-                    "australiaeast",
-                    "australiasoutheast"
-                ]
+                "replication_regions": "{{user `destination_replication_regions`}}"
             }
         }
     ],
