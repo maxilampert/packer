@@ -69,7 +69,10 @@
                 "gallery_name": "{{user `destination_gallery_name`}}",
                 "image_name": "{{user `image_offer`}}-{{user `image_sku`}}-{{user `image_date`}}",
                 "image_version": "{{user `image_date`}}",
-                "replication_regions": "{{user `destination_replication_regions`}}"
+                "replication_regions": [
+                    "australiaeast",
+                    "australiasoutheast"
+                ]
             }
         }
     ],
