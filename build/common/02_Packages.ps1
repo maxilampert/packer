@@ -140,7 +140,7 @@ Function Install-Packages ($Path, $PackagesUrl) {
             Write-Host "================ Failed to download: $($item.Url)."
             Break
         }
-        Expand-Archive -Path $OutFile -DestinationPath $AppPath -Force
+        Expand-Archive -Path $OutFile -DestinationPath $AppPath -Force -Verbose
         Remove-Item -Path $OutFile -Force -ErrorAction SilentlyContinue
 
         Write-Host "================ Installing item: $($AppName)."

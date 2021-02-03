@@ -91,7 +91,7 @@ Function Invoke-CitrixOptimizer ($Path) {
     Write-Host "=============== Downloading Citrix Optimizer"
     $url = "https://raw.githubusercontent.com/aaronparker/packer/main/tools/rds/optimizer/CitrixOptimizer.zip"
     Invoke-WebRequest -Uri $url -OutFile "$Path\$(Split-Path $url -Leaf)" -UseBasicParsing
-    Expand-Archive -Path "$Path\$(Split-Path $url -Leaf)" -DestinationPath $Path -Force
+    Expand-Archive -Path "$Path\$(Split-Path $url -Leaf)" -DestinationPath $Path -Force -Verbose
 
     # Download templates
     Write-Host "=============== Downloading Citrix Optimizer template"

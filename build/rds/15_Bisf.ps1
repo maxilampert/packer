@@ -100,11 +100,11 @@ Function Invoke-Bisf ($Path) {
     #$url = (Get-BISF).URI
     $url = "https://github.com/EUCweb/BIS-F/archive/master.zip"
     Invoke-WebRequest -Uri $url -OutFile "$Path\$(Split-Path $url -Leaf)" -UseBasicParsing
-    Expand-Archive -Path "$Path\$(Split-Path $url -Leaf)" -DestinationPath "$Path" -Force
+    Expand-Archive -Path "$Path\$(Split-Path $url -Leaf)" -DestinationPath "$Path" -Force -Verbose
 
     $url = "https://raw.githubusercontent.com/aaronparker/packer/main/tools/rds/bisf/BisfConfig.zip"
     Invoke-WebRequest -Uri $url -OutFile "$Path\$(Split-Path $url -Leaf)" -UseBasicParsing
-    Expand-Archive -Path "$Path\$(Split-Path $url -Leaf)" -DestinationPath "$Path" -Force
+    Expand-Archive -Path "$Path\$(Split-Path $url -Leaf)" -DestinationPath "$Path" -Force -Verbose
 
     Write-Host "=============== Installing BIS-F"
     #Start-Process -FilePath "$Path\$(Split-Path $url -Leaf)" -ArgumentList "/SILENT" -Wait

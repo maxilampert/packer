@@ -302,6 +302,8 @@ Function MicrosoftOptimizer {
         $params = @{
             Path        = $OutFile
             Destination = $Path
+            Force       = $true
+            Verbose     = $true
         }
         Expand-Archive @params
     }

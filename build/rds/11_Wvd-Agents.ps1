@@ -211,7 +211,7 @@ Function Install-ConnectionExperienceIndicator ($Path) {
     }
 
     # Extract the zip file
-    Expand-Archive -Path $OutFile -DestinationPath $Path
+    Expand-Archive -Path $OutFile -DestinationPath $Path -Verbose
     Write-Host "================ Done"
 }
 #endregion

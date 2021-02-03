@@ -20,7 +20,7 @@ Function Set-Customise ($Path) {
     $OutFile = Join-Path -Path $Path -ChildPath $(Split-Path $url -Leaf)
     Invoke-WebRequest -Uri $url -OutFile $OutFile -UseBasicParsing
     try {
-        Expand-Archive -Path $OutFile -DestinationPath $Path -Force
+        Expand-Archive -Path $OutFile -DestinationPath $Path -Force -Verbose
         Remove-Item -Path $OutFile
     }
     catch { }
