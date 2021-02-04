@@ -31,7 +31,7 @@ $Repository = "PSGallery"
 If (Get-PSRepository | Where-Object { $_.Name -eq $Repository -and $_.InstallationPolicy -ne "Trusted" }) {
     try {
         Write-Host "================ Trusting the repository: $Repository."
-        Install-PackageProvider -Name "NuGet" -MinimumVersion 2.8.5.208 -Force
+        Install-PackageProvider -Name "NuGet" -MinimumVersion "2.8.5.208" -Force
         Set-PSRepository -Name $Repository -InstallationPolicy "Trusted"
     }
     catch {
