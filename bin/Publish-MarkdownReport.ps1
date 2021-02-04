@@ -69,12 +69,9 @@ ForEach ($module in "MarkdownPS") {
 }
 #endregion
 
-
 # Start with a blank markdown variable
 [System.String] $markdown
 $markdown += New-MDHeader -Text $version -Level 1
-# $markdown += New-MDHeader -Text "$ImagePublisher-$ImageOffer-$ImageSku-$version" -Level 1
-#$markdown += ""
 
 # Read the contents of the output files, convert to markdown
 ForEach ($file in $InputFile) {
@@ -82,7 +79,7 @@ ForEach ($file in $InputFile) {
     $TargetFile = Join-Path -Path $Path -ChildPath $file
     If (([System.IO.FileInfo]$TargetFile).Exists) {
         try {
-            Write-Verbose -Message "Reading: $TargetFile."
+            Write-Verbose -Message "================ Reading: $TargetFile."
             $table = Get-Content -Path $TargetFile | ConvertFrom-Json
         }
         catch {
@@ -91,14 +88,13 @@ ForEach ($file in $InputFile) {
 
         If ($table) {
             $markdown += New-MDHeader -Text ($file -replace ".json", "") -Level 2
-            #$markdown += ""
-            $markdown += $table | Sort-Object -Property Publisher, Version | New-MDTable
+            $markdown += $table | Sort-Object -Property "Publisher", "Name", "Version" | New-MDTable
             $markdown += ""
             Remove-Variable -Name "table"
         }
     }
     Else {
-        Write-Warning -Message "Cannot find: $TargetFile."
+        Write-Warning -Message "================ Cannot find: $TargetFile."
     }
 }
 
