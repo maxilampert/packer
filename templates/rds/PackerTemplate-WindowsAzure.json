@@ -64,7 +64,7 @@
                 "OperatingSystem": "{{user `managed_image_name`}}",
                 "Owner": "{{user `tag_owner`}}",
                 "Billing": "Packer",
-                "Source": "{{users `build_source_repo`}}"
+                "Source": "{{user `build_source_repo`}}"
             },
             "shared_image_gallery_destination": {
                 "subscription": "{{user `subscription_id`}}",
