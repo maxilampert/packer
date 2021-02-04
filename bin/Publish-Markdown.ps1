@@ -90,7 +90,7 @@ ForEach ($file in $InputFile) {
         }
 
         If ($table) {
-            $markdown += New-MDHeader -Text $file -Level 2
+            $markdown += New-MDHeader -Text ($file -replace ".json", "") -Level 2
             #$markdown += ""
             $markdown += $table | Sort-Object -Property Publisher, Version | New-MDTable
             $markdown += ""
