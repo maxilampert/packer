@@ -24,12 +24,7 @@
         "build_key_vault": "stpyimageaustraliaeast",
         "build_vnet": "vnet-ImageBuild-AustraliaEast",
         "build_subnet": "subnet-Packer",
-        "build_source_repo": "",
-        "destination_gallery_resource_group": "rg-Images-AustraliaEast",
-        "destination_gallery_name": "sigWindowsVirtualDesktop",
-        "destination_image_name": "{{user `image_publisher`}}-{{user `image_offer`}}-{{user `image_sku`}}",
-        "destination_image_version": "1.0.1",
-        "destination_replication_regions": "australiaeast"
+        "build_source_repo": ""
     },
     "builders": [
         {
@@ -65,14 +60,6 @@
                 "Owner": "{{user `tag_owner`}}",
                 "Billing": "Packer",
                 "Source": "{{user `build_source_repo`}}"
-            },
-            "shared_image_gallery_destination": {
-                "subscription": "{{user `subscription_id`}}",
-                "resource_group": "{{user `destination_gallery_resource_group`}}",
-                "gallery_name": "{{user `destination_gallery_name`}}",
-                "image_name": "{{user `destination_image_name`}}",
-                "image_version": "{{user `destination_image_version`}}",
-                "replication_regions": "{{user `destination_replication_regions`}}"
             }
         }
     ],

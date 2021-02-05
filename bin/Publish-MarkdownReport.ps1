@@ -1,29 +1,37 @@
 <# 
     .SYNOPSIS
         Creates markdown from JSON ouput generated from Azure DevOps builds
+        Uses environment variables created inside the Azure DevOps environment
 #>
 [CmdletBinding()]
 Param (
     [Parameter()]
-    [System.String] $Path,
+    [ValidateNotNullOrEmpty]
+    [System.String] $Path = [IO.Path]::Combine($env:SYSTEM_DEFAULTWORKINGDIRECTORY, "Json"),
 
     [Parameter()]
+    [ValidateNotNullOrEmpty]
     [System.String[]] $InputFile = @("InstalledSoftware.json", "InstalledHotfixes.json"),
 
     [Parameter()]
-    [System.String] $ImagePublisher = "MicrosoftWindowsDesktop",
+    [ValidateNotNullOrEmpty]
+    [System.String] $ImagePublisher = $env:IMAGE_PUBLISHER,
 
     [Parameter()]
-    [System.String] $ImageOffer = "Windows-10",
+    [ValidateNotNullOrEmpty]
+    [System.String] $ImageOffer = $env:IMAGE_OFFER,
 
     [Parameter()]
-    [System.String] $ImageSku = "20h2-ent",
+    [ValidateNotNullOrEmpty]
+    [System.String] $ImageSku = $IMAGE_SKU,
 
     [Parameter()]
-    [System.String] $Version = "20210204.14",
+    [ValidateNotNullOrEmpty]
+    [System.String] $Version = $env:CREATED_DATE,
 
     [Parameter()]
-    [System.String] $DestinationPath = "docs"
+    [ValidateNotNullOrEmpty]
+    [System.String] $DestinationPath = [IO.Path]::Combine($env:SYSTEM_DEFAULTWORKINGDIRECTORY, "docs")
 )
 
 #region Trust the PSGallery for modules
@@ -98,7 +106,24 @@ ForEach ($file in $InputFile) {
     }
 }
 
+# Create the target folder
+try {
+    $TargetPath = [IO.Path]::Combine($DestinationPath, $ImagePublisher, $ImageOffer, $ImageSku)
+    New-Item -Path $TargetPath -ItemType "Directory" -Force -ErrorAction "SilentlyContinue"
+}
+catch {
+    Throw $_
+    Break
+}
+
 # Write the markdown to a file
-$TargetPath = [IO.Path]::Combine($DestinationPath, $ImagePublisher, $ImageOffer, $ImageSku)
-New-Item -Path $TargetPath -ItemType "Directory" -Force -ErrorAction "SilentlyContinue"
-$markdown | Out-File -FilePath (Join-Path -Path $TargetPath -ChildPath "$Version.md") -Encoding "Utf8" -Force
+try {
+    $markdown | Out-File -FilePath (Join-Path -Path $TargetPath -ChildPath "$Version.md") -Encoding "Utf8" -Force
+}
+catch {
+    Throw $_
+    Break
+}
+
+# If we're all good and the markdown has been created, remove the JSON files from the working repo
+Remove-Item -Path $Path -Force
