@@ -6,7 +6,7 @@
 [CmdletBinding()]
 Param (
     [Parameter()]
-    [System.String] $Path = [IO.Path]::Combine($env:SYSTEM_DEFAULTWORKINGDIRECTORY, "Json"),
+    [System.String] $Path = $env:SYSTEM_DEFAULTWORKINGDIRECTORY,
 
     [Parameter()]
     [System.String[]] $InputFile = @("InstalledSoftware.json", "InstalledHotfixes.json"),
@@ -24,7 +24,7 @@ Param (
     [System.String] $Version = $env:CREATED_DATE,
 
     [Parameter()]
-    [System.String] $DestinationPath = [IO.Path]::Combine($env:SYSTEM_DEFAULTWORKINGDIRECTORY, "docs")
+    [System.String] $DestinationPath = [System.IO.Path]::Combine($env:SYSTEM_DEFAULTWORKINGDIRECTORY, "docs")
 )
 
 #region Trust the PSGallery for modules
@@ -69,11 +69,11 @@ ForEach ($module in "MarkdownPS") {
 #endregion
 
 # Output variable values
-Write-Verbose -Message "================ Path:              $Path."
-Write-Verbose -Message "================ ImagePublisher:    $ImagePublisher."
-Write-Verbose -Message "================ ImageOffer:        $ImageOffer."
-Write-Verbose -Message "================ ImageSku:          $ImageSku."
-Write-Verbose -Message "================ DestinationPath:   $ImagePublisher."
+Write-Host "================ Path:              $Path."
+Write-Host "================ ImagePublisher:    $ImagePublisher."
+Write-Host "================ ImageOffer:        $ImageOffer."
+Write-Host "================ ImageSku:          $ImageSku."
+Write-Host "================ DestinationPath:   $ImagePublisher."
 
 # Start with a blank markdown variable
 [System.String] $markdown
@@ -85,7 +85,7 @@ ForEach ($file in $InputFile) {
     $TargetFile = Join-Path -Path $Path -ChildPath $file
     If (([System.IO.FileInfo]$TargetFile).Exists) {
         try {
-            Write-Verbose -Message "================ Reading: $TargetFile."
+            Write-Host "================ Reading: $TargetFile."
             $table = Get-Content -Path $TargetFile | ConvertFrom-Json
         }
         catch {
@@ -106,8 +106,8 @@ ForEach ($file in $InputFile) {
 
 # Create the target folder
 try {
-    $TargetPath = [IO.Path]::Combine($DestinationPath, $ImagePublisher, $ImageOffer, $ImageSku)
-    New-Item -Path $TargetPath -ItemType "Directory" -Force -ErrorAction "SilentlyContinue"
+    $TargetPath = [System.IO.Path]::Combine($DestinationPath, $ImagePublisher, $ImageOffer, $ImageSku)
+    New-Item -Path $TargetPath -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
 }
 catch {
     Throw $_
@@ -124,4 +124,11 @@ catch {
 }
 
 # If we're all good and the markdown has been created, remove the JSON files from the working repo
-Remove-Item -Path $Path -Force
+<#
+try {
+    Remove-Item -Path $Path -Force -Confirm:$False -ErrorAction "SilentlyContinue"
+}
+catch {
+    Throw "Failed to remove path: $Path."
+}
+#>

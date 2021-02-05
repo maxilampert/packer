@@ -73,8 +73,6 @@
             "scripts": [
                 "build/rds/01_Rds-PrepImage.ps1",
                 "build/common/03_RegionLanguage.ps1",
-                "build/common/04_Customise.ps1",
-                "build/rds/05_Rds-Roles.ps1",
                 "build/common/06_SupportFunctions.ps1",
                 "build/rds/07_MicrosoftVcRedists.ps1",
                 "build/rds/09_MicrosoftEdge.ps1",
