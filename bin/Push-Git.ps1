@@ -95,8 +95,8 @@ If (Get-PSRepository | Where-Object { $_.Name -eq $Repository -and $_.Installati
 }
 #endregion
 
-#region Install the MarkdownPS module
-ForEach ($module in "MarkdownPS") {
+#region Install the posh-git module
+ForEach ($module in "posh-git") {
     try {
         Write-Host "================ Checking module: $module"
         $installedModule = Get-Module -Name $module -ListAvailable | `
@@ -109,8 +109,6 @@ ForEach ($module in "MarkdownPS") {
                 Name               = $module
                 SkipPublisherCheck = $true
                 Force              = $true
-                AllowPrerelease    = $False
-                AcceptLicense      = $true
                 ErrorAction        = "Stop"
             }
             Install-Module @params

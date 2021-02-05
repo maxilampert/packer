@@ -6,31 +6,24 @@
 [CmdletBinding()]
 Param (
     [Parameter()]
-    [ValidateNotNullOrEmpty]
     [System.String] $Path = [IO.Path]::Combine($env:SYSTEM_DEFAULTWORKINGDIRECTORY, "Json"),
 
     [Parameter()]
-    [ValidateNotNullOrEmpty]
     [System.String[]] $InputFile = @("InstalledSoftware.json", "InstalledHotfixes.json"),
 
     [Parameter()]
-    [ValidateNotNullOrEmpty]
     [System.String] $ImagePublisher = $env:IMAGE_PUBLISHER,
 
     [Parameter()]
-    [ValidateNotNullOrEmpty]
     [System.String] $ImageOffer = $env:IMAGE_OFFER,
 
     [Parameter()]
-    [ValidateNotNullOrEmpty]
     [System.String] $ImageSku = $IMAGE_SKU,
 
     [Parameter()]
-    [ValidateNotNullOrEmpty]
     [System.String] $Version = $env:CREATED_DATE,
 
     [Parameter()]
-    [ValidateNotNullOrEmpty]
     [System.String] $DestinationPath = [IO.Path]::Combine($env:SYSTEM_DEFAULTWORKINGDIRECTORY, "docs")
 )
 
@@ -63,8 +56,6 @@ ForEach ($module in "MarkdownPS") {
                 Name               = $module
                 SkipPublisherCheck = $true
                 Force              = $true
-                AllowPrerelease    = $False
-                AcceptLicense      = $true
                 ErrorAction        = "Stop"
             }
             Install-Module @params
@@ -76,6 +67,13 @@ ForEach ($module in "MarkdownPS") {
     }
 }
 #endregion
+
+# Output variable values
+Write-Verbose -Message "================ Path:              $Path."
+Write-Verbose -Message "================ ImagePublisher:    $ImagePublisher."
+Write-Verbose -Message "================ ImageOffer:        $ImageOffer."
+Write-Verbose -Message "================ ImageSku:          $ImageSku."
+Write-Verbose -Message "================ DestinationPath:   $ImagePublisher."
 
 # Start with a blank markdown variable
 [System.String] $markdown

@@ -37,8 +37,6 @@ Function Install-RequiredModules {
                 Name               = $module
                 SkipPublisherCheck = $true
                 Force              = $true
-                AllowPrerelease    = $False
-                AcceptLicense      = $true
                 ErrorAction        = "Stop"
             }
             Install-Module @params
