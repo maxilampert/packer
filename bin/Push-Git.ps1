@@ -4,7 +4,14 @@
         Uses environment variables created inside the Azure DevOps environment
 #>
 [CmdletBinding()]
-Param ()
+Param (
+    [Parameter()]
+    [System.String] $GitHubKey
+)
+
+Write-Host "================ GitHubKey:"
+Write-Host "##vso[task.setvariable variable=GitHubKey]$GitHubKey"
+
 
 #region Functions
 Function Invoke-Process {
@@ -129,11 +136,12 @@ Try {
     $env:Path += ";$env:ProgramFiles\Git\cmd"
     Import-Module -Name "posh-git" -ErrorAction "Stop"
 
+    # Branch to use
     $branch = "main"
 
     # Configure the git environment
     git config --global credential.helper store
-    Add-Content -Path (Join-Path -Path $env:USERPROFILE -ChildPath ".git-credentials") -Value "https://$($env:GitHubKey):x-oauth-basic@github.com`n"
+    Add-Content -Path (Join-Path -Path $env:USERPROFILE -ChildPath ".git-credentials") -Value "https://$(GitHubKey):x-oauth-basic@github.com`n"
     git config --global user.email "$($env:GitHubUserEmail)"
     git config --global user.name "$($env:GitHubUserName)"
     git config --global core.autocrlf true

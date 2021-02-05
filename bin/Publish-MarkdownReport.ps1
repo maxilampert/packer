@@ -122,13 +122,3 @@ catch {
     Throw $_
     Break
 }
-
-# If we're all good and the markdown has been created, remove the JSON files from the working repo
-<#
-try {
-    Remove-Item -Path $Path -Force -Confirm:$False -ErrorAction "SilentlyContinue"
-}
-catch {
-    Throw "Failed to remove path: $Path."
-}
-#>

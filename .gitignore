@@ -16,3 +16,9 @@ crash.log
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+# Files used in Azure DevOps
+InstalledHotfixes.json
+InstalledSoftware.json
+json/**
+packer-manifest*
