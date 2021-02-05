@@ -6,6 +6,4 @@ tags:
   - Packer
   - Azure DevOps
   - Evergreen
-template:
-  name: tomjoht
-  repo: documentation-theme-jekyll
+repository: tomjoht/documentation-theme-jekyll
