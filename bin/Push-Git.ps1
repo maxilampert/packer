@@ -5,7 +5,7 @@
 #>
 [CmdletBinding()]
 Param (
-    [Parameter()]
+    [Parameter(Position = 0)]
     [System.String] $GitHubKey
 )
 
@@ -141,7 +141,7 @@ Try {
 
     # Configure the git environment
     git config --global credential.helper store
-    Add-Content -Path (Join-Path -Path $env:USERPROFILE -ChildPath ".git-credentials") -Value "https://$(GitHubKey):x-oauth-basic@github.com`n"
+    Add-Content -Path (Join-Path -Path $env:USERPROFILE -ChildPath ".git-credentials") -Value "https://$($GitHubKey):x-oauth-basic@github.com`n"
     git config --global user.email "$($env:GitHubUserEmail)"
     git config --global user.name "$($env:GitHubUserName)"
     git config --global core.autocrlf true
