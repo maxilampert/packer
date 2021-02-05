@@ -18,7 +18,7 @@ Param (
     [System.String] $ImageOffer = $env:IMAGE_OFFER,
 
     [Parameter()]
-    [System.String] $ImageSku = $IMAGE_SKU,
+    [System.String] $ImageSku = $env:IMAGE_SKU,
 
     [Parameter()]
     [System.String] $Version = $env:CREATED_DATE,
