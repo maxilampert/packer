@@ -4,6 +4,7 @@ description: >-
   Application and update reports for Windows images built in Azure DevOps using Hashicorp Packer and Evergreen
 tags:
   - Packer
-  - Azure DevOps
+  - Azure
+  - DevOps
   - Evergreen
-remote_theme: pmarsceill/just-the-docs
+remote_theme: tomjoht/documentation-theme-jekyll
