@@ -20,7 +20,7 @@ Param (
 # $OutFile = [System.IO.Path]::Combine("/Users/aaron/Projects/packer", "docs", "index.md")
 
 # Start with a blank markdown variable
-Remove-Variable -Name markdown
+Remove-Variable -Name markdown -ErrorAction "SilentlyContinue"
 [System.String] $markdown
 
 # Get a listing of files in the /docs folder
