@@ -106,6 +106,9 @@ Try {
     git config --global core.autocrlf true
     git config --global core.safecrlf false
 
+    # Update the local repo in case anything has changed on the remote during the build
+    git fetch origin
+
     # Push changes to GitHub
     Invoke-Process -FilePath "git" -ArgumentList "checkout $branch"
     git add --all
