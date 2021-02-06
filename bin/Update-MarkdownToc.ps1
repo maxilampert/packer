@@ -18,6 +18,8 @@ Param (
 # Local testing
 #$Path = [System.IO.Path]::Combine("C:\Projects\packer", "docs")
 #$OutFile = [System.IO.Path]::Combine("C:\Projects\packer", "docs", "index.md")
+#$Path = [System.IO.Path]::Combine("/Users/aaron/Projects/packer/docs", "docs")
+#$OutFile = [System.IO.Path]::Combine("/Users/aaron/Projects/packer/docs", "docs", "index.md")
 
 Write-Host "================ Input: $Path."
 Write-Host "================ Output: $OutFile."

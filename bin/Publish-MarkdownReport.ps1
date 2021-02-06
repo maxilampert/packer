@@ -27,6 +27,12 @@ Param (
     [System.String] $DestinationPath = [System.IO.Path]::Combine($env:SYSTEM_DEFAULTWORKINGDIRECTORY, "docs")
 )
 
+# Local testing
+#$Path = [System.IO.Path]::Combine("C:\Projects\packer", "docs")
+#$OutFile = [System.IO.Path]::Combine("C:\Projects\packer", "docs", "index.md")
+#$Path = [System.IO.Path]::Combine("/Users/aaron/Projects/packer/docs", "docs")
+#$OutFile = [System.IO.Path]::Combine("/Users/aaron/Projects/packer/docs", "docs", "index.md")
+
 # Output variable values
 Write-Host "================ Path:              $Path."
 Write-Host "================ ImagePublisher:    $ImagePublisher."
@@ -36,7 +42,7 @@ Write-Host "================ DestinationPath:   $ImagePublisher."
 
 # Start with a markdown variable
 [System.String] $markdown += New-MDHeader -Text $version -Level 1 -NoNewLine
-$markdown += "`n"
+$markdown += "`n`n"
 
 # Read the contents of the output files, convert to markdown
 ForEach ($file in $InputFile) {
@@ -53,7 +59,7 @@ ForEach ($file in $InputFile) {
 
         If ($table) {
             $markdown += New-MDHeader -Text ($file -replace ".json", "") -Level 2 -NoNewLine
-            $markdown += "`n"
+            $markdown += "`n`n"
             $markdown += $table | Sort-Object -Property "Publisher", "Name", "Version" | New-MDTable
             $markdown += "`n"
             Remove-Variable -Name "table" -ErrorAction "SilentlyContinue"
@@ -76,9 +82,9 @@ catch {
 
 # Write the markdown to a file
 try {
-    Write-Host "================ Writing markdown to: $(Join-Path -Path $TargetPath -ChildPath "$Version.md")."
-    If ($markdown[-1] -ne "`n") { $markdown += "`n" }
-    $markdown | Out-File -FilePath (Join-Path -Path $TargetPath -ChildPath "$Version.md") -Encoding "Utf8" -NoNewLine -Force
+    $OutFile = Join-Path -Path $TargetPath -ChildPath "$Version.md"
+    Write-Host "================ Writing markdown to: $OutFile."
+    ($markdown.TrimEnd("`n")) | Out-File -FilePath $OutFile -Encoding "Utf8" -NoNewLine -Force
 }
 catch {s
     Throw $_
