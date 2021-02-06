@@ -6,3 +6,4 @@ tags:
   - Packer
   - Azure DevOps
   - Evergreen
+remote_theme: pmarsceill/just-the-docs
