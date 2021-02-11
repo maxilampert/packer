@@ -22,3 +22,4 @@ InstalledHotfixes.json
 InstalledSoftware.json
 json/**
 packer-manifest*
+debug.log
