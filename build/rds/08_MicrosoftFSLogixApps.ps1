@@ -131,7 +131,7 @@ Function Install-FSLogix ($Path) {
         Write-Host "================ Done"
     }
     Else {
-        Write-Host "================ Failed to retreive Microsoft FSLogix Apps"
+        Write-Host "================ Failed to retrieve Microsoft FSLogix Apps"
     }
 }
 #endregion Functions
