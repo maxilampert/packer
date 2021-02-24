@@ -11,7 +11,7 @@ $ProgressPreference = "SilentlyContinue"
 $target = "$env:AppData\packer.d\plugins"
 
 # Windows Update plugin
-$url = "https://github.com/rgl/packer-provisioner-windows-update/releases/download/v0.11.0/packer-provisioner-windows-update_0.10.1_windows_amd64.zip"
+$url = "https://github.com/rgl/packer-provisioner-windows-update/releases/download/v0.11.0/packer-provisioner-windows-update_0.11.0_windows_amd64.zip"
 $zip = "$env:Temp\packer-provisioner-windows-update-windows.zip"
 $exe = "packer-provisioner-windows-update.exe"
 If (Test-Path -Path (Join-Path -Path $target -ChildPath $exe)) {
