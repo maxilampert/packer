@@ -84,7 +84,7 @@ Function Global:Invoke-Process {
     }
 }
 
-Function Install-MicrosoftOffice ($Path) {
+Function Install-Microsoft365Apps ($Path) {
 
     $OfficeXml = @"
     <Configuration ID="a39b1c70-558d-463b-b3d4-9156ddbcbb05">
@@ -170,7 +170,7 @@ Function Install-MicrosoftOffice ($Path) {
 Function Install-MicrosoftTeams ($Path) {
     Write-Host "================ Microsoft Teams"
     Write-Host "================ Downloading Microsoft Teams"
-    $Teams = Get-MicrosoftTeams | Where-Object { $_.Architecture -eq "x64" }
+    $Teams = Get-MicrosoftTeams | Where-Object { $_.Architecture -eq "x64" -and $_.Ring -eq "General" }
     
     If ($Teams) {
         If (!(Test-Path $Path)) { New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null }
@@ -234,24 +234,6 @@ Function Set-TeamsAutostart {
     reg delete "HKLM\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Run" /v "Teams" /f
 }
 
-Function Uninstall-MicrosoftOneDrive {
-    If (Get-Process -Name "OneDrive.exe" -ErrorAction SilentlyContinue ) { Stop-Process -Name "OneDrive.exe" -PassThru -ErrorAction SilentlyContinue }
-    If (Get-Process -Name "Explorer.exe" -ErrorAction SilentlyContinue ) { Stop-Process -Name "OneDrive.exe" -PassThru -ErrorAction SilentlyContinue }
-    if (Test-Path "$env:SystemRoot\System32\OneDriveSetup.exe") {
-        Start-Process "$env:SystemRoot\System32\OneDriveSetup.exe" -ArgumentList "/uninstall" -Wait 
-    }
-    if (Test-Path "$env:SystemRoot\SysWOW64\OneDriveSetup.exe") {
-        Start-Process "$env:SystemRoot\SysWOW64\OneDriveSetup.exe" -ArgumentList "/uninstall" -Wait
-    }
-    $Shortcuts = "$env:SystemRoot\ServiceProfiles\LocalService\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\OneDrive.lnk", `
-        "$env:SystemRoot\ServiceProfiles\NetworkService\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\OneDrive.lnk"
-    ForEach ($shortcut in $Shortcuts) { If (Test-Path -Path $shortcut) { Remove-Item -Path $shortcut -Force } }
-    Start-Process $env:SystemRoot\System32\Reg.exe -ArgumentList "Load HKLM\Temp C:\Users\Default\NTUSER.DAT" -Wait
-    Start-Process $env:SystemRoot\System32\Reg.exe -ArgumentList "Delete HKLM\Temp\SOFTWARE\Microsoft\Windows\CurrentVersion\Run /v OneDriveSetup /f" -Wait
-    Start-Process $env:SystemRoot\System32\Reg.exe -ArgumentList "Unload HKLM\Temp" -Wait
-    Start-Process -FilePath $env:SystemRoot\Explorer.exe -Wait
-}
-
 Function Install-MicrosoftOneDrive ($Path) {
     Write-Host "================ Microsoft OneDrive"    
     Write-Host "================ Downloading Microsoft OneDrive"
@@ -305,7 +287,7 @@ $ProgressPreference = "SilentlyContinue"
 New-Item -Path $Target -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
 
 # Run tasks/install apps
-Install-MicrosoftOffice -Path "$Target\Office"
+Install-Microsoft365Apps -Path "$Target\Microsoft365Apps"
 Install-MicrosoftTeams -Path "$Target\Teams"
 Set-TeamsAutostart
 Install-MicrosoftOneDrive -Path "$Target\OneDrive"
