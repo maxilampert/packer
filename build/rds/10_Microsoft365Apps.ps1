@@ -289,7 +289,7 @@ Function Install-MicrosoftOneDrive ($Path) {
         Write-Host "================ Done"
     }
     Else {
-        Write-Host "================ Failed to retreive Microsoft OneDrive"
+        Write-Host "================ Failed to retrieve Microsoft OneDrive"
     }
 }
 #endregion Functions
