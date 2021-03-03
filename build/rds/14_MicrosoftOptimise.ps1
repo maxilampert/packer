@@ -167,15 +167,14 @@ Function Disable-Services {
     #################### BEGIN: DISABLE SERVICES section ###########################
     Write-Host "========== Disabling services."
     $ServicesToDisable = @("autotimesvc", "BcastDVRUserService", "CDPSvc", "CDPUserSvc", "CscService",
-        "defragsvc", "DiagSvc", "DiagTrack", "DPS", "DsmSvc", "DusmSvc", "icssvc", "lfsvc", "MapsBroker",
+        "defragsvc", "DiagTrack", "DsmSvc", "DusmSvc", "icssvc", "lfsvc", "MapsBroker",
         "MessagingService", "OneSyncSvc", "PimIndexMaintenanceSvc", "Power", "SEMgrSvc", "SmsRouter",
-        "SysMain", "TabletInputService", "UsoSvc", "WdiSystemHost", "WerSvc", "XblAuthManager",
+        "SysMain", "TabletInputService", "UsoSvc", "WerSvc", "XblAuthManager",
         "XblGameSave", "XboxGipSvc", "XboxNetApiSvc", "AdobeARMservice")
     If ($ServicesToDisable.count -gt 0) {
         Foreach ($Item in $ServicesToDisable) {
             $service = Get-Service -Name $Item -ErrorAction "SilentlyContinue"
             Write-Host "========== Disabling service: $($service.DisplayName)."
-            $service | Stop-Service -Force -ErrorAction "SilentlyContinue"
             $service | Set-Service -StartupType "Disabled" -ErrorAction "SilentlyContinue"
         }
     }
