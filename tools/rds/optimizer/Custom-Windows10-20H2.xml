@@ -3,12 +3,12 @@
   <metadata>
     <schemaversion>2.0</schemaversion>
     <version>1.0</version>
-    <id>6866CBCB-C915-461E-A209-F7FA68077325</id>
-    <displayname>Windows 10 1909</displayname>
-    <description>Customised Windows 10 1909 image</description>
+    <id>F2A567B3-7EF2-4B2A-AB8E-84CD3E4554E7</id>
+    <displayname>Windows 10 20H2</displayname>
+    <description>Template to optimise Windows 10 20H2</description>
     <category>OS Optimizations</category>
     <author>Aaron Parker</author>
-    <lastupdatedate>5/12/2020</lastupdatedate>
+    <lastupdatedate>3/23/2021</lastupdatedate>
   </metadata>
   <group>
     <id>DisableServices</id>
@@ -111,30 +111,6 @@
       </action>
     </entry>
     <entry>
-      <name>Connected Devices Platform Service</name>
-      <description>This service is used for Connected Devices Platform scenarios. This is per-user service.</description>
-      <execute>1</execute>
-      <action>
-        <plugin>Services</plugin>
-        <params>
-          <name>CDPSvc</name>
-          <value>Disabled</value>
-        </params>
-      </action>
-    </entry>
-    <entry>
-      <name>Connected User Experiences and Telemetry</name>
-      <description>The Connected User Experiences and Telemetry service enables features that support in-application and connected user experiences. Additionally, this service manages the event driven collection and transmission of diagnostic and usage information (used to improve the experience and quality of the Windows Platform) when the diagnostics and usage privacy option settings are enabled under Feedback and Diagnostics.</description>
-      <execute>1</execute>
-      <action>
-        <plugin>Services</plugin>
-        <params>
-          <name>DiagTrack</name>
-          <value>Disabled</value>
-        </params>
-      </action>
-    </entry>
-    <entry>
       <name>Contact Data</name>
       <description>Indexes contact data for fast contact searching. If you stop or disable this service, contacts might be missing from your search results.</description>
       <execute>1</execute>
@@ -195,6 +171,30 @@
       </action>
     </entry>
     <entry>
+      <name>Distributed Link Tracking Client</name>
+      <description>Maintains links between NTFS files within a computer or across computers in a network domain.</description>
+      <execute>1</execute>
+      <action>
+        <plugin>Services</plugin>
+        <params>
+          <name>TrkWks</name>
+          <value>Disabled</value>
+        </params>
+      </action>
+    </entry>
+    <entry>
+      <name>Downloaded Maps Manager</name>
+      <description>Windows service for application access to downloaded maps. This service is started on-demand by application accessing downloaded maps. Disabling this service will prevent apps from accessing maps.</description>
+      <execute>1</execute>
+      <action>
+        <plugin>Services</plugin>
+        <params>
+          <name>MapsBroker</name>
+          <value>Disabled</value>
+        </params>
+      </action>
+    </entry>
+    <entry>
       <name>Encrypting File System (EFS)</name>
       <description>Provides the core file encryption technology used to store encrypted files on NTFS file system volumes.</description>
       <execute>1</execute>
@@ -220,7 +220,7 @@
     </entry>
     <entry>
       <name>Function Discovery Provider Host</name>
-      <description>The FDPHOST service hosts the Function Discovery (FD) network discovery providers. These FD providers supply network discovery services for the Simple Services Discovery Protocol (SSDP) and Web Services – Discovery (WS-D) protocol. Stopping or disabling the FDPHOST service will disable network discovery for these protocols when using FD. When this service is unavailable, network services using FD and relying on these discovery protocols will be unable to find network devices or resources.</description>
+      <description>The FDPHOST service hosts the Function Discovery (FD) network discovery providers. These FD providers supply network discovery services for the Simple Services Discovery Protocol (SSDP) and Web Services Discovery (WS-D) protocol. Stopping or disabling the FDPHOST service will disable network discovery for these protocols when using FD. When this service is unavailable, network services using FD and relying on these discovery protocols will be unable to find network devices or resources.</description>
       <execute>1</execute>
       <action>
         <plugin>Services</plugin>
@@ -250,6 +250,18 @@
         <plugin>Services</plugin>
         <params>
           <name>BcastDVRUserService</name>
+          <value>Disabled</value>
+        </params>
+      </action>
+    </entry>
+    <entry>
+      <name>Geolocation Service</name>
+      <description>This service monitors the current location of the system and manages geofences (a geographical location with associated events).  If you turn off this service, applications will be unable to use or receive notifications for geolocation or geofences.</description>
+      <execute>1</execute>
+      <action>
+        <plugin>Services</plugin>
+        <params>
+          <name>lfsvc</name>
           <value>Disabled</value>
         </params>
       </action>
@@ -303,18 +315,6 @@
       </action>
     </entry>
     <entry>
-      <name>Optimize drives</name>
-      <description>Helps the computer run more efficiently by optimizing files on storage drives.</description>
-      <execute>1</execute>
-      <action>
-        <plugin>Services</plugin>
-        <params>
-          <name>defragsvc</name>
-          <value>Disabled</value>
-        </params>
-      </action>
-    </entry>
-    <entry>
       <name>Parental Controls</name>
       <description>Enforces parental controls for child accounts in Windows. If this service is stopped or disabled, parental controls may not be enforced.</description>
       <execute>1</execute>
@@ -346,18 +346,6 @@
         <plugin>Services</plugin>
         <params>
           <name>SensrSvc</name>
-          <value>Disabled</value>
-        </params>
-      </action>
-    </entry>
-    <entry>
-      <name>Shell Hardware Detection</name>
-      <description>Provides notifications for AutoPlay hardware events.</description>
-      <execute>1</execute>
-      <action>
-        <plugin>Services</plugin>
-        <params>
-          <name>ShellHWDetection</name>
           <value>Disabled</value>
         </params>
       </action>
@@ -449,7 +437,7 @@ Recommended by Microsoft to disable: https://docs.microsoft.com/en-us/windows-se
     </entry>
     <entry>
       <name>WWAN AutoConfig</name>
-      <description>This service manages mobile broadband (GSM &amp; CDMA) data card/embedded module adapters and connections by auto-configuring the networks. It is strongly recommended that this service be kept running for best user experience of mobile broadband devices.</description>
+      <description>This service manages mobile broadband (GSM and CDMA) data card/embedded module adapters and connections by auto-configuring the networks. It is strongly recommended that this service be kept running for best user experience of mobile broadband devices.</description>
       <execute>1</execute>
       <action>
         <plugin>Services</plugin>
@@ -507,431 +495,12 @@ Recommended by Microsoft to disable: https://docs.microsoft.com/en-us/windows-se
         </params>
       </action>
     </entry>
-    <entry>
-      <name>Distributed Link Tracking Client</name>
-      <description>Maintains links between NTFS files within a computer or across computers in a network domain.</description>
-      <execute>1</execute>
-      <action>
-        <plugin>Services</plugin>
-        <params>
-          <name>TrkWks</name>
-          <value>Disabled</value>
-        </params>
-      </action>
-    </entry>
   </group>
   <group>
     <id>RemoveApplications</id>
     <displayname>Remove Built-in Apps</displayname>
     <description>Remove Windows Universal Apps to speed up logons.
 DOES NOT SUPPORT ROLLBACK!</description>
-    <entry>
-      <name>Microsoft.BingWeather</name>
-      <description>Microsoft.BingWeather</description>
-      <execute>1</execute>
-      <action>
-        <plugin>UWP</plugin>
-        <params>
-          <name>Microsoft.BingWeather</name>
-        </params>
-      </action>
-    </entry>
-    <entry>
-      <name>Microsoft.DesktopAppInstaller</name>
-      <description>Microsoft.DesktopAppInstaller</description>
-      <execute>0</execute>
-      <action>
-        <plugin>UWP</plugin>
-        <params>
-          <name>Microsoft.DesktopAppInstaller</name>
-        </params>
-      </action>
-    </entry>
-    <entry>
-      <name>Microsoft.GetHelp</name>
-      <description>Microsoft.GetHelp</description>
-      <execute>1</execute>
-      <action>
-        <plugin>UWP</plugin>
-        <params>
-          <name>Microsoft.GetHelp</name>
-        </params>
-      </action>
-    </entry>
-    <entry>
-      <name>Microsoft.Getstarted</name>
-      <description>Microsoft.Getstarted</description>
-      <execute>0</execute>
-      <action>
-        <plugin>UWP</plugin>
-        <params>
-          <name>Microsoft.Getstarted</name>
-        </params>
-      </action>
-    </entry>
-    <entry>
-      <name>Microsoft.Messaging</name>
-      <description>Microsoft.Messaging</description>
-      <execute>1</execute>
-      <action>
-        <plugin>UWP</plugin>
-        <params>
-          <name>Microsoft.Messaging</name>
-        </params>
-      </action>
-    </entry>
-    <entry>
-      <name>Microsoft.Microsoft3DViewer</name>
-      <description>Microsoft.Microsoft3DViewer</description>
-      <execute>1</execute>
-      <action>
-        <plugin>UWP</plugin>
-        <params>
-          <name>Microsoft.Microsoft3DViewer</name>
-        </params>
-      </action>
-    </entry>
-    <entry>
-      <name>Microsoft.MicrosoftOfficeHub</name>
-      <description>Microsoft.MicrosoftOfficeHub</description>
-      <execute>1</execute>
-      <action>
-        <plugin>UWP</plugin>
-        <params>
-          <name>Microsoft.MicrosoftOfficeHub</name>
-        </params>
-      </action>
-    </entry>
-    <entry>
-      <name>Microsoft.MicrosoftSolitaireCollection</name>
-      <description>Microsoft.MicrosoftSolitaireCollection</description>
-      <execute>1</execute>
-      <action>
-        <plugin>UWP</plugin>
-        <params>
-          <name>Microsoft.MicrosoftSolitaireCollection</name>
-        </params>
-      </action>
-    </entry>
-    <entry>
-      <name>Microsoft.MicrosoftStickyNotes</name>
-      <description>Microsoft.MicrosoftStickyNotes</description>
-      <execute>1</execute>
-      <action>
-        <plugin>UWP</plugin>
-        <params>
-          <name>Microsoft.MicrosoftStickyNotes</name>
-        </params>
-      </action>
-    </entry>
-    <entry>
-      <name>Microsoft.MSPaint</name>
-      <description>Microsoft.MSPaint</description>
-      <execute>1</execute>
-      <action>
-        <plugin>UWP</plugin>
-        <params>
-          <name>Microsoft.MSPaint</name>
-        </params>
-      </action>
-    </entry>
-    <entry>
-      <name>Microsoft.Office.OneNote</name>
-      <description>Microsoft.Office.OneNote</description>
-      <execute>1</execute>
-      <action>
-        <plugin>UWP</plugin>
-        <params>
-          <name>Microsoft.Office.OneNote</name>
-        </params>
-      </action>
-    </entry>
-    <entry>
-      <name>Microsoft.OneConnect</name>
-      <description>Microsoft.OneConnect</description>
-      <execute>1</execute>
-      <action>
-        <plugin>UWP</plugin>
-        <params>
-          <name>Microsoft.OneConnect</name>
-        </params>
-      </action>
-    </entry>
-    <entry>
-      <name>Microsoft.People</name>
-      <description>Microsoft.People</description>
-      <execute>1</execute>
-      <action>
-        <plugin>UWP</plugin>
-        <params>
-          <name>Microsoft.People</name>
-        </params>
-      </action>
-    </entry>
-    <entry>
-      <name>Microsoft.Print3D</name>
-      <description>Microsoft.Print3D</description>
-      <execute>1</execute>
-      <action>
-        <plugin>UWP</plugin>
-        <params>
-          <name>Microsoft.Print3D</name>
-        </params>
-      </action>
-    </entry>
-    <entry>
-      <name>Microsoft.SkypeApp</name>
-      <description>Microsoft.SkypeApp</description>
-      <execute>1</execute>
-      <action>
-        <plugin>UWP</plugin>
-        <params>
-          <name>Microsoft.SkypeApp</name>
-        </params>
-      </action>
-    </entry>
-    <entry>
-      <name>Microsoft.Wallet</name>
-      <description>Microsoft.Wallet</description>
-      <execute>1</execute>
-      <action>
-        <plugin>UWP</plugin>
-        <params>
-          <name>Microsoft.Wallet</name>
-        </params>
-      </action>
-    </entry>
-    <entry>
-      <name>Microsoft.WebMediaExtensions</name>
-      <description>Microsoft.WebMediaExtensions</description>
-      <execute>1</execute>
-      <action>
-        <plugin>UWP</plugin>
-        <params>
-          <name>Microsoft.WebMediaExtensions</name>
-        </params>
-      </action>
-    </entry>
-    <entry>
-      <name>Microsoft.Windows.Photos</name>
-      <description>Microsoft.Windows.Photos</description>
-      <execute>0</execute>
-      <action>
-        <plugin>UWP</plugin>
-        <params>
-          <name>Microsoft.Windows.Photos</name>
-        </params>
-      </action>
-    </entry>
-    <entry>
-      <name>Microsoft.WindowsAlarms</name>
-      <description>Microsoft.WindowsAlarms</description>
-      <execute>1</execute>
-      <action>
-        <plugin>UWP</plugin>
-        <params>
-          <name>Microsoft.WindowsAlarms</name>
-        </params>
-      </action>
-    </entry>
-    <entry>
-      <name>Microsoft.WindowsCamera</name>
-      <description>Microsoft.WindowsCamera</description>
-      <execute>1</execute>
-      <action>
-        <plugin>UWP</plugin>
-        <params>
-          <name>Microsoft.WindowsCamera</name>
-        </params>
-      </action>
-    </entry>
-    <entry>
-      <name>Microsoft.WindowsFeedbackHub</name>
-      <description>Microsoft.WindowsFeedbackHub</description>
-      <execute>1</execute>
-      <action>
-        <plugin>UWP</plugin>
-        <params>
-          <name>Microsoft.WindowsFeedbackHub</name>
-        </params>
-      </action>
-    </entry>
-    <entry>
-      <name>Microsoft.WindowsMaps</name>
-      <description>Microsoft.WindowsMaps</description>
-      <execute>1</execute>
-      <action>
-        <plugin>UWP</plugin>
-        <params>
-          <name>Microsoft.WindowsMaps</name>
-        </params>
-      </action>
-    </entry>
-    <entry>
-      <name>Microsoft.WindowsSoundRecorder</name>
-      <description>Microsoft.WindowsSoundRecorder</description>
-      <execute>1</execute>
-      <action>
-        <plugin>UWP</plugin>
-        <params>
-          <name>Microsoft.WindowsSoundRecorder</name>
-        </params>
-      </action>
-    </entry>
-    <entry>
-      <name>Microsoft.Xbox.TCUI</name>
-      <description>Microsoft.Xbox.TCUI</description>
-      <execute>1</execute>
-      <action>
-        <plugin>UWP</plugin>
-        <params>
-          <name>Microsoft.Xbox.TCUI</name>
-        </params>
-      </action>
-    </entry>
-    <entry>
-      <name>Microsoft.XboxApp</name>
-      <description>Microsoft.XboxApp</description>
-      <execute>1</execute>
-      <action>
-        <plugin>UWP</plugin>
-        <params>
-          <name>Microsoft.XboxApp</name>
-        </params>
-      </action>
-    </entry>
-    <entry>
-      <name>Microsoft.XboxGameOverlay</name>
-      <description>Microsoft.XboxGameOverlay</description>
-      <execute>1</execute>
-      <action>
-        <plugin>UWP</plugin>
-        <params>
-          <name>Microsoft.XboxGameOverlay</name>
-        </params>
-      </action>
-    </entry>
-    <entry>
-      <name>Microsoft.XboxGamingOverlay</name>
-      <description>Microsoft.XboxGamingOverlay</description>
-      <execute>1</execute>
-      <action>
-        <plugin>UWP</plugin>
-        <params>
-          <name>Microsoft.XboxGamingOverlay</name>
-        </params>
-      </action>
-    </entry>
-    <entry>
-      <name>Microsoft.XboxIdentityProvider</name>
-      <description>Microsoft.XboxIdentityProvider</description>
-      <execute>1</execute>
-      <action>
-        <plugin>UWP</plugin>
-        <params>
-          <name>Microsoft.XboxIdentityProvider</name>
-        </params>
-      </action>
-    </entry>
-    <entry>
-      <name>Microsoft.XboxSpeechToTextOverlay</name>
-      <description>Microsoft.XboxSpeechToTextOverlay</description>
-      <execute>1</execute>
-      <action>
-        <plugin>UWP</plugin>
-        <params>
-          <name>Microsoft.XboxSpeechToTextOverlay</name>
-        </params>
-      </action>
-    </entry>
-    <entry>
-      <name>Microsoft.ZuneMusic</name>
-      <description>Microsoft.ZuneMusic</description>
-      <execute>1</execute>
-      <action>
-        <plugin>UWP</plugin>
-        <params>
-          <name>Microsoft.ZuneMusic</name>
-        </params>
-      </action>
-    </entry>
-    <entry>
-      <name>Microsoft.ZuneVideo</name>
-      <description>Microsoft.ZuneVideo</description>
-      <execute>1</execute>
-      <action>
-        <plugin>UWP</plugin>
-        <params>
-          <name>Microsoft.ZuneVideo</name>
-        </params>
-      </action>
-    </entry>
-    <entry>
-      <name>Microsoft.MixedReality.Portal</name>
-      <description>Provides access to mixed reality games and VR experiences.</description>
-      <execute>1</execute>
-      <action>
-        <plugin>UWP</plugin>
-        <params>
-          <name>Microsoft.MixedReality.Portal</name>
-        </params>
-      </action>
-    </entry>
-    <entry>
-      <name>Microsoft.YourPhone</name>
-      <description>Provides access to remotely send text messages or access images on Android-based phone.</description>
-      <execute>1</execute>
-      <action>
-        <plugin>UWP</plugin>
-        <params>
-          <name>Microsoft.YourPhone</name>
-        </params>
-      </action>
-    </entry>
-    <entry>
-      <name>Microsoft.WindowsCommunicationsApps</name>
-      <description>Disable Windows Mail and Calendar functionality</description>
-      <execute>1</execute>
-      <action>
-        <plugin>UWP</plugin>
-        <params>
-          <name>microsoft.windowscommunicationsapps</name>
-        </params>
-      </action>
-    </entry>
-    <entry>
-      <name>Microsoft.HEIFImageExtension</name>
-      <description>Adds support for High Efficiency Image File (HEIF) format, usually with .heif extension.</description>
-      <execute>0</execute>
-      <action>
-        <plugin>UWP</plugin>
-        <params>
-          <name>Microsoft.HEIFImageExtension</name>
-        </params>
-      </action>
-    </entry>
-    <entry>
-      <name>Microsoft.VP9VideoExtensions</name>
-      <description>Adds support for video codec VP9 (part of WebM project by Google)</description>
-      <execute>0</execute>
-      <action>
-        <plugin>UWP</plugin>
-        <params>
-          <name>Microsoft.VP9VideoExtensions</name>
-        </params>
-      </action>
-    </entry>
-    <entry>
-      <name>Microsoft.WebpImageExtension</name>
-      <description>Adds support for image format WebP.</description>
-      <execute>0</execute>
-      <action>
-        <plugin>UWP</plugin>
-        <params>
-          <name>Microsoft.WebpImageExtension</name>
-        </params>
-      </action>
-    </entry>
   </group>
   <group>
     <id>DisableScheduledTasks</id>
@@ -964,6 +533,21 @@ DOES NOT SUPPORT ROLLBACK!</description>
       </action>
     </entry>
     <entry>
+      <name>Cellular</name>
+      <description>One of scheduled tasks that perform optimizations or data collections on computers that maintain their state across reboots. When a VDI VM task reboots and discards all changes since last boot, optimizations intended for physical computers are not helpful.
+
+Source: https://docs.microsoft.com/en-us/windows-server/remote/remote-desktop-services/rds_vdi-recommendations-1909</description>
+      <execute>1</execute>
+      <action>
+        <plugin>SchTasks</plugin>
+        <params>
+          <name>Cellular</name>
+          <path>\Microsoft\Windows\Management\Provisioning\</path>
+          <value>Disabled</value>
+        </params>
+      </action>
+    </entry>
+    <entry>
       <name>Consolidator</name>
       <description>Collects and sends usage data to Microsoft if opted-in to the Windows Customer Experience Improvement Program.</description>
       <execute>1</execute>
@@ -972,6 +556,21 @@ DOES NOT SUPPORT ROLLBACK!</description>
         <params>
           <name>Consolidator</name>
           <path>\Microsoft\Windows\Customer Experience Improvement Program</path>
+          <value>Disabled</value>
+        </params>
+      </action>
+    </entry>
+    <entry>
+      <name>Diagnostics</name>
+      <description>One of scheduled tasks that perform optimizations or data collections on computers that maintain their state across reboots. When a VDI VM task reboots and discards all changes since last boot, optimizations intended for physical computers are not helpful.
+
+Source: https://docs.microsoft.com/en-us/windows-server/remote/remote-desktop-services/rds_vdi-recommendations-1909</description>
+      <execute>1</execute>
+      <action>
+        <plugin>SchTasks</plugin>
+        <params>
+          <name>Diagnostics</name>
+          <path>\Microsoft\Windows\DiskFootprint\</path>
           <value>Disabled</value>
         </params>
       </action>
@@ -1016,26 +615,26 @@ DOES NOT SUPPORT ROLLBACK!</description>
       </action>
     </entry>
     <entry>
-      <name>Location Notifications</name>
-      <description>Location Notifications</description>
+      <name>Location - Actions Dialog</name>
+      <description>Location - Actions Dialog</description>
       <execute>1</execute>
       <action>
         <plugin>SchTasks</plugin>
         <params>
-          <name>Notifications</name>
+          <name>WindowsActionDialog</name>
           <path>\Microsoft\Windows\Location</path>
           <value>Disabled</value>
         </params>
       </action>
     </entry>
     <entry>
-      <name>Location Notifications 2</name>
-      <description>Location Notifications 2</description>
+      <name>Location - Notifications</name>
+      <description>Location - Notifications</description>
       <execute>1</execute>
       <action>
         <plugin>SchTasks</plugin>
         <params>
-          <name>WindowsActionDialog</name>
+          <name>Notifications</name>
           <path>\Microsoft\Windows\Location</path>
           <value>Disabled</value>
         </params>
@@ -1120,6 +719,21 @@ DOES NOT SUPPORT ROLLBACK!</description>
       </action>
     </entry>
     <entry>
+      <name>NotificationTask</name>
+      <description>One of scheduled tasks that perform optimizations or data collections on computers that maintain their state across reboots. When a VDI VM task reboots and discards all changes since last boot, optimizations intended for physical computers are not helpful.
+
+Source: https://docs.microsoft.com/en-us/windows-server/remote/remote-desktop-services/rds_vdi-recommendations-1909</description>
+      <execute>1</execute>
+      <action>
+        <plugin>SchTasks</plugin>
+        <params>
+          <name>NotificationTask</name>
+          <path>\Microsoft\Windows\WwanSvc\</path>
+          <value>Disabled</value>
+        </params>
+      </action>
+    </entry>
+    <entry>
       <name>ProactiveScan</name>
       <description>NTFS volume health scan.</description>
       <execute>1</execute>
@@ -1172,6 +786,66 @@ DOES NOT SUPPORT ROLLBACK!</description>
       </action>
     </entry>
     <entry>
+      <name>RecommendedTroubleshootingScanner</name>
+      <description>One of scheduled tasks that perform optimizations or data collections on computers that maintain their state across reboots. When a VDI VM task reboots and discards all changes since last boot, optimizations intended for physical computers are not helpful.
+
+Source: https://docs.microsoft.com/en-us/windows-server/remote/remote-desktop-services/rds_vdi-recommendations-1909</description>
+      <execute>1</execute>
+      <action>
+        <plugin>SchTasks</plugin>
+        <params>
+          <name>RecommendedTroubleshootingScanner</name>
+          <path>\Microsoft\Windows\Diagnosis\</path>
+          <value>Disabled</value>
+        </params>
+      </action>
+    </entry>
+    <entry>
+      <name>ReconcileFeatures</name>
+      <description>One of scheduled tasks that perform optimizations or data collections on computers that maintain their state across reboots. When a VDI VM task reboots and discards all changes since last boot, optimizations intended for physical computers are not helpful.
+
+Source: https://docs.microsoft.com/en-us/windows-server/remote/remote-desktop-services/rds_vdi-recommendations-1909</description>
+      <execute>1</execute>
+      <action>
+        <plugin>SchTasks</plugin>
+        <params>
+          <name>ReconcileFeatures</name>
+          <path>\Microsoft\Windows\Flighting\FeatureConfig\</path>
+          <value>Disabled</value>
+        </params>
+      </action>
+    </entry>
+    <entry>
+      <name>ReconcileLanguageResources</name>
+      <description>One of scheduled tasks that perform optimizations or data collections on computers that maintain their state across reboots. When a VDI VM task reboots and discards all changes since last boot, optimizations intended for physical computers are not helpful.
+
+Source: https://docs.microsoft.com/en-us/windows-server/remote/remote-desktop-services/rds_vdi-recommendations-1909</description>
+      <execute>1</execute>
+      <action>
+        <plugin>SchTasks</plugin>
+        <params>
+          <name>ReconcileLanguageResources</name>
+          <path>\Microsoft\Windows\LanguageComponentsInstaller\</path>
+          <value>Disabled</value>
+        </params>
+      </action>
+    </entry>
+    <entry>
+      <name>RefreshCache</name>
+      <description>One of scheduled tasks that perform optimizations or data collections on computers that maintain their state across reboots. When a VDI VM task reboots and discards all changes since last boot, optimizations intended for physical computers are not helpful.
+
+Source: https://docs.microsoft.com/en-us/windows-server/remote/remote-desktop-services/rds_vdi-recommendations-1909</description>
+      <execute>1</execute>
+      <action>
+        <plugin>SchTasks</plugin>
+        <params>
+          <name>RefreshCache</name>
+          <path>\Microsoft\Windows\Flighting\OneSettings\</path>
+          <value>Disabled</value>
+        </params>
+      </action>
+    </entry>
+    <entry>
       <name>RegIdleBackup</name>
       <description>Registry idle backup task.</description>
       <execute>1</execute>
@@ -1198,6 +872,21 @@ DOES NOT SUPPORT ROLLBACK!</description>
       </action>
     </entry>
     <entry>
+      <name>ResPriStaticDbSync</name>
+      <description>One of scheduled tasks that perform optimizations or data collections on computers that maintain their state across reboots. When a VDI VM task reboots and discards all changes since last boot, optimizations intended for physical computers are not helpful.
+
+Source: https://docs.microsoft.com/en-us/windows-server/remote/remote-desktop-services/rds_vdi-recommendations-1909</description>
+      <execute>1</execute>
+      <action>
+        <plugin>SchTasks</plugin>
+        <params>
+          <name>ResPriStaticDbSync</name>
+          <path>\Microsoft\Windows\Sysmain\</path>
+          <value>Disabled</value>
+        </params>
+      </action>
+    </entry>
+    <entry>
       <name>RunFullMemoryDiagnostic</name>
       <description>Detects and mitigates problems in physical memory (RAM).</description>
       <execute>1</execute>
@@ -1206,6 +895,36 @@ DOES NOT SUPPORT ROLLBACK!</description>
         <params>
           <name>RunFullMemoryDiagnostic</name>
           <path>\Microsoft\Windows\MemoryDiagnostic</path>
+          <value>Disabled</value>
+        </params>
+      </action>
+    </entry>
+    <entry>
+      <name>ScanForUpdates</name>
+      <description>One of scheduled tasks that perform optimizations or data collections on computers that maintain their state across reboots. When a VDI VM task reboots and discards all changes since last boot, optimizations intended for physical computers are not helpful.
+
+Source: https://docs.microsoft.com/en-us/windows-server/remote/remote-desktop-services/rds_vdi-recommendations-1909</description>
+      <execute>1</execute>
+      <action>
+        <plugin>SchTasks</plugin>
+        <params>
+          <name>ScanForUpdates</name>
+          <path>\Microsoft\Windows\InstallService\</path>
+          <value>Disabled</value>
+        </params>
+      </action>
+    </entry>
+    <entry>
+      <name>ScanForUpdatesAsUser</name>
+      <description>One of scheduled tasks that perform optimizations or data collections on computers that maintain their state across reboots. When a VDI VM task reboots and discards all changes since last boot, optimizations intended for physical computers are not helpful.
+
+Source: https://docs.microsoft.com/en-us/windows-server/remote/remote-desktop-services/rds_vdi-recommendations-1909</description>
+      <execute>1</execute>
+      <action>
+        <plugin>SchTasks</plugin>
+        <params>
+          <name>ScanForUpdatesAsUser</name>
+          <path>\Microsoft\Windows\InstallService\</path>
           <value>Disabled</value>
         </params>
       </action>
@@ -1232,6 +951,96 @@ DOES NOT SUPPORT ROLLBACK!</description>
         <params>
           <name>ScheduledDefrag</name>
           <path>\Microsoft\Windows\Defrag</path>
+          <value>Disabled</value>
+        </params>
+      </action>
+    </entry>
+    <entry>
+      <name>SilentCleanup</name>
+      <description>One of scheduled tasks that perform optimizations or data collections on computers that maintain their state across reboots. When a VDI VM task reboots and discards all changes since last boot, optimizations intended for physical computers are not helpful.
+
+Source: https://docs.microsoft.com/en-us/windows-server/remote/remote-desktop-services/rds_vdi-recommendations-1909</description>
+      <execute>1</execute>
+      <action>
+        <plugin>SchTasks</plugin>
+        <params>
+          <name>SilentCleanup</name>
+          <path>\Microsoft\Windows\DiskCleanup\</path>
+          <value>Disabled</value>
+        </params>
+      </action>
+    </entry>
+    <entry>
+      <name>SmartRetry</name>
+      <description>One of scheduled tasks that perform optimizations or data collections on computers that maintain their state across reboots. When a VDI VM task reboots and discards all changes since last boot, optimizations intended for physical computers are not helpful.
+
+Source: https://docs.microsoft.com/en-us/windows-server/remote/remote-desktop-services/rds_vdi-recommendations-1909</description>
+      <execute>1</execute>
+      <action>
+        <plugin>SchTasks</plugin>
+        <params>
+          <name>SmartRetry</name>
+          <path>\Microsoft\Windows\InstallService\</path>
+          <value>Disabled</value>
+        </params>
+      </action>
+    </entry>
+    <entry>
+      <name>SpaceAgentTask</name>
+      <description>One of scheduled tasks that perform optimizations or data collections on computers that maintain their state across reboots. When a VDI VM task reboots and discards all changes since last boot, optimizations intended for physical computers are not helpful.
+
+Source: https://docs.microsoft.com/en-us/windows-server/remote/remote-desktop-services/rds_vdi-recommendations-1909</description>
+      <execute>1</execute>
+      <action>
+        <plugin>SchTasks</plugin>
+        <params>
+          <name>SpaceAgentTask</name>
+          <path>\Microsoft\Windows\SpacePort\</path>
+          <value>Disabled</value>
+        </params>
+      </action>
+    </entry>
+    <entry>
+      <name>SpaceManagerTask</name>
+      <description>One of scheduled tasks that perform optimizations or data collections on computers that maintain their state across reboots. When a VDI VM task reboots and discards all changes since last boot, optimizations intended for physical computers are not helpful.
+
+Source: https://docs.microsoft.com/en-us/windows-server/remote/remote-desktop-services/rds_vdi-recommendations-1909</description>
+      <execute>1</execute>
+      <action>
+        <plugin>SchTasks</plugin>
+        <params>
+          <name>SpaceManagerTask</name>
+          <path>\Microsoft\Windows\SpacePort\</path>
+          <value>Disabled</value>
+        </params>
+      </action>
+    </entry>
+    <entry>
+      <name>SpeechModelDownloadTask</name>
+      <description>One of scheduled tasks that perform optimizations or data collections on computers that maintain their state across reboots. When a VDI VM task reboots and discards all changes since last boot, optimizations intended for physical computers are not helpful.
+
+Source: https://docs.microsoft.com/en-us/windows-server/remote/remote-desktop-services/rds_vdi-recommendations-1909</description>
+      <execute>1</execute>
+      <action>
+        <plugin>SchTasks</plugin>
+        <params>
+          <name>SpeechModelDownloadTask</name>
+          <path>\Microsoft\Windows\Speech\</path>
+          <value>Disabled</value>
+        </params>
+      </action>
+    </entry>
+    <entry>
+      <name>Sqm-Tasks</name>
+      <description>One of scheduled tasks that perform optimizations or data collections on computers that maintain their state across reboots. When a VDI VM task reboots and discards all changes since last boot, optimizations intended for physical computers are not helpful.
+
+Source: https://docs.microsoft.com/en-us/windows-server/remote/remote-desktop-services/rds_vdi-recommendations-1909</description>
+      <execute>1</execute>
+      <action>
+        <plugin>SchTasks</plugin>
+        <params>
+          <name>Sqm-Tasks</name>
+          <path>\Microsoft\Windows\PI\</path>
           <value>Disabled</value>
         </params>
       </action>
@@ -1276,6 +1085,36 @@ DOES NOT SUPPORT ROLLBACK!</description>
       </action>
     </entry>
     <entry>
+      <name>StorageSense</name>
+      <description>One of scheduled tasks that perform optimizations or data collections on computers that maintain their state across reboots. When a VDI VM task reboots and discards all changes since last boot, optimizations intended for physical computers are not helpful.
+
+Source: https://docs.microsoft.com/en-us/windows-server/remote/remote-desktop-services/rds_vdi-recommendations-1909</description>
+      <execute>1</execute>
+      <action>
+        <plugin>SchTasks</plugin>
+        <params>
+          <name>StorageSense</name>
+          <path>\Microsoft\Windows\DiskFootprint\</path>
+          <value>Disabled</value>
+        </params>
+      </action>
+    </entry>
+    <entry>
+      <name>UninstallDeviceTask</name>
+      <description>One of scheduled tasks that perform optimizations or data collections on computers that maintain their state across reboots. When a VDI VM task reboots and discards all changes since last boot, optimizations intended for physical computers are not helpful.
+
+Source: https://docs.microsoft.com/en-us/windows-server/remote/remote-desktop-services/rds_vdi-recommendations-1909</description>
+      <execute>1</execute>
+      <action>
+        <plugin>SchTasks</plugin>
+        <params>
+          <name>UninstallDeviceTask</name>
+          <path>\Microsoft\Windows\Bluetooth\</path>
+          <value>Disabled</value>
+        </params>
+      </action>
+    </entry>
+    <entry>
       <name>UsbCeip</name>
       <description>Collects Universal Serial Bus related statistics and information about your machine and sends to the Windows Device Connectivity engineering group at Microsoft, if opted-in to Windows Customer Experience Improvement Program.</description>
       <execute>1</execute>
@@ -1289,6 +1128,21 @@ DOES NOT SUPPORT ROLLBACK!</description>
       </action>
     </entry>
     <entry>
+      <name>Usb-Notifications</name>
+      <description>One of scheduled tasks that perform optimizations or data collections on computers that maintain their state across reboots. When a VDI VM task reboots and discards all changes since last boot, optimizations intended for physical computers are not helpful.
+
+Source: https://docs.microsoft.com/en-us/windows-server/remote/remote-desktop-services/rds_vdi-recommendations-1909</description>
+      <execute>1</execute>
+      <action>
+        <plugin>SchTasks</plugin>
+        <params>
+          <name>Usb-Notifications</name>
+          <path>\Microsoft\Windows\USB\</path>
+          <value>Disabled</value>
+        </params>
+      </action>
+    </entry>
+    <entry>
       <name>VerifyWinRE</name>
       <description>Validates the Windows Recovery Environment.</description>
       <execute>1</execute>
@@ -1297,6 +1151,21 @@ DOES NOT SUPPORT ROLLBACK!</description>
         <params>
           <name>VerifyWinRE</name>
           <path>\Microsoft\Windows\RecoveryEnvironment</path>
+          <value>Disabled</value>
+        </params>
+      </action>
+    </entry>
+    <entry>
+      <name>WIM-Hash-Management</name>
+      <description>One of scheduled tasks that perform optimizations or data collections on computers that maintain their state across reboots. When a VDI VM task reboots and discards all changes since last boot, optimizations intended for physical computers are not helpful.
+
+Source: https://docs.microsoft.com/en-us/windows-server/remote/remote-desktop-services/rds_vdi-recommendations-1909</description>
+      <execute>1</execute>
+      <action>
+        <plugin>SchTasks</plugin>
+        <params>
+          <name>WIM-Hash-Management</name>
+          <path>\Microsoft\Windows\WOF\</path>
           <value>Disabled</value>
         </params>
       </action>
@@ -1316,7 +1185,7 @@ DOES NOT SUPPORT ROLLBACK!</description>
     </entry>
     <entry>
       <name>Windows Media Sharing</name>
-      <description>This task updates the cached list of folders and the security permissions on any new files in a user’s shared media library.</description>
+      <description>This task updates the cached list of folders and the security permissions on any new files in a user's shared media library.</description>
       <execute>1</execute>
       <action>
         <plugin>SchTasks</plugin>
@@ -1329,13 +1198,28 @@ DOES NOT SUPPORT ROLLBACK!</description>
     </entry>
     <entry>
       <name>WinSAT</name>
-      <description>Measures a system’s performance and capabilities.</description>
+      <description>Measures a system's performance and capabilities.</description>
       <execute>1</execute>
       <action>
         <plugin>SchTasks</plugin>
         <params>
           <name>WinSAT</name>
           <path>\Microsoft\Windows\Maintenance</path>
+          <value>Disabled</value>
+        </params>
+      </action>
+    </entry>
+    <entry>
+      <name>WsSwapAssessmentTask</name>
+      <description>One of scheduled tasks that perform optimizations or data collections on computers that maintain their state across reboots. When a VDI VM task reboots and discards all changes since last boot, optimizations intended for physical computers are not helpful.
+
+Source: https://docs.microsoft.com/en-us/windows-server/remote/remote-desktop-services/rds_vdi-recommendations-1909</description>
+      <execute>1</execute>
+      <action>
+        <plugin>SchTasks</plugin>
+        <params>
+          <name>WsSwapAssessmentTask</name>
+          <path>\Microsoft\Windows\Sysmain\</path>
           <value>Disabled</value>
         </params>
       </action>
@@ -1358,6 +1242,22 @@ DOES NOT SUPPORT ROLLBACK!</description>
     <id>Miscellaneous</id>
     <displayname>Miscellaneous</displayname>
     <description>Various optimizations and tweaks for VDI\RDS virtual machines</description>
+    <entry>
+      <name>DeleteUserAppContainersOnLogoff</name>
+      <description>When new user logs in to Windows OS, new per-user firewall rules are created. These rules are not deleted when user logs off.
+
+This can have significant impact on performance.</description>
+      <execute>1</execute>
+      <action>
+        <plugin>Registry</plugin>
+        <params>
+          <name>DeleteUserAppContainersOnLogoff</name>
+          <path>HKLM\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy</path>
+          <value>1</value>
+          <valuetype>Dword</valuetype>
+        </params>
+      </action>
+    </entry>
     <entry>
       <name>Disable background auto-layout</name>
       <description>Disabling background auto-layout can help improve EWF performance.</description>
@@ -1401,6 +1301,20 @@ DOES NOT SUPPORT ROLLBACK!</description>
       </action>
     </entry>
     <entry>
+      <name>Disable Hibernate</name>
+      <description>Disable Hibernate.</description>
+      <execute>1</execute>
+      <action>
+        <plugin>Registry</plugin>
+        <params>
+          <name>HibernateEnabled</name>
+          <path>HKLM\SYSTEM\CurrentControlSet\Control\Power</path>
+          <value>0</value>
+          <valuetype>DWORD</valuetype>
+        </params>
+      </action>
+    </entry>
+    <entry>
       <name>Disable memory dump creation</name>
       <description>Disable memory dump creation.</description>
       <execute>1</execute>
@@ -1423,7 +1337,21 @@ DOES NOT SUPPORT ROLLBACK!</description>
         <params>
           <name>NtfsDisableLastAccessUpdate</name>
           <path>HKLM\SYSTEM\CurrentControlSet\Control\FileSystem</path>
-          <value>1</value>
+          <value>2147483651</value>
+          <valuetype>Dword</valuetype>
+        </params>
+      </action>
+    </entry>
+    <entry>
+      <name>Disable Storage Sense</name>
+      <description>Disable Storage Sense.</description>
+      <execute>0</execute>
+      <action>
+        <plugin>Registry</plugin>
+        <params>
+          <name>AllowStorageSenseGlobal</name>
+          <path>HKLM\SOFTWARE\Policies\Microsoft\Windows\StorageSense</path>
+          <value>0</value>
           <valuetype>DWORD</valuetype>
         </params>
       </action>
@@ -1471,75 +1399,13 @@ DOES NOT SUPPORT ROLLBACK!</description>
       </action>
     </entry>
     <entry>
-      <name>Turn off Cortana</name>
-      <description>Turn off Cortana.</description>
-      <execute>1</execute>
-      <action>
-        <plugin>Registry</plugin>
-        <params>
-          <name>AllowCortana</name>
-          <path>HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search</path>
-          <value>0</value>
-          <valuetype>DWORD</valuetype>
-        </params>
-      </action>
-    </entry>
-    <entry>
-      <name>Disable Hibernate</name>
-      <description>Disable Hibernate.</description>
-      <execute>1</execute>
-      <action>
-        <plugin>Registry</plugin>
-        <params>
-          <name>HibernateEnabled</name>
-          <path>HKLM\SYSTEM\CurrentControlSet\Control\Power</path>
-          <value>0</value>
-          <valuetype>DWORD</valuetype>
-        </params>
-      </action>
-    </entry>
-    <entry>
-      <name>Disable Storage Sense</name>
-      <description>Disable Storage Sense.</description>
-      <execute>0</execute>
-      <action>
-        <plugin>Registry</plugin>
-        <params>
-          <name>AllowStorageSenseGlobal</name>
-          <path>HKLM\SOFTWARE\Policies\Microsoft\Windows\StorageSense</path>
-          <value>0</value>
-          <valuetype>DWORD</valuetype>
-        </params>
-      </action>
-    </entry>
-    <entry>
-      <name>Windows Update</name>
-      <description>Enables the detection, download, and installation of updates for Windows and other programs.
-NOTE: This read-only entry is analyzing if Windows Update has been disabled using Group Policy. This entry does NOT support disabling Windows Update.
-All of the relevant policies are under the path Computer configuration &gt; Administrative Templates &gt; Windows Components &gt; Windows Update.
-For more information, please refer to official Microsoft documentation: https://docs.microsoft.com/en-us/windows/deployment/update/waas-wufb-group-policy
-      </description>
-      <execute>0</execute>
-      <action>
-        <plugin>Registry</plugin>
-        <params>
-          <name>NoAutoUpdate</name>
-          <path>HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU</path>
-          <value>1</value>
-          <valuetype>DWORD</valuetype>
-        </params>
-      </action>
-      <execute_not_supported />
-      <rollback_not_supported />
-    </entry>
-    <entry>
       <name>Set power plan to High Performance</name>
       <description>Change current power plan to "High performance". If you rollback these changes, power plan will default to "Balanced".</description>
       <execute>1</execute>
       <action>
         <plugin>PowerShell</plugin>
         <analyzeparams>
-          <value># Get power plan through registry (version 1803 and up)
+          <value><![CDATA[# Get power plan through registry (version 1803 and up)
 
 [String]$m_DesiredPlanID = "8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c"; #This is High Performance
 [String]$m_CurrentPlan = powercfg /GetActiveScheme
@@ -1556,10 +1422,10 @@ $Global:CTXOE_Details = "Correct mode is selected. Power management schema ID: $
 $Global:CTXOE_Details = "Wrong mode is selected. Power management schema ID: $m_CurrentPlanID";
 }
 
-Return;</value>
+Return;]]></value>
         </analyzeparams>
         <executeparams>
-          <value>[String]$m_DesiredPlanID = "8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c"; #This is High Performance
+          <value><![CDATA[[String]$m_DesiredPlanID = "8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c"; #This is High Performance
 [String]$m_CurrentPlan = powercfg /GetActiveScheme
 
 # We could use RegEx, but it's just so hard to read. Insetad, using ":" as first delimiter and " " as second delimiter. Output of this command is localized, so we need to keep this as simple as possible. 
@@ -1586,10 +1452,10 @@ If ($Global:CTXOE_Result -eq $True) {
 $Global:CTXOE_Details = "Correct mode is selected. Power management schema ID: $m_CurrentPlanID";
 } Else {
 $Global:CTXOE_Details = "Wrong mode is selected. Power management schema ID: $m_CurrentPlanID. You cannot use this optimization if power management scheme is configured through Group Policy.";
-}</value>
+}]]></value>
         </executeparams>
         <rollbackparams>
-          <value># Rollback power plan to "Balanced"
+          <value><![CDATA[# Rollback power plan to "Balanced"
 [String]$m_DesiredPlanID = "381b4222-f694-41f0-9685-ff5bb260df2e"; #This is Balanced
 [String]$m_CurrentPlan = powercfg /GetActiveScheme
 
@@ -1617,9 +1483,43 @@ If ($Global:CTXOE_Result -eq $True) {
 $Global:CTXOE_Details = "Correct mode is selected. Power management schema ID: $m_CurrentPlanID";
 } Else {
 $Global:CTXOE_Details = "Wrong mode is selected. Power management schema ID: $m_CurrentPlanID. You cannot use this optimization if power management scheme is configured through Group Policy.";
-}</value>
+}]]></value>
         </rollbackparams>
       </action>
+    </entry>
+    <entry>
+      <name>Turn off Cortana</name>
+      <description>Turn off Cortana.</description>
+      <execute>1</execute>
+      <action>
+        <plugin>Registry</plugin>
+        <params>
+          <name>AllowCortana</name>
+          <path>HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search</path>
+          <value>0</value>
+          <valuetype>DWORD</valuetype>
+        </params>
+      </action>
+    </entry>
+    <entry>
+      <name>Windows Update</name>
+      <description>Enables the detection, download, and installation of updates for Windows and other programs.
+NOTE: This read-only entry is analyzing if Windows Update has been disabled using Group Policy. This entry does NOT support disabling Windows Update.
+All of the relevant policies are under the path Computer configuration - Administrative Templates - Windows Components - Windows Update.
+For more information, please refer to official Microsoft documentation: https://docs.microsoft.com/en-us/windows/deployment/update/waas-wufb-group-policy
+      </description>
+      <execute>1</execute>
+      <action>
+        <plugin>Registry</plugin>
+        <params>
+          <name>NoAutoUpdate</name>
+          <path>HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU</path>
+          <value>1</value>
+          <valuetype>DWORD</valuetype>
+        </params>
+      </action>
+      <execute_not_supported />
+      <rollback_not_supported />
     </entry>
   </group>
   <group>
@@ -1633,21 +1533,21 @@ $Global:CTXOE_Details = "Wrong mode is selected. Power management schema ID: $m_
       <action>
         <plugin>PowerShell</plugin>
         <executeparams>
-          <value>
+          <value><![CDATA[
             [Array]$EventLogs = wevtutil enum-logs
 
-            Write-Host -ForegroundColor Yellow  'Clear event logs'
+            Write-Host -ForegroundColor Yellow  'Clear event logs';
             # Clear all event log entries
             ForEach ($EventLog in $EventLogs) {
-            Write-Host "Clearing $EventLog"
-            wevtutil cl "$EventLog"
+            Write-Host "Clearing $EventLog";
+            wevtutil cl "$EventLog" 2> $null;
             }
             # System event log contains events ID 104 ("Log Clear"), so it needs to be cleared as the last one again
-            wevtutil cl "System"
+            wevtutil cl "System";
 
             $Global:CTXOE_Result = $True;
             $Global:CTXOE_Details = "Successfully cleaned the event logs";
-          </value>
+          ]]></value>
         </executeparams>
       </action>
       <analyze_not_supported />
@@ -1663,12 +1563,12 @@ $Global:CTXOE_Details = "Wrong mode is selected. Power management schema ID: $m_
       <action>
         <plugin>PowerShell</plugin>
         <executeparams>
-          <value>
+          <value><![CDATA[
             . $Env:WinDir\Microsoft.Net\Framework\v4.0.30319\ngen.exe Update;
 
             $Global:CTXOE_Result = $True;
             $Global:CTXOE_Details = ".NET assemblies optimized";
-          </value>
+          ]]></value>
         </executeparams>
       </action>
       <analyze_not_supported />
@@ -1684,7 +1584,7 @@ $Global:CTXOE_Details = "Wrong mode is selected. Power management schema ID: $m_
       <action>
         <plugin>PowerShell</plugin>
         <executeparams>
-          <value>
+          <value><![CDATA[
             If ($(Test-Path $Env:WinDir\Microsoft.Net\Framework64\v4.0.30319\ngen.exe) -eq $True) {
             . $Env:WinDir\Microsoft.Net\Framework64\v4.0.30319\ngen.exe Update;
             $Global:CTXOE_Details = ".NET assemblies optimized";
@@ -1692,7 +1592,7 @@ $Global:CTXOE_Details = "Wrong mode is selected. Power management schema ID: $m_
             $Global:CTXOE_Details = "Skipping, not 64 bit NGEN not found";
             }
             $Global:CTXOE_Result = $True;
-          </value>
+          ]]></value>
         </executeparams>
       </action>
       <analyze_not_supported />
@@ -1704,24 +1604,27 @@ $Global:CTXOE_Details = "Wrong mode is selected. Power management schema ID: $m_
     <displayname>Optional Components</displayname>
     <description>Contains components that are often disabled for VDI\RDS machines, however can impact other applications or user experience. It is recommended to review these settings before applying them. </description>
     <entry>
+      <name>Disable Windows Customer Experience Improvement program</name>
+      <description>Disable Windows Customer Experience Improvement program.</description>
+      <execute>0</execute>
+      <action>
+        <plugin>Registry</plugin>
+        <params>
+          <name>CEIPEnable</name>
+          <path>HKLM\SOFTWARE\Microsoft\SQMClient\Windows</path>
+          <value>0</value>
+          <valuetype>DWORD</valuetype>
+        </params>
+      </action>
+    </entry>
+    <entry>
       <name>Microsoft.ScreenSketch</name>
-      <description>Removes "Snip &amp; Sketch" application. Provides functionality of Snipping Tool with additional improvements.</description>
+      <description>Removes "Snip and Sketch" application. Provides functionality of Snipping Tool with additional improvements.</description>
       <execute>0</execute>
       <action>
         <plugin>UWP</plugin>
         <params>
           <name>Microsoft.ScreenSketch</name>
-        </params>
-      </action>
-    </entry>
-    <entry>
-      <name>Microsoft.WindowsStore</name>
-      <description>Microsoft Store application. Do not remove it if you're planning to use UWP applications. After removed, it is not possible to fix it without reverting to previous backup / snapshot or resetting operating system.</description>
-      <execute>0</execute>
-      <action>
-        <plugin>UWP</plugin>
-        <params>
-          <name>Microsoft.WindowsStore</name>
         </params>
       </action>
     </entry>
@@ -1737,6 +1640,19 @@ $Global:CTXOE_Details = "Wrong mode is selected. Power management schema ID: $m_
       </action>
     </entry>
     <entry>
+      <name>Microsoft.VP9VideoExtensions</name>
+      <description>Adds support for video codec VP9 (part of WebM project by Google)
+
+Note: This is required to support HDR video streaming</description>
+      <execute>0</execute>
+      <action>
+        <plugin>UWP</plugin>
+        <params>
+          <name>Microsoft.VP9VideoExtensions</name>
+        </params>
+      </action>
+    </entry>
+    <entry>
       <name>Microsoft.WindowsCalculator</name>
       <description>Built-in Windows Calculator. If your users are using it (mostly desktop sessions rather than published applications), do not remove it unless you have a replacement calculator app.</description>
       <execute>0</execute>
@@ -1744,6 +1660,17 @@ $Global:CTXOE_Details = "Wrong mode is selected. Power management schema ID: $m_
         <plugin>UWP</plugin>
         <params>
           <name>Microsoft.WindowsCalculator</name>
+        </params>
+      </action>
+    </entry>
+    <entry>
+      <name>Microsoft.WindowsStore</name>
+      <description>Microsoft Store application. Do not remove it if you're planning to use UWP applications. After removed, it is not possible to fix it without reverting to previous backup / snapshot or resetting operating system.</description>
+      <execute>0</execute>
+      <action>
+        <plugin>UWP</plugin>
+        <params>
+          <name>Microsoft.WindowsStore</name>
         </params>
       </action>
     </entry>
@@ -1783,17 +1710,50 @@ $Global:CTXOE_Details = "Wrong mode is selected. Power management schema ID: $m_
         </params>
       </action>
     </entry>
+  </group>
+  <group>
+    <id>Rollback</id>
+    <displayname>Rollback</displayname>
+    <description>Contains optimizations for which recommendations have changed, for example for compatibility reasons. This reverts those changes to original state.</description>
     <entry>
-      <name>Disable Windows Customer Experience Improvement program</name>
-      <description>Disable Windows Customer Experience Improvement program.</description>
-      <execute>0</execute>
+      <name>Connected User Experiences and Telemetry</name>
+      <description>11/17/2020 - Stopping this service prevents Microsoft Defender ATP from working properly.
+
+This entry restores the system to the original state and fixes this issue.</description>
+      <execute>1</execute>
       <action>
-        <plugin>Registry</plugin>
+        <plugin>Services</plugin>
         <params>
-          <name>CEIPEnable</name>
-          <path>HKLM\SOFTWARE\Microsoft\SQMClient\Windows</path>
-          <value>0</value>
-          <valuetype>DWORD</valuetype>
+          <name>DiagTrack</name>
+          <value>Automatic</value>
+        </params>
+      </action>
+    </entry>
+    <entry>
+      <name>Optimize drives</name>
+      <description>11/17/2020 - Disabling this service prevents defragmentation (UI) from working.
+
+This entry restores the system to the original state and fixes this issue.</description>
+      <execute>1</execute>
+      <action>
+        <plugin>Services</plugin>
+        <params>
+          <name>defragsvc</name>
+          <value>Manual</value>
+        </params>
+      </action>
+    </entry>
+    <entry>
+      <name>Shell Hardware Detection</name>
+      <description>11/17/2020 - Disabling this service impacts some UI elements (e.g. Format menu for DVD writers) and can also cause event log entries by AppX packages.
+
+This entry restores the system to the original state and fixes this issue.</description>
+      <execute>1</execute>
+      <action>
+        <plugin>Services</plugin>
+        <params>
+          <name>ShellHWDetection</name>
+          <value>Automatic</value>
         </params>
       </action>
     </entry>

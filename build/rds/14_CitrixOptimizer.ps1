@@ -1,5 +1,5 @@
 <# 
-    .SYSOPSIS
+    .SYNOPSIS
         Optimise and seal a Windows image.
 #>
 [CmdletBinding()]
@@ -8,7 +8,10 @@ Param (
     [System.String] $Log = "$env:SystemRoot\Logs\PackerImagePrep.log",
 
     [Parameter(Mandatory = $False)]
-    [System.String] $Target = "$env:SystemDrive\Apps"
+    [System.String] $Target = "$env:SystemDrive\Apps",
+
+    [Parameter(Mandatory = $False)]
+    [System.String] $OptimizerTemplate = "Custom-Windows10-20H2.xml"
 )
 
 #region Functions
@@ -83,35 +86,6 @@ Function Global:Invoke-Process {
         Remove-Item -Path $stdOutTempFile, $stdErrTempFile -Force -ErrorAction Ignore
     }
 }
-
-Function Invoke-CitrixOptimizer ($Path) {
-    Write-Host "========== Citrix Optimizer"
-    If (!(Test-Path $Path)) { New-Item -Path $Path -ItemType Directory -Force -ErrorAction SilentlyContinue > $Null }
-
-    Write-Host "=============== Downloading Citrix Optimizer"
-    $url = "https://raw.githubusercontent.com/aaronparker/packer/main/tools/rds/optimizer/CitrixOptimizer.zip"
-    Invoke-WebRequest -Uri $url -OutFile "$Path\$(Split-Path $url -Leaf)" -UseBasicParsing
-    Expand-Archive -Path "$Path\$(Split-Path $url -Leaf)" -DestinationPath $Path -Force -Verbose
-
-    # Download templates
-    Write-Host "=============== Downloading Citrix Optimizer template"
-    If (!(Test-Path $Path)) { New-Item -Path "$Path\Templates" -ItemType Directory -Force -ErrorAction SilentlyContinue > $Null }
-    Switch -Regex ((Get-WmiObject Win32_OperatingSystem).Caption) {
-        "Microsoft Windows Server*" {
-            $url = "https://raw.githubusercontent.com/aaronparker/packer/main/tools/rds/optimizer/WindowsServer2019-Defender-Azure.xml"
-        }
-        "Microsoft Windows 10 Enterprise for Virtual Desktops" {
-            $url = "https://raw.githubusercontent.com/aaronparker/packer/main/tools/rds/optimizer/Windows101909-Defender-Azure.xml"
-        }
-        "Microsoft Windows 10*" {
-            $url = "https://raw.githubusercontent.com/aaronparker/packer/main/tools/rds/optimizer/Windows101909-Defender-Azure.xml"
-        }
-    }
-    Invoke-WebRequest -Uri $url -OutFile "$Path\Templates\$(Split-Path $url -Leaf)" -UseBasicParsing
-
-    Write-Host "=============== Running Citrix Optimizer"
-    & "$Path\CtxOptimizerEngine.ps1" -Source "$Path\Templates\$(Split-Path $url -Leaf)" -Mode execute -OutputHtml "$Path\CitrixOptimizer.html"
-}
 #endregion
 
 #region Script logic
@@ -123,8 +97,105 @@ $ProgressPreference = "SilentlyContinue"
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 New-Item -Path $Target -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
 
-# Seal image tasks
-# Invoke-CitrixOptimizer -Path "$Target\CitrixOptimizer"
+#region Citrix Optimizer
+If ($Null -eq $Installer) {
+    $OptimizerPath = Join-Path -Path $Path -ChildPath "CitrixOptimizer"
+    $Installer = Get-ChildItem -Path $OptimizerPath -Filter "CitrixOptimizer.zip"
+    $params = @{
+        Uri             = "https://raw.githubusercontent.com/aaronparker/packer/main/tools/rds/optimizer/CitrixOptimizer.zip"
+        OutFile         = (Join-Path -Path $OptimizerPath -ChildPath "CitrixOptimizer.zip")
+        UseBasicParsing = $True
+    }
+    try {
+        Invoke-WebRequest -Uri
+    }
+    catch {
+        Write-Warning -Message "Invoke-WebRequest exited with: $($_.Exception.Message)."
+    }
+}
+$Installer = Get-ChildItem -Path $OptimizerPath -Filter "CitrixOptimizer.zip"
+If ($Installer) {
+    Write-Host "Found ZIP file: $($Installer.FullName)."
+    Expand-Archive -Path $Installer.FullName -DestinationPath $OptimizerPath -Force -Verbose
+
+    $Template = Get-ChildItem -Path $OptimizerPath -Recurse -Filter $OptimizerTemplate
+    Write-Host "Found zip file: $($Template.FullName)."
+
+    If ($Template) {
+        try {
+            $OptimizerBin = Get-ChildItem -Path $OptimizerPath -Recurse -Filter "CtxOptimizerEngine.ps1"
+            Push-Location -Path $OptimizerBin.Directory
+            Write-Host "Running: $($OptimizerBin.FullName) -Source $($Template.FullName) -Mode execute"
+            Write-Host "Output will be saved to: $OptimizerPath\CitrixOptimizer.html."
+            & $OptimizerBin.FullName -Source $Template.FullName -Mode execute -OutputHtml "$OptimizerPath\CitrixOptimizer.html"
+            Pop-Location
+        }
+        catch {
+            Write-Warning -Message "Citrix Optimizer exited with: $($_.Exception.Message)."
+        }
+    }
+    Else {
+        Throw "Failed to find Citrix Optimizer template: [$OptimizerPath\$OptimizerTemplate]."
+    }
+}
+Else {
+    Throw "Failed to find Citrix Optimizer in: $OptimizerPath."
+}
+#endregion
+
+
+#region BIS-F
+try {
+    $BisfPath = Join-Path -Path $Path -ChildPath "BISF"
+    $Bisf = Get-BISF
+    $Installer = Join-Path -Path $BisfPath -ChildPath (Split-Path -Path $Bisf.URI)
+    Invoke-WebRequest -Uri $Bisf.URI -OutFile $Installer -UseBasicParsing
+    #$Installer = Get-ChildItem -Path $BisfPath -Filter "setup-BIS*.MSI" | Select-Object -First 1
+}
+catch {
+    Write-Warning -Message "Invoke-WebRequest exited with: $($_.Exception.Message)."
+}
+If ($Installer) {
+    Write-Host "Found MSI file: $($Installer.FullName)."
+    try {
+        $params = @{
+            FilePath     = "$env:SystemRoot\System32\msiexec.exe"
+            ArgumentList = "/i $($Installer.FullName) ALLUSERS=1 /quiet"
+            Verbose      = $True
+        }
+        Invoke-Process @params
+    }
+    catch {
+        Throw "Failed to install BIS-F with: $($_.Exception.Message)."
+    }
+
+    $BisfInstall = "${env:ProgramFiles(x86)}\Base Image Script Framework (BIS-F)"
+    If (Test-Path -Path $BisfInstall) {
+        Remove-Item -Path "$env:ProgramData\Microsoft\Windows\Start Menu\Programs\Base Image Script Framework (BIS-F).lnk" -Force -ErrorAction "SilentlyContinue"
+        
+        try {
+            $ConfigFiles = Get-ChildItem -Path $BisfPath -Filter "*.json"
+            Copy-Item -Path $ConfigFiles.FullName -Destination $BisfInstall -Verbose
+        }
+        catch {
+            Throw "Failed to copy BIS-F config files with: $($_.Exception.Message)."
+        }
+
+        try {
+            & "${env:ProgramFiles(x86)}\Base Image Script Framework (BIS-F)\Framework\PrepBISF_Start.ps1"
+        }
+        catch {
+            Write-Warning -Message "BIS-F exited with: $($_.Exception.Message)."
+        }
+    }
+    Else {
+        Throw "Failed to find BIS-F in: ${env:ProgramFiles(x86)}\Base Image Script Framework (BIS-F)."
+    }
+}
+Else {
+    Throw "Failed to find BIS-F in: $BisfPath."
+}
+#endregion
 
 Write-Host "================ Complete: CitrixOptimizer."
 #endregion

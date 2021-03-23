@@ -1,5 +1,5 @@
 <# 
-    .SYSOPSIS
+    .SYNOPSIS
         Optimise and seal a Windows image.
 #>
 [CmdletBinding()]
