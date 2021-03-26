@@ -89,13 +89,13 @@ Function Install-AdobeReaderDC ($Path) {
     # Download Reader installer and updater
     Write-Host "================ Adobe Acrobat Reader DC"
     Write-Host "================ Downloading Reader"
-    $Reader = Get-AdobeAcrobatReaderDC | Where-Object { $_.Language -eq "English" -or $_.Language -eq "Neutral" }
+    $Reader = Get-AdobeAcrobatReaderDC | Where-Object { $_.Language -eq "English" -and $_.Architecture -eq "x64" }
 
     If ($Reader) {
         If (!(Test-Path $Path)) { New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null }
 
-        $Installer = ($Reader | Where-Object { $_.Type -eq "Installer" | Sort-Object -Property "Version" -Descending })[-1]
-        $Updater = ($Reader | Where-Object { $_.Type -eq "Updater" | Sort-Object -Property "Version" -Descending })[-1]
+        $Installer = $Reader | Where-Object { $_.Type -eq "Installer" | Sort-Object -Property "Version" -Descending } | Select-Object -First 1
+        $Updater = Get-AdobeAcrobat | Where-Object { $_.Product -eq "Reader" -and  $_.Track -eq "DC" -and $_.Language -eq "Neutral" } | Select-Object -First 1
         
         # Download Adobe Acrobat Reader
         ForEach ($File in $Installer) {

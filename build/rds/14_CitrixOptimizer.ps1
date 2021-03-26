@@ -8,7 +8,7 @@ Param (
     [System.String] $Log = "$env:SystemRoot\Logs\PackerImagePrep.log",
 
     [Parameter(Mandatory = $False)]
-    [System.String] $Target = "$env:SystemDrive\Apps",
+    [System.String] $Path = "$env:SystemDrive\Apps",
 
     [Parameter(Mandatory = $False)]
     [System.String] $OptimizerTemplate = "Custom-Windows10-20H2.xml"
@@ -98,22 +98,22 @@ $ProgressPreference = "SilentlyContinue"
 New-Item -Path $Target -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
 
 #region Citrix Optimizer
+$OptimizerPath = Join-Path -Path $Path -ChildPath "CitrixOptimizer"
+$Installer = Get-ChildItem -Path $OptimizerPath -Filter "CitrixOptimizer.zip"
 If ($Null -eq $Installer) {
-    $OptimizerPath = Join-Path -Path $Path -ChildPath "CitrixOptimizer"
-    $Installer = Get-ChildItem -Path $OptimizerPath -Filter "CitrixOptimizer.zip"
     $params = @{
         Uri             = "https://raw.githubusercontent.com/aaronparker/packer/main/tools/rds/optimizer/CitrixOptimizer.zip"
         OutFile         = (Join-Path -Path $OptimizerPath -ChildPath "CitrixOptimizer.zip")
         UseBasicParsing = $True
     }
     try {
-        Invoke-WebRequest -Uri
+        Invoke-WebRequest @params
     }
     catch {
         Write-Warning -Message "Invoke-WebRequest exited with: $($_.Exception.Message)."
     }
+    $Installer = Get-ChildItem -Path $OptimizerPath -Filter "CitrixOptimizer.zip"
 }
-$Installer = Get-ChildItem -Path $OptimizerPath -Filter "CitrixOptimizer.zip"
 If ($Installer) {
     Write-Host "Found ZIP file: $($Installer.FullName)."
     Expand-Archive -Path $Installer.FullName -DestinationPath $OptimizerPath -Force -Verbose
@@ -149,8 +149,17 @@ try {
     $BisfPath = Join-Path -Path $Path -ChildPath "BISF"
     $Bisf = Get-BISF
     $Installer = Join-Path -Path $BisfPath -ChildPath (Split-Path -Path $Bisf.URI)
-    Invoke-WebRequest -Uri $Bisf.URI -OutFile $Installer -UseBasicParsing
-    #$Installer = Get-ChildItem -Path $BisfPath -Filter "setup-BIS*.MSI" | Select-Object -First 1
+    $params = @{
+        Uri             = $Bisf.URI
+        OutFile         = $Installer
+        UseBasicParsing = $True
+    }
+    try {
+        Invoke-WebRequest @params
+    }
+    catch {
+        Write-Warning -Message "Invoke-WebRequest exited with: $($_.Exception.Message)."
+    }
 }
 catch {
     Write-Warning -Message "Invoke-WebRequest exited with: $($_.Exception.Message)."
