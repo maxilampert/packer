@@ -152,6 +152,7 @@
             "type": "powershell",
             "scripts": [
                 "build/rds/14_CitrixOptimizer.ps1",
+                "build/rds/15_Bisf.ps1",
                 "build/common/Get-InstalledSoftware.ps1",
                 "build/common/Get-InstalledHotfixes.ps1"
             ]

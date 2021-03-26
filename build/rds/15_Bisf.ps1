@@ -8,10 +8,7 @@ Param (
     [System.String] $Log = "$env:SystemRoot\Logs\PackerImagePrep.log",
 
     [Parameter(Mandatory = $False)]
-    [System.String] $Path = "$env:SystemDrive\Apps",
-
-    [Parameter(Mandatory = $False)]
-    [System.String] $OptimizerTemplate = "Custom-Windows10-20H2.xml"
+    [System.String] $Path = "$env:SystemDrive\Apps"
 )
 
 #region Functions
@@ -96,57 +93,98 @@ $ProgressPreference = "SilentlyContinue"
 # Set TLS to 1.2; Create target folder
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
-#region Citrix Optimizer
-$CtxPath = "CitrixOptimizer"
-$OptimizerPath = Join-Path -Path $Path -ChildPath $CtxPath
-New-Item -Path $OptimizerPath -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
-Write-Host "Using path: $OptimizerPath."
-$Installer = Get-ChildItem -Path $OptimizerPath -Filter "$CtxPath.zip" -ErrorAction "SilentlyContinue"
 
-If ($Null -eq $Installer) {
+#region BIS-F
+$Bisf = Get-BISF
+$BisfPath = Join-Path -Path $Path -ChildPath "BISF"
+New-Item -Path $BisfPath -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
+$Installer = Join-Path -Path $BisfPath -ChildPath (Split-Path -Path $Bisf.URI -Leaf)
+Write-Host "Using path: $BisfPath."
+
+# Download the latest BIS-F
+try {
     $params = @{
-        Uri             = "https://raw.githubusercontent.com/aaronparker/packer/main/tools/rds/optimizer/CitrixOptimizer.zip"
-        OutFile         = (Join-Path -Path $OptimizerPath -ChildPath "$CtxPath.zip")
+        Uri             = $Bisf.URI
+        OutFile         = $Installer
         UseBasicParsing = $True
-        ErrorAction     = "SilentlyContinue"
     }
+    Invoke-WebRequest @params
+}
+catch {
+    Write-Warning -Message "Invoke-WebRequest exited with: $($_.Exception.Message)."
+}
+
+$Installer = Get-ChildItem -Path $BisfPath -Filter $(Split-Path -Path $Bisf.URI -Leaf) -ErrorAction "SilentlyContinue" 
+If ($Installer) {
+    
+    # Install BIS-F
+    Write-Host "Found MSI file: $($Installer.FullName)."
     try {
-        Invoke-WebRequest @params
+        $params = @{
+            FilePath     = "$env:SystemRoot\System32\msiexec.exe"
+            ArgumentList = "/i $($Installer.FullName) ALLUSERS=1 /quiet"
+            Verbose      = $True
+        }
+        Invoke-Process @params
     }
     catch {
-        Write-Warning -Message "Invoke-WebRequest exited with: $($_.Exception.Message)."
+        Throw "Failed to install BIS-F with: $($_.Exception.Message)."
     }
-    $Installer = Get-ChildItem -Path $OptimizerPath -Filter "$CtxPath.zip"
-}
-If ($Installer) {
-    Write-Host "Found ZIP file: $($Installer.FullName)."
-    Expand-Archive -Path $Installer.FullName -DestinationPath $OptimizerPath -Force -Verbose
 
-    $Template = Get-ChildItem -Path $OptimizerPath -Recurse -Filter $OptimizerTemplate
-    Write-Host "Found zip file: $($Template.FullName)."
+    # If BIS-F installed OK, continue
+    $BisfInstall = Join-Path -Path ${env:ProgramFiles(x86)} -ChildPath "Base Image Script Framework (BIS-F)"
+    Write-Host "BIS-F install path: $BisfInstall."
+    If (Test-Path -Path $BisfInstall -ErrorAction "SilentlyContinue") {
+        
+        # Remove Start menu shortcut if it exists
+        Write-Host "Remove BIS-F Start menu shortcut."
+        $params = @{
+            Path        = "$env:ProgramData\Microsoft\Windows\Start Menu\Programs\Base Image Script Framework (BIS-F).lnk"
+            Force       = $True
+            Verbose     = $True
+            ErrorAction = "SilentlyContinue"
+        }
+        Remove-Item @params
+        
+        # Copy BIS-F config files
+        Write-Host "Copy BIS-F configuration files from: $BisfPath to $BisfInstall."
+        $ConfigFiles = Get-ChildItem -Path $BisfPath -Recurse -Filter "*.json" -ErrorAction "SilentlyContinue"
+        If ($Null -ne $ConfigFiles) {
+            try {
+                $params = @{
+                    Path        = $ConfigFiles
+                    Destination = $BisfInstall
+                    Force       = $True
+                    Verbose     = $True
+                    ErrorAction = "SilentlyContinue"
+                }
+                Copy-Item @params
+            }
+            catch {
+                Throw "Failed to copy BIS-F config files with: $($_.Exception.Message)."
+            }
+        }
+        Else {
+            Write-Warning -Message "Unable to find BIS-F config files in: $BisfPath."
+        }
 
-    If ($Template) {
+        # Run BIS-F
+        Write-Host "Run BIS-F."
         try {
-            $OptimizerBin = Get-ChildItem -Path $OptimizerPath -Recurse -Filter "CtxOptimizerEngine.ps1"
-            Push-Location -Path $OptimizerBin.Directory
-            Write-Host "Running: $($OptimizerBin.FullName) -Source $($Template.FullName) -Mode execute"
-            Write-Host "Output will be saved to: $OptimizerPath\$CtxPath.html."
-            & $OptimizerBin.FullName -Source $Template.FullName -Mode execute -OutputHtml "$OptimizerPath\$CtxPath.html"
-            Pop-Location
+            & "${env:ProgramFiles(x86)}\Base Image Script Framework (BIS-F)\Framework\PrepBISF_Start.ps1"
         }
         catch {
-            Write-Warning -Message "Citrix Optimizer exited with: $($_.Exception.Message)."
+            Write-Warning -Message "BIS-F exited with: $($_.Exception.Message)."
         }
     }
     Else {
-        Throw "Failed to find Citrix Optimizer template: [$OptimizerPath\$OptimizerTemplate]."
+        Throw "Failed to find BIS-F in: ${env:ProgramFiles(x86)}\Base Image Script Framework (BIS-F)."
     }
 }
 Else {
-    Throw "Failed to find Citrix Optimizer in: $OptimizerPath."
+    Throw "Failed to find BIS-F in: $BisfPath."
 }
 #endregion
 
-
-Write-Host "================ Complete: Optimise."
+Write-Host "================ Complete: Bisf."
 #endregion
