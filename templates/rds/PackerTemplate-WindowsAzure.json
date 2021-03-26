@@ -139,6 +139,16 @@
             "update_limit": 25
         },
         {
+            "type": "file",
+            "source": "{{user `WorkingDirectory`}}/tools/rds/optimizer/Custom-Windows10-20H2.xml",
+            "destination": "C:\\Apps\\Optimizer\\Custom-Windows10-20H2.xml"
+        },
+        {
+            "type": "file",
+            "source": "{{user `WorkingDirectory`}}/tools/rds/bisf",
+            "destination": "C:\\Apps\\BISF"
+        },
+        {
             "type": "powershell",
             "scripts": [
                 "build/rds/14_CitrixOptimizer.ps1",

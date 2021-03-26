@@ -95,16 +95,17 @@ $ProgressPreference = "SilentlyContinue"
 
 # Set TLS to 1.2; Create target folder
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-New-Item -Path $Target -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
 
 #region Citrix Optimizer
 $OptimizerPath = Join-Path -Path $Path -ChildPath "CitrixOptimizer"
-$Installer = Get-ChildItem -Path $OptimizerPath -Filter "CitrixOptimizer.zip"
+New-Item -Path $OptimizerPath -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
+$Installer = Get-ChildItem -Path $OptimizerPath -Filter "CitrixOptimizer.zip" -ErrorAction "SilentlyContinue"
 If ($Null -eq $Installer) {
     $params = @{
         Uri             = "https://raw.githubusercontent.com/aaronparker/packer/main/tools/rds/optimizer/CitrixOptimizer.zip"
         OutFile         = (Join-Path -Path $OptimizerPath -ChildPath "CitrixOptimizer.zip")
         UseBasicParsing = $True
+        ErrorAction     = "SilentlyContinue"
     }
     try {
         Invoke-WebRequest @params
@@ -145,25 +146,22 @@ Else {
 
 
 #region BIS-F
+$BisfPath = Join-Path -Path $Path -ChildPath "BISF"
+New-Item -Path $BisfPath -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
+$Bisf = Get-BISF
+$Installer = Join-Path -Path $BisfPath -ChildPath (Split-Path -Path $Bisf.URI -Leaf)
 try {
-    $BisfPath = Join-Path -Path $Path -ChildPath "BISF"
-    $Bisf = Get-BISF
-    $Installer = Join-Path -Path $BisfPath -ChildPath (Split-Path -Path $Bisf.URI)
     $params = @{
         Uri             = $Bisf.URI
         OutFile         = $Installer
         UseBasicParsing = $True
     }
-    try {
-        Invoke-WebRequest @params
-    }
-    catch {
-        Write-Warning -Message "Invoke-WebRequest exited with: $($_.Exception.Message)."
-    }
+    Invoke-WebRequest @params
 }
 catch {
     Write-Warning -Message "Invoke-WebRequest exited with: $($_.Exception.Message)."
 }
+$Installer = Get-ChildItem -Path $BisfPath -Filter $(Split-Path -Path $Bisf.URI -Leaf) -ErrorAction "SilentlyContinue" 
 If ($Installer) {
     Write-Host "Found MSI file: $($Installer.FullName)."
     try {
@@ -178,9 +176,14 @@ If ($Installer) {
         Throw "Failed to install BIS-F with: $($_.Exception.Message)."
     }
 
-    $BisfInstall = "${env:ProgramFiles(x86)}\Base Image Script Framework (BIS-F)"
-    If (Test-Path -Path $BisfInstall) {
-        Remove-Item -Path "$env:ProgramData\Microsoft\Windows\Start Menu\Programs\Base Image Script Framework (BIS-F).lnk" -Force -ErrorAction "SilentlyContinue"
+    $BisfInstall = Join-Path -Path ${env:ProgramFiles(x86)} -ChildPath "Base Image Script Framework (BIS-F)"
+    If (Test-Path -Path $BisfInstall -ErrorAction "SilentlyContinue") {
+        $params = @{
+            Path        = "$env:ProgramData\Microsoft\Windows\Start Menu\Programs\Base Image Script Framework (BIS-F).lnk"
+            Force       = $True
+            ErrorAction = "SilentlyContinue"
+        }
+        Remove-Item @params
         
         try {
             $ConfigFiles = Get-ChildItem -Path $BisfPath -Filter "*.json"
