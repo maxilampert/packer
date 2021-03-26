@@ -140,12 +140,12 @@
         },
         {
             "type": "file",
-            "source": "{{user `WorkingDirectory`}}/tools/rds/optimizer/Custom-Windows10-20H2.xml",
+            "source": "{{user `working_directory`}}/tools/rds/optimizer/Custom-Windows10-20H2.xml",
             "destination": "C:\\Apps\\Optimizer\\Custom-Windows10-20H2.xml"
         },
         {
             "type": "file",
-            "source": "{{user `WorkingDirectory`}}/tools/rds/bisf",
+            "source": "{{user `working_directory`}}/tools/rds/bisf",
             "destination": "C:\\Apps\\BISF"
         },
         {
