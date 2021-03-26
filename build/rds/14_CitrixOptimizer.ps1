@@ -100,7 +100,9 @@ $ProgressPreference = "SilentlyContinue"
 $CtxPath = "CitrixOptimizer"
 $OptimizerPath = Join-Path -Path $Path -ChildPath $CtxPath
 New-Item -Path $OptimizerPath -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
+Write-Host "Using path: $OptimizerPath."
 $Installer = Get-ChildItem -Path $OptimizerPath -Filter "$CtxPath.zip" -ErrorAction "SilentlyContinue"
+
 If ($Null -eq $Installer) {
     $params = @{
         Uri             = "https://raw.githubusercontent.com/aaronparker/packer/main/tools/rds/optimizer/CitrixOptimizer.zip"
@@ -147,10 +149,13 @@ Else {
 
 
 #region BIS-F
+$Bisf = Get-BISF
 $BisfPath = Join-Path -Path $Path -ChildPath "BISF"
 New-Item -Path $BisfPath -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
-$Bisf = Get-BISF
 $Installer = Join-Path -Path $BisfPath -ChildPath (Split-Path -Path $Bisf.URI -Leaf)
+Write-Host "Using path: $BisfPath."
+
+# Download the latest BIS-F
 try {
     $params = @{
         Uri             = $Bisf.URI
@@ -162,8 +167,11 @@ try {
 catch {
     Write-Warning -Message "Invoke-WebRequest exited with: $($_.Exception.Message)."
 }
+
 $Installer = Get-ChildItem -Path $BisfPath -Filter $(Split-Path -Path $Bisf.URI -Leaf) -ErrorAction "SilentlyContinue" 
 If ($Installer) {
+    
+    # Install BIS-F
     Write-Host "Found MSI file: $($Installer.FullName)."
     try {
         $params = @{
@@ -177,23 +185,41 @@ If ($Installer) {
         Throw "Failed to install BIS-F with: $($_.Exception.Message)."
     }
 
+    # If BIS-F installed OK, continue
     $BisfInstall = Join-Path -Path ${env:ProgramFiles(x86)} -ChildPath "Base Image Script Framework (BIS-F)"
     If (Test-Path -Path $BisfInstall -ErrorAction "SilentlyContinue") {
+        
+        # Remove Start menu shortcut if it exists
         $params = @{
             Path        = "$env:ProgramData\Microsoft\Windows\Start Menu\Programs\Base Image Script Framework (BIS-F).lnk"
             Force       = $True
+            Verbose     = $True
             ErrorAction = "SilentlyContinue"
         }
         Remove-Item @params
         
-        try {
-            $ConfigFiles = Get-ChildItem -Path $BisfPath -Filter "*.json"
-            Copy-Item -Path $ConfigFiles.FullName -Destination $BisfInstall -Verbose
+        # Copy BIS-F config files
+        $ConfigFiles = Get-ChildItem -Path $BisfPath -Recurse -Filter "*.json" -ErrorAction "SilentlyContinue"
+        If ($Null -ne $ConfigFiles) {
+            try {
+                $params = @{
+                    Path        = $ConfigFiles
+                    Destination = $BisfInstall
+                    Force       = $True
+                    Verbose     = $True
+                    ErrorAction = "SilentlyContinue"
+                }
+                Copy-Item @params
+            }
+            catch {
+                Throw "Failed to copy BIS-F config files with: $($_.Exception.Message)."
+            }
         }
-        catch {
-            Throw "Failed to copy BIS-F config files with: $($_.Exception.Message)."
+        Else {
+            Write-Warning -Message "Unable to find BIS-F config files in: $BisfPath."
         }
 
+        # Run BIS-F
         try {
             & "${env:ProgramFiles(x86)}\Base Image Script Framework (BIS-F)\Framework\PrepBISF_Start.ps1"
         }
