@@ -97,13 +97,14 @@ $ProgressPreference = "SilentlyContinue"
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
 #region Citrix Optimizer
-$OptimizerPath = Join-Path -Path $Path -ChildPath "CitrixOptimizer"
+$CtxPath = "CitrixOptimizer"
+$OptimizerPath = Join-Path -Path $Path -ChildPath $CtxPath
 New-Item -Path $OptimizerPath -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
-$Installer = Get-ChildItem -Path $OptimizerPath -Filter "CitrixOptimizer.zip" -ErrorAction "SilentlyContinue"
+$Installer = Get-ChildItem -Path $OptimizerPath -Filter "$CtxPath.zip" -ErrorAction "SilentlyContinue"
 If ($Null -eq $Installer) {
     $params = @{
         Uri             = "https://raw.githubusercontent.com/aaronparker/packer/main/tools/rds/optimizer/CitrixOptimizer.zip"
-        OutFile         = (Join-Path -Path $OptimizerPath -ChildPath "CitrixOptimizer.zip")
+        OutFile         = (Join-Path -Path $OptimizerPath -ChildPath "$CtxPath.zip")
         UseBasicParsing = $True
         ErrorAction     = "SilentlyContinue"
     }
@@ -113,7 +114,7 @@ If ($Null -eq $Installer) {
     catch {
         Write-Warning -Message "Invoke-WebRequest exited with: $($_.Exception.Message)."
     }
-    $Installer = Get-ChildItem -Path $OptimizerPath -Filter "CitrixOptimizer.zip"
+    $Installer = Get-ChildItem -Path $OptimizerPath -Filter "$CtxPath.zip"
 }
 If ($Installer) {
     Write-Host "Found ZIP file: $($Installer.FullName)."
@@ -127,8 +128,8 @@ If ($Installer) {
             $OptimizerBin = Get-ChildItem -Path $OptimizerPath -Recurse -Filter "CtxOptimizerEngine.ps1"
             Push-Location -Path $OptimizerBin.Directory
             Write-Host "Running: $($OptimizerBin.FullName) -Source $($Template.FullName) -Mode execute"
-            Write-Host "Output will be saved to: $OptimizerPath\CitrixOptimizer.html."
-            & $OptimizerBin.FullName -Source $Template.FullName -Mode execute -OutputHtml "$OptimizerPath\CitrixOptimizer.html"
+            Write-Host "Output will be saved to: $OptimizerPath\$CtxPath.html."
+            & $OptimizerBin.FullName -Source $Template.FullName -Mode execute -OutputHtml "$OptimizerPath\$CtxPath.html"
             Pop-Location
         }
         catch {
@@ -209,5 +210,5 @@ Else {
 }
 #endregion
 
-Write-Host "================ Complete: CitrixOptimizer."
+Write-Host "================ Complete: $CtxPath."
 #endregion

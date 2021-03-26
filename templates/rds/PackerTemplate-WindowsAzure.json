@@ -114,18 +114,6 @@
             "type": "windows-restart"
         },
         {
-            "type": "powershell",
-            "environment_vars": [
-                "AppsUrl={{user `apps_url`}}"
-            ],
-            "scripts": [
-                "build/rds/13_Rds-LobApps.ps1"
-            ]
-        },
-        {
-            "type": "windows-restart"
-        },
-        {
             "type": "windows-update",
             "search_criteria": "IsInstalled=0",
             "filters": [
@@ -138,7 +126,7 @@
         {
             "type": "file",
             "source": "{{user `working_directory`}}/tools/rds/optimizer",
-            "destination": "C:\\Apps\\Optimizer"
+            "destination": "C:\\Apps\\CitrixOptimizer"
         },
         {
             "type": "file",
