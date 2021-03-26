@@ -107,10 +107,7 @@
                 "build/common/06_SupportFunctions.ps1",
                 "build/rds/07_MicrosoftVcRedists.ps1",
                 "build/rds/08_MicrosoftFSLogixApps.ps1",
-                "build/rds/09_MicrosoftEdge.ps1",
-                "build/rds/10_Microsoft365Apps.ps1",
-                "build/rds/11_Wvd-Agents.ps1",
-                "build/rds/12_AdobeAcrobatReaderDC.ps1"
+                "build/rds/09_MicrosoftEdge.ps1"
             ]
         },
         {
@@ -140,8 +137,8 @@
         },
         {
             "type": "file",
-            "source": "{{user `working_directory`}}/tools/rds/optimizer/Custom-Windows10-20H2.xml",
-            "destination": "C:\\Apps\\Optimizer\\Custom-Windows10-20H2.xml"
+            "source": "{{user `working_directory`}}/tools/rds/optimizer",
+            "destination": "C:\\Apps\\Optimizer"
         },
         {
             "type": "file",
