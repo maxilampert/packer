@@ -14,14 +14,6 @@
 - [20210225.01](/MicrosoftWindowsDesktop/Windows-10/20h2-ent/20210225.01.md)
 - [20210301.01](/MicrosoftWindowsDesktop/Windows-10/20h2-ent/20210301.01.md)
 - [20210303.01](/MicrosoftWindowsDesktop/Windows-10/20h2-ent/20210303.01.md)
-- [20210304.01](/MicrosoftWindowsDesktop/Windows-10/20h2-ent/20210304.01.md)
-- [20210311.01](/MicrosoftWindowsDesktop/Windows-10/20h2-ent/20210311.01.md)
-- [20210318.01](/MicrosoftWindowsDesktop/Windows-10/20h2-ent/20210318.01.md)
-- [20210325.01](/MicrosoftWindowsDesktop/Windows-10/20h2-ent/20210325.01.md)
-- [20210327.02](/MicrosoftWindowsDesktop/Windows-10/20h2-ent/20210327.02.md)
-- [20210327.03](/MicrosoftWindowsDesktop/Windows-10/20h2-ent/20210327.03.md)
-- [20210327.07](/MicrosoftWindowsDesktop/Windows-10/20h2-ent/20210327.07.md)
-- [20210327.11](/MicrosoftWindowsDesktop/Windows-10/20h2-ent/20210327.11.md)
 
 ### 20h2-evd
 
@@ -36,4 +28,4 @@
 
 ### 2019-Datacenter
 
-- [20210224.05](/MicrosoftWindowsServer/WindowsServer/2019-Datacenter/20210224.05.md)
+- [20210224.05](/MicrosoftWindowsServer/WindowsServer/2019-Datacenter/20210224.05.md)

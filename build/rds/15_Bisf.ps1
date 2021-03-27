@@ -193,7 +193,7 @@ If ($Installer) {
         Write-Host "Run BIS-F."
         try {
             $VerbosePreference = "SilentlyContinue"
-            Push-Location -Path $BisfInstall
+            Push-Location -Path (Join-Path -Path $BisfInstall -ChildPath "Framework")
             & "${env:ProgramFiles(x86)}\Base Image Script Framework (BIS-F)\Framework\PrepBISF_Start.ps1"
             Pop-Location
             $VerbosePreference = "Continue"
