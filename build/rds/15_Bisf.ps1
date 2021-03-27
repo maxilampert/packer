@@ -177,7 +177,7 @@ If ($Installer) {
             }
             $params = @{
                 FilePath    = [System.IO.Path]::Combine(${env:ProgramFiles(x86)}, "Base Image Script Framework (BIS-F)", "BISFSharedConfig.json")
-                Encoding    = utf8
+                Encoding    = "utf8"
                 Force       = $True
                 Verbose     = $True
                 ErrorAction = "SilentlyContinue"
