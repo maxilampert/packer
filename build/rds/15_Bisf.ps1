@@ -147,21 +147,22 @@ If ($Installer) {
         
         # Copy BIS-F config files
         Write-Host "Copy BIS-F configuration files from: $Path to $BisfInstall."
+        Get-ChildItem -Path $Path | Select-Object -Property FullName, Name
         try {
             $ConfigFiles = Get-ChildItem -Path $Path -Recurse -Filter "*.json" -ErrorAction "SilentlyContinue"
             $params = @{
-                Path        = $ConfigFiles
+                #Path        = $ConfigFiles
+                Path        = "$ConfigFiles\*.json"
                 Destination = $BisfInstall
                 Force       = $True
                 Verbose     = $True
-                ErrorAction = "SilentlyContinue"
+                ErrorAction = "Stop"
             }
             Copy-Item @params
         }
         catch {
             Throw "Failed to copy BIS-F config files with: $($_.Exception.Message)."
         }
-        Get-ChildItem -Path $BisfInstall -Filter "*.json"
 
         # Run BIS-F
         Write-Host "Run BIS-F."
