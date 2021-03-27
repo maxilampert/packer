@@ -147,19 +147,46 @@ If ($Installer) {
         
         # Copy BIS-F config files
         Write-Host "Copy BIS-F configuration files from: $Path to $BisfInstall."
-        Get-ChildItem -Path $Path | Select-Object -Property FullName, Name
         try {
+            Switch -Regex ((Get-WmiObject Win32_OperatingSystem).Caption) {
+                "Microsoft Windows Server*" {
+                    $ConfigFile = "BISFconfig_MicrosoftWindowsServer2019Standard_64-bit.json"
+                }
+                "Microsoft Windows 10*" {
+                    $ConfigFile = "BISFconfig_MicrosoftWindows10Enterprise_64-bit.json"
+                }
+                Default {
+                }
+            }
             $params = @{
-                Path        = (Join-Path -Path $Path -ChildPath "*.json")
+                Path        = (Join-Path -Path $Path -ChildPath $ConfigFile)
                 Destination = $BisfInstall
                 Force       = $True
                 Verbose     = $True
-                ErrorAction = "Stop"
+                ErrorAction = "SilentlyContinue"
             }
+            Write-Host "Copy BIS-F configuration file: $ConfigFile."
             Copy-Item @params
         }
         catch {
-            Throw "Failed to copy BIS-F config files with: $($_.Exception.Message)."
+            Throw "Failed to copy BIS-F config file: $ConfigFile with: $($_.Exception.Message)."
+        }
+        try {
+            $json = [PSCustomObject] @{
+                ConfigFile = [System.IO.Path]::Combine(${env:ProgramFiles(x86)}, "Base Image Script Framework (BIS-F)", $ConfigFile) 
+            }
+            $params = @{
+                FilePath    = [System.IO.Path]::Combine(${env:ProgramFiles(x86)}, "Base Image Script Framework (BIS-F)", "BISFSharedConfig.json")
+                Encoding    = utf8
+                Force       = $True
+                Verbose     = $True
+                ErrorAction = "SilentlyContinue"
+            }
+            Write-Host "Set BIS-F shared configuration file: BISFSharedConfig.json."
+            $json | ConvertTo-Json | Out-File @params
+        }
+        catch {
+            Throw "Failed to set BIS-F shared config file: $ConfigFile with: $($_.Exception.Message)."
         }
 
         # Run BIS-F
