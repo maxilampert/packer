@@ -152,7 +152,7 @@ If ($Installer) {
             $ConfigFiles = Get-ChildItem -Path $Path -Recurse -Filter "*.json" -ErrorAction "SilentlyContinue"
             $params = @{
                 #Path        = $ConfigFiles
-                Path        = "$ConfigFiles\*.json"
+                Path        = "$Path\*.json"
                 Destination = $BisfInstall
                 Force       = $True
                 Verbose     = $True
