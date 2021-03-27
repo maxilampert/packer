@@ -149,10 +149,8 @@ If ($Installer) {
         Write-Host "Copy BIS-F configuration files from: $Path to $BisfInstall."
         Get-ChildItem -Path $Path | Select-Object -Property FullName, Name
         try {
-            $ConfigFiles = Get-ChildItem -Path $Path -Recurse -Filter "*.json" -ErrorAction "SilentlyContinue"
             $params = @{
-                #Path        = $ConfigFiles
-                Path        = "$Path\*.json"
+                Path        = (Join-Path -Path $Path -ChildPath "*.json")
                 Destination = $BisfInstall
                 Force       = $True
                 Verbose     = $True
@@ -167,7 +165,11 @@ If ($Installer) {
         # Run BIS-F
         Write-Host "Run BIS-F."
         try {
+            $VerbosePreference = "SilentlyContinue"
+            Push-Location -Path $BisfInstall
             & "${env:ProgramFiles(x86)}\Base Image Script Framework (BIS-F)\Framework\PrepBISF_Start.ps1"
+            Pop-Location
+            $VerbosePreference = "Continue"
         }
         catch {
             Write-Warning -Message "BIS-F exited with: $($_.Exception.Message)."
