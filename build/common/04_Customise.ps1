@@ -43,5 +43,5 @@ New-Item -Path $Target -ItemType "Directory" -Force -ErrorAction "SilentlyContin
 
 # Run tasks
 Set-Customise -Path "$Target\Customise"
-Write-Host "================ Complete: Customise."
+Write-Host " Complete: Customise."
 #endregion

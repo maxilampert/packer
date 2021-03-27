@@ -8,7 +8,7 @@ Param (
     [System.String] $Log = "$env:SystemRoot\Logs\PackerImagePrep.log",
 
     [Parameter(Mandatory = $False)]
-    [System.String] $Path = "$env:SystemDrive\Apps"
+    [System.String] $Path = "$env:SystemDrive\Apps\BISF"
 )
 
 #region Functions
@@ -96,10 +96,9 @@ $ProgressPreference = "SilentlyContinue"
 
 #region BIS-F
 $Bisf = Get-BISF
-$BisfPath = Join-Path -Path $Path -ChildPath "BISF"
-New-Item -Path $BisfPath -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
-$Installer = Join-Path -Path $BisfPath -ChildPath (Split-Path -Path $Bisf.URI -Leaf)
-Write-Host "Using path: $BisfPath."
+New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
+$Installer = Join-Path -Path $Path -ChildPath (Split-Path -Path $Bisf.URI -Leaf)
+Write-Host "Using path: $Path."
 
 # Download the latest BIS-F
 try {
@@ -114,7 +113,7 @@ catch {
     Write-Warning -Message "Invoke-WebRequest exited with: $($_.Exception.Message)."
 }
 
-$Installer = Get-ChildItem -Path $BisfPath -Filter $(Split-Path -Path $Bisf.URI -Leaf) -ErrorAction "SilentlyContinue" 
+$Installer = Get-ChildItem -Path $Path -Filter $(Split-Path -Path $Bisf.URI -Leaf) -ErrorAction "SilentlyContinue" 
 If ($Installer) {
     
     # Install BIS-F
@@ -147,27 +146,22 @@ If ($Installer) {
         Remove-Item @params
         
         # Copy BIS-F config files
-        Write-Host "Copy BIS-F configuration files from: $BisfPath to $BisfInstall."
-        Get-ChildItem -Path $BisfPath | Select-Object -ExpandProperty FullName
-        $ConfigFiles = Get-ChildItem -Path $BisfPath -Recurse -Filter "*.json" -ErrorAction "SilentlyContinue"
-        If ($Null -ne $ConfigFiles) {
-            try {
-                $params = @{
-                    Path        = $ConfigFiles
-                    Destination = $BisfInstall
-                    Force       = $True
-                    Verbose     = $True
-                    ErrorAction = "SilentlyContinue"
-                }
-                Copy-Item @params
+        Write-Host "Copy BIS-F configuration files from: $Path to $BisfInstall."
+        try {
+            $ConfigFiles = Get-ChildItem -Path $Path -Recurse -Filter "*.json" -ErrorAction "SilentlyContinue"
+            $params = @{
+                Path        = $ConfigFiles
+                Destination = $BisfInstall
+                Force       = $True
+                Verbose     = $True
+                ErrorAction = "SilentlyContinue"
             }
-            catch {
-                Throw "Failed to copy BIS-F config files with: $($_.Exception.Message)."
-            }
+            Copy-Item @params
         }
-        Else {
-            Write-Warning -Message "Unable to find BIS-F config files in: $BisfPath."
+        catch {
+            Throw "Failed to copy BIS-F config files with: $($_.Exception.Message)."
         }
+        Get-ChildItem -Path $BisfInstall -Filter "*.json"
 
         # Run BIS-F
         Write-Host "Run BIS-F."
@@ -183,9 +177,9 @@ If ($Installer) {
     }
 }
 Else {
-    Throw "Failed to find BIS-F in: $BisfPath."
+    Throw "Failed to find BIS-F in: $Path."
 }
 #endregion
 
-Write-Host "================ Complete: Bisf."
+Write-Host " Complete: Bisf."
 #endregion

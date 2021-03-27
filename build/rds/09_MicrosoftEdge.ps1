@@ -85,28 +85,28 @@ Function Global:Invoke-Process {
 }
 
 Function Install-MicrosoftEdge ($Path) {
-    Write-Host "================ Microsoft Edge"
+    Write-Host " Microsoft Edge"
     $Edge = Get-MicrosoftEdge | Where-Object { $_.Architecture -eq "x64" -and $_.Channel -eq "Stable" }
     $Edge = $Edge | Sort-Object -Property Version -Descending | Select-Object -First 1
 
     If ($Edge) {
-        Write-Host "================ Downloading Microsoft Edge"
+        Write-Host " Downloading Microsoft Edge"
         If (!(Test-Path $Path)) { New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null }
 
         # Download
         $url = $Edge.URI
         $OutFile = Join-Path -Path $Path -ChildPath $(Split-Path -Path $url -Leaf)
-        Write-Host "================ Downloading to: $OutFile"
+        Write-Host " Downloading to: $OutFile"
         try {
             Invoke-WebRequest -Uri $url -OutFile $OutFile -UseBasicParsing
-            If (Test-Path -Path $OutFile) { Write-Host "================ Downloaded: $OutFile." }
+            If (Test-Path -Path $OutFile) { Write-Host " Downloaded: $OutFile." }
         }
         catch {
             Throw "Failed to download Microsoft Edge."
         }
 
         # Install
-        Write-Host "================ Installing Microsoft Edge"
+        Write-Host " Installing Microsoft Edge"
         try {
             Invoke-Process -FilePath "$env:SystemRoot\System32\msiexec.exe" -ArgumentList "/package $OutFile /quiet /norestart DONOTCREATEDESKTOPSHORTCUT=true" -Verbose
         }
@@ -115,7 +115,7 @@ Function Install-MicrosoftEdge ($Path) {
         }
 
         # Post install configuration
-        Write-Host "================ Post-install config"
+        Write-Host " Post-install config"
         $prefs = @{
             "homepage"               = "https://www.office.com"
             "homepage_is_newtabpage" = $False
@@ -141,10 +141,10 @@ Function Install-MicrosoftEdge ($Path) {
         $services = "edgeupdate", "edgeupdatem", "MicrosoftEdgeElevationService"
         ForEach ($service in $services) { Get-Service -Name $service | Set-Service -StartupType "Disabled" }
         ForEach ($task in (Get-ScheduledTask -TaskName *Edge*)) { Unregister-ScheduledTask -TaskName $Task -Confirm:$False -ErrorAction SilentlyContinue }
-        Write-Host "================ Done"
+        Write-Host " Done"
     }
     Else {
-        Write-Host "================ Failed to retreive Microsoft Edge"
+        Write-Host " Failed to retreive Microsoft Edge"
     }
 }
 #endregion Functions
@@ -161,5 +161,5 @@ New-Item -Path $Target -ItemType "Directory" -Force -ErrorAction "SilentlyContin
 
 # Run tasks/install apps
 Install-MicrosoftEdge -Path "$Target\Edge"
-Write-Host "================ Complete: MicrosoftEdge."
+Write-Host " Complete: MicrosoftEdge."
 #endregion

@@ -85,8 +85,8 @@ Function Global:Invoke-Process {
 }
 
 Function Install-MicrosoftWvdRtcService ($Path) {
-    Write-Host "================ Microsoft Remote Desktop WebRTC Redirector Service"
-    Write-Host "================ Downloading Microsoft Remote Desktop WebRTC Redirector Service"
+    Write-Host " Microsoft Remote Desktop WebRTC Redirector Service"
+    Write-Host " Downloading Microsoft Remote Desktop WebRTC Redirector Service"
     $Rtc = Get-MicrosoftWvdRtcService | Where-Object { $_.Architecture -eq "x64" }
     
     If ($Rtc) {
@@ -94,17 +94,17 @@ Function Install-MicrosoftWvdRtcService ($Path) {
 
         # Download
         $OutFile = Join-Path -Path $Path -ChildPath $Rtc.Filename
-        Write-Host "================ Downloading to: $OutFile"
+        Write-Host " Downloading to: $OutFile"
         try {
             Invoke-WebRequest -Uri $Rtc.URI -OutFile $OutFile -UseBasicParsing
-            If (Test-Path -Path $OutFile) { Write-Host "================ Downloaded: $OutFile." }
+            If (Test-Path -Path $OutFile) { Write-Host " Downloaded: $OutFile." }
         }
         catch {
             Throw "Failed to download Microsoft Remote Desktop WebRTC Redirector Service."
         }
 
         # Install
-        Write-Host "================ Installing Microsoft Remote Desktop WebRTC Redirector Service"
+        Write-Host " Installing Microsoft Remote Desktop WebRTC Redirector Service"
         try {
             $ArgumentList = "/package $OutFile ALLUSERS=1 /quiet"
             Invoke-Process -FilePath "$env:SystemRoot\System32\msiexec.exe" -ArgumentList $ArgumentList -Verbose
@@ -112,16 +112,16 @@ Function Install-MicrosoftWvdRtcService ($Path) {
         catch {
             Throw "Failed to install Microsoft Remote Desktop WebRTC Redirector Service."
         }
-        Write-Host "================ Done"
+        Write-Host " Done"
     }
     Else {
-        Write-Host "================ Failed to retreive Microsoft Remote Desktop WebRTC Redirector Service"
+        Write-Host " Failed to retreive Microsoft Remote Desktop WebRTC Redirector Service"
     }
 }
 
 Function Install-MicrosoftWvdBootLoader ($Path) {
-    Write-Host "================ Microsoft Windows Virtual Desktop Agent Bootloader"
-    Write-Host "================ Downloading Microsoft Windows Virtual Desktop Agent Bootloader"
+    Write-Host " Microsoft Windows Virtual Desktop Agent Bootloader"
+    Write-Host " Downloading Microsoft Windows Virtual Desktop Agent Bootloader"
     $Rtc = Get-MicrosoftWvdBootLoader | Where-Object { $_.Architecture -eq "x64" }
     
     If ($Rtc) {
@@ -129,17 +129,17 @@ Function Install-MicrosoftWvdBootLoader ($Path) {
 
         # Download
         $OutFile = Join-Path -Path $Path -ChildPath $Rtc.Filename
-        Write-Host "================ Downloading to: $OutFile"
+        Write-Host " Downloading to: $OutFile"
         try {
             Invoke-WebRequest -Uri $Rtc.URI -OutFile $OutFile -UseBasicParsing
-            If (Test-Path -Path $OutFile) { Write-Host "================ Downloaded: $OutFile." }
+            If (Test-Path -Path $OutFile) { Write-Host " Downloaded: $OutFile." }
         }
         catch {
             Throw "Failed to download Microsoft Windows Virtual Desktop Agent Bootloader"
         }
 
         # Install
-        Write-Host "================ Installing Microsoft Windows Virtual Desktop Agent Bootloader"
+        Write-Host " Installing Microsoft Windows Virtual Desktop Agent Bootloader"
         try {
             $ArgumentList = "/package $OutFile ALLUSERS=1 /quiet"
             Invoke-Process -FilePath "$env:SystemRoot\System32\msiexec.exe" -ArgumentList $ArgumentList -Verbose
@@ -147,16 +147,16 @@ Function Install-MicrosoftWvdBootLoader ($Path) {
         catch {
             Throw "Failed to install Microsoft Windows Virtual Desktop Agent Bootloader"
         }
-        Write-Host "================ Done"
+        Write-Host " Done"
     }
     Else {
-        Write-Host "================ Failed to Microsoft Windows Virtual Desktop Agent Bootloader"
+        Write-Host " Failed to Microsoft Windows Virtual Desktop Agent Bootloader"
     }
 }
 
 Function Install-MicrosoftWvdInfraAgent ($Path) {
-    Write-Host "================ Microsoft WVD Infrastructure Agent"
-    Write-Host "================ Downloading Microsoft WVD Infrastructure Agent"
+    Write-Host " Microsoft WVD Infrastructure Agent"
+    Write-Host " Downloading Microsoft WVD Infrastructure Agent"
     $Agent = Get-MicrosoftWvdInfraAgent | Where-Object { $_.Architecture -eq "x64" }
     
     If ($Agent) {
@@ -164,10 +164,10 @@ Function Install-MicrosoftWvdInfraAgent ($Path) {
 
         # Download
         $OutFile = Join-Path -Path $Path -ChildPath $Agent.Filename
-        Write-Host "================ Downloading to: $OutFile"
+        Write-Host " Downloading to: $OutFile"
         try {
             Invoke-WebRequest -Uri $Agent.URI -OutFile $OutFile -UseBasicParsing
-            If (Test-Path -Path $OutFile) { Write-Host "================ Downloaded: $OutFile." }
+            If (Test-Path -Path $OutFile) { Write-Host " Downloaded: $OutFile." }
         }
         catch {
             Throw "Failed to download Microsoft WVD Infrastructure Agent."
@@ -175,7 +175,7 @@ Function Install-MicrosoftWvdInfraAgent ($Path) {
 
         # Install
         <#
-        Write-Host "================ Installing Microsoft WVD Infrastructure Agent"
+        Write-Host " Installing Microsoft WVD Infrastructure Agent"
         try {
             $ArgumentList = "/package $OutFile ALLUSERS=1 /quiet"
             Invoke-Process -FilePath "$env:SystemRoot\System32\msiexec.exe" -ArgumentList $ArgumentList -Verbose
@@ -183,18 +183,18 @@ Function Install-MicrosoftWvdInfraAgent ($Path) {
         catch {
             Throw "Failed to install Microsoft WVD Infrastructure Agent."
         }
-        Write-Host "================ Done"
+        Write-Host " Done"
         #>
     }
     Else {
-        Write-Host "================ Failed to retreive Microsoft WVD Infrastructure Agent"
+        Write-Host " Failed to retreive Microsoft WVD Infrastructure Agent"
     }
 }
 
 Function Install-ConnectionExperienceIndicator ($Path) {
 
-    Write-Host "================ Connection Experience Indicator"
-    Write-Host "================ Downloading Connection Experience Indicator"
+    Write-Host " Connection Experience Indicator"
+    Write-Host " Downloading Connection Experience Indicator"
 
     # Parameters
     $Url = "https://bit.ly/2RrQTd3"
@@ -212,7 +212,7 @@ Function Install-ConnectionExperienceIndicator ($Path) {
 
     # Extract the zip file
     Expand-Archive -Path $OutFile -DestinationPath $Path -Verbose
-    Write-Host "================ Done"
+    Write-Host " Done"
 }
 #endregion
 
@@ -230,5 +230,5 @@ Install-MicrosoftWvdRtcService -Path "$Target\Wvd"
 Install-MicrosoftWvdBootLoader -Path "$Target\Wvd"
 #Install-MicrosoftWvdInfraAgent -Path "$Target\Wvd"
 Install-ConnectionExperienceIndicator -Path "$Target\ConnectionExperienceIndicator"
-Write-Host "================ Complete: WvdAgents."
+Write-Host " Complete: WvdAgents."
 #endregion

@@ -132,7 +132,7 @@ Function Install-Microsoft365Apps ($Path) {
 "@
 
     # Get Office version
-    Write-Host "================ Microsoft Office"
+    Write-Host " Microsoft Office"
     $Office = Get-MicrosoftOffice | Where-Object { $_.Channel -eq "Monthly" }
     
     If ($Office) {
@@ -141,17 +141,17 @@ Function Install-Microsoft365Apps ($Path) {
         # Download setup.exe
         $url = $Office.URI
         $OutFile = Join-Path -Path $Path -ChildPath $(Split-Path -Path $url -Leaf)
-        Write-Host "================ Downloading to: $OutFile"
+        Write-Host " Downloading to: $OutFile"
         try {
             Invoke-WebRequest -Uri $url -OutFile $OutFile -UseBasicParsing
-            If (Test-Path -Path $OutFile) { Write-Host "================ Downloaded: $OutFile." }
+            If (Test-Path -Path $OutFile) { Write-Host " Downloaded: $OutFile." }
         }
         catch {
             Throw "Failed to download Microsoft Office setup."
         }
 
         # Download Office package, Setup fails to exit, so wait 9-10 mins for Office install to complete
-        Write-Host "================ Installing Microsoft Office"
+        Write-Host " Installing Microsoft Office"
 
         Push-Location -Path $Path
         $XmlFile = Join-Path -Path $Path -ChildPath "Office.xml"
@@ -160,16 +160,16 @@ Function Install-Microsoft365Apps ($Path) {
         Invoke-Process -FilePath $OutFile -ArgumentList "/configure $XmlFile" -Verbose
         Pop-Location
         Remove-Variable -Name url
-        Write-Host "================ Done"
+        Write-Host " Done"
     }
     Else {
-        Write-Host "================ Failed to retreive Microsoft Office"
+        Write-Host " Failed to retreive Microsoft Office"
     }
 }
 
 Function Install-MicrosoftTeams ($Path) {
-    Write-Host "================ Microsoft Teams"
-    Write-Host "================ Downloading Microsoft Teams"
+    Write-Host " Microsoft Teams"
+    Write-Host " Downloading Microsoft Teams"
     $Teams = Get-MicrosoftTeams | Where-Object { $_.Architecture -eq "x64" -and $_.Ring -eq "General" }
     
     If ($Teams) {
@@ -178,17 +178,17 @@ Function Install-MicrosoftTeams ($Path) {
         # Download
         $url = $Teams.URI
         $OutFile = Join-Path -Path $Path -ChildPath $(Split-Path -Path $url -Leaf)
-        Write-Host "================ Downloading to: $OutFile"
+        Write-Host " Downloading to: $OutFile"
         try {
             Invoke-WebRequest -Uri $url -OutFile $OutFile -UseBasicParsing
-            If (Test-Path -Path $OutFile) { Write-Host "================ Downloaded: $OutFile." }
+            If (Test-Path -Path $OutFile) { Write-Host " Downloaded: $OutFile." }
         }
         catch {
             Throw "Failed to download Microsoft Teams."
         }
 
         # Install
-        Write-Host "================ Installing Microsoft Teams"
+        Write-Host " Installing Microsoft Teams"
         try {
             reg add "HKLM\SOFTWARE\Microsoft\Teams" /v "IsWVDEnvironment" /t REG_DWORD /d 1 /f
             reg add "HKLM\SOFTWARE\Citrix\PortICA" /v "IsWVDEnvironment" /t REG_DWORD /d 1 /f
@@ -204,10 +204,10 @@ Function Install-MicrosoftTeams ($Path) {
         catch {
             Throw "Failed to install Microsoft Teams."
         }
-        Write-Host "================ Done"
+        Write-Host " Done"
     }
     Else {
-        Write-Host "================ Failed to retreive Microsoft Teams"
+        Write-Host " Failed to retreive Microsoft Teams"
     }
 }
 
@@ -235,8 +235,8 @@ Function Set-TeamsAutostart {
 }
 
 Function Install-MicrosoftOneDrive ($Path) {
-    Write-Host "================ Microsoft OneDrive"    
-    Write-Host "================ Downloading Microsoft OneDrive"
+    Write-Host " Microsoft OneDrive"    
+    Write-Host " Downloading Microsoft OneDrive"
     $OneDrive = Get-MicrosoftOneDrive | Where-Object { $_.Ring -eq "Production" -and $_.Type -eq "Exe" } | `
         Sort-Object -Property @{ Expression = { [System.Version]$_.Version }; Descending = $true } | Select-Object -First 1
 
@@ -246,21 +246,21 @@ Function Install-MicrosoftOneDrive ($Path) {
         # Download
         $url = $OneDrive.URI
         $OutFile = Join-Path -Path $Path -ChildPath $(Split-Path -Path $url -Leaf)
-        Write-Host "================ Downloading to: $OutFile"
+        Write-Host " Downloading to: $OutFile"
         try {
             Invoke-WebRequest -Uri $url -OutFile $OutFile -UseBasicParsing
-            If (Test-Path -Path $OutFile) { Write-Host "================ Downloaded: $OutFile." }
+            If (Test-Path -Path $OutFile) { Write-Host " Downloaded: $OutFile." }
         }
         catch {
             Write-Warning "Failed to download Microsoft OneDrive. Falling back to direct URL."
             $url = "https://oneclient.sfx.ms/Win/Prod/20.052.0311.0011/OneDriveSetup.exe"
             $OutFile = Join-Path -Path $Path -ChildPath $(Split-Path -Path $url -Leaf)
             Invoke-WebRequest -Uri $url -OutFile $OutFile -UseBasicParsing
-            If (Test-Path -Path $OutFile) { Write-Host "================ Downloaded: $OutFile." }
+            If (Test-Path -Path $OutFile) { Write-Host " Downloaded: $OutFile." }
         }
     
         # Install
-        Write-Host "================ Installing Microsoft OneDrive"
+        Write-Host " Installing Microsoft OneDrive"
         try {
             Invoke-Process -FilePath $OutFile -ArgumentList "/ALLUSERS" -Verbose
         }
@@ -268,10 +268,10 @@ Function Install-MicrosoftOneDrive ($Path) {
             Throw "Failed to install Microsoft OneDrive."
         }
         Remove-Variable -Name url
-        Write-Host "================ Done"
+        Write-Host " Done"
     }
     Else {
-        Write-Host "================ Failed to retrieve Microsoft OneDrive"
+        Write-Host " Failed to retrieve Microsoft OneDrive"
     }
 }
 #endregion Functions
@@ -291,5 +291,5 @@ Install-Microsoft365Apps -Path "$Target\Microsoft365Apps"
 Install-MicrosoftTeams -Path "$Target\Teams"
 Set-TeamsAutostart
 Install-MicrosoftOneDrive -Path "$Target\OneDrive"
-Write-Host "================ Complete: Microsoft365Apps."
+Write-Host " Complete: Microsoft365Apps."
 #endregion

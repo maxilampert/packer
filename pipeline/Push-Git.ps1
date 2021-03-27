@@ -9,7 +9,7 @@ Param (
     [System.String] $GitHubKey
 )
 
-Write-Host "================ GitHubKey:"
+Write-Host " GitHubKey:"
 Write-Host "##vso[task.setvariable variable=GitHubKey]$GitHubKey"
 
 

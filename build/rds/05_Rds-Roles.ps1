@@ -86,4 +86,4 @@ New-Item -Path $Target -ItemType "Directory" -Force -ErrorAction "SilentlyContin
 
 # Run tasks
 Set-Roles
-Write-Host "================ Complete: Roles."
+Write-Host " Complete: Roles."

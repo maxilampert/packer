@@ -88,7 +88,7 @@ Function Install-LobApps ($Path, $AppsUrl) {
         $Items = Get-AzureBlobItem -Uri "$($AppsUrl)?comp=list" | Where-Object { $_.Name -match "zip?" }
     }
     catch {
-        Write-Host "================ Failed to retrieve items from: [$AppsUrl]."
+        Write-Host " Failed to retrieve items from: [$AppsUrl]."
         Throw "Failed to retrieve items from: [$AppsUrl]."
     }
 
@@ -97,19 +97,19 @@ Function Install-LobApps ($Path, $AppsUrl) {
         $AppPath = Join-Path -Path $Path -ChildPath $AppName
         If (!(Test-Path $AppPath)) { New-Item -Path $AppPath -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null }
 
-        Write-Host "================ Downloading item: [$($item.Url)]."
+        Write-Host " Downloading item: [$($item.Url)]."
         $OutFile = Join-Path -Path $Path -ChildPath (Split-Path -Path $item.Url -Leaf)
         try {
             Invoke-WebRequest -Uri $item.Url -OutFile $OutFile -UseBasicParsing
         }
         catch {
-            Write-Host "================ Failed to download: $($item.Url)."
+            Write-Host " Failed to download: $($item.Url)."
             Break
         }
         Expand-Archive -Path $OutFile -DestinationPath $AppPath -Force -Verbose
         Remove-Item -Path $OutFile -Force -ErrorAction SilentlyContinue
 
-        Write-Host "================ Installing item: $($AppName)."
+        Write-Host " Installing item: $($AppName)."
         Push-Location $AppPath
         Get-ChildItem -Path $AppPath -Recurse | Unblock-File
         . .\Deploy-Application.ps1
@@ -131,5 +131,5 @@ New-Item -Path $Target -ItemType "Directory" -Force -ErrorAction "SilentlyContin
 If (Test-Path -Path env:AppsUrl) {
     Install-LobApps -Path $Target -AppsUrl $env:AppsUrl
 }
-Write-Host "================ Complete: LoBApps."
+Write-Host " Complete: LoBApps."
 #endregion

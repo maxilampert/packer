@@ -87,8 +87,8 @@ Function Global:Invoke-Process {
 Function Install-AdobeReaderDC ($Path) {
     # Enforce settings with GPO: https://www.adobe.com/devnet-docs/acrobatetk/tools/AdminGuide/gpo.html
     # Download Reader installer and updater
-    Write-Host "================ Adobe Acrobat Reader DC"
-    Write-Host "================ Downloading Reader"
+    Write-Host " Adobe Acrobat Reader DC"
+    Write-Host " Downloading Reader"
     $Reader = Get-AdobeAcrobatReaderDC | Where-Object { $_.Language -eq "English" -and $_.Architecture -eq "x64" }
 
     If ($Reader) {
@@ -100,10 +100,10 @@ Function Install-AdobeReaderDC ($Path) {
         # Download Adobe Acrobat Reader
         ForEach ($File in $Installer) {
             $OutFile = Join-Path -Path $Path -ChildPath (Split-Path -Path $File.Uri -Leaf)
-            Write-Host "================ Downloading to: $OutFile."
+            Write-Host " Downloading to: $OutFile."
             try {
                 Invoke-WebRequest -Uri $File.Uri -OutFile $OutFile -UseBasicParsing
-                If (Test-Path -Path $OutFile) { Write-Host "================ Downloaded: $OutFile." }
+                If (Test-Path -Path $OutFile) { Write-Host " Downloaded: $OutFile." }
             }
             catch {
                 Throw "Failed to download Adobe Acrobat Reader installer."
@@ -115,10 +115,10 @@ Function Install-AdobeReaderDC ($Path) {
         If ($Updater.Version -gt $Installer.Version) {
             ForEach ($File in $Updater) {
                 $OutFile = Join-Path -Path $Path -ChildPath (Split-Path -Path $File.Uri -Leaf)
-                Write-Host "================ Downloading to: $OutFile."
+                Write-Host " Downloading to: $OutFile."
                 try {
                     Invoke-WebRequest -Uri $File.Uri -OutFile $OutFile -UseBasicParsing
-                    If (Test-Path -Path $OutFile) { Write-Host "================ Downloaded: $OutFile." }
+                    If (Test-Path -Path $OutFile) { Write-Host " Downloaded: $OutFile." }
                 }
                 catch {
                     Throw "Failed to download Adobe Acrobat Reader update patch."
@@ -127,12 +127,12 @@ Function Install-AdobeReaderDC ($Path) {
             }
         }
         Else {
-            Write-Host "================ Installer already up to date, skipping patch file."
+            Write-Host " Installer already up to date, skipping patch file."
         }
 
 
         # Install Adobe Acrobat Reader
-        Write-Host "================ Installing Reader"
+        Write-Host " Installing Reader"
         try {
             $ArgumentList = "-sfx_nu /sALL /rps /l /msi EULA_ACCEPT=YES ENABLE_CHROMEEXT=0 DISABLE_BROWSER_INTEGRATION=1 ENABLE_OPTIMIZATION=YES ADD_THUMBNAILPREVIEW=0 DISABLEDESKTOPSHORTCUT=1"
             $Installers = Get-ChildItem -Path $Path -Filter "*.exe"
@@ -150,18 +150,18 @@ Function Install-AdobeReaderDC ($Path) {
         }
 
         # Run post install actions
-        Write-Host "================ Post install configuration Reader"
+        Write-Host " Post install configuration Reader"
         $Paths = "$env:ProgramFiles\Adobe\Acrobat DC\Acrobat\Acrobat.exe", `
             "${env:ProgramFiles(x86)}\Adobe\Acrobat DC\Acrobat\Acrobat.exe", `
             "${env:ProgramFiles(x86)}\Adobe\Acrobat Reader DC\Reader\AcroRd32.exe"
         If (Test-Path -Path $Paths) {
 
             # Update Adobe Acrobat Reader
-            Write-Host "================ Update Reader"
+            Write-Host " Update Reader"
             try {
                 $Updates = Get-ChildItem -Path $Path -Filter "*.msp"
                 ForEach ($msp in $Updates) {
-                    Write-Host "================ Installing update: $($msp.FullName)."
+                    Write-Host " Installing update: $($msp.FullName)."
                     Invoke-Process -FilePath "$env:SystemRoot\System32\msiexec.exe" -ArgumentList "/update $($msp.FullName) /quiet /qn" -Verbose
                 }
             }
@@ -170,17 +170,17 @@ Function Install-AdobeReaderDC ($Path) {
             }
 
             # Configure update tasks
-            Write-Host "================ Configure Reader services"
+            Write-Host " Configure Reader services"
             Get-Service -Name "AdobeARMservice" -ErrorAction "SilentlyContinue" | Set-Service -StartupType "Disabled" -ErrorAction "SilentlyContinue"
             Get-ScheduledTask "Adobe Acrobat Update Task*" | Unregister-ScheduledTask -Confirm:$False -ErrorAction "SilentlyContinue"
         }
         Else {
-            Write-Warning -Message "================ Cannot find Adobe Acrobat Reader install"
+            Write-Warning -Message " Cannot find Adobe Acrobat Reader install"
         }
-        Write-Host "================ Done"
+        Write-Host " Done"
     }
     Else {
-        Write-Host "================ Failed to retrieve Adobe Acrobat Reader"
+        Write-Host " Failed to retrieve Adobe Acrobat Reader"
     }
 }
 #endregion Functions
@@ -197,5 +197,5 @@ New-Item -Path $Target -ItemType "Directory" -Force -ErrorAction "SilentlyContin
 
 # Run tasks/install apps
 Install-AdobeReaderDC -Path "$Target\AdobeReader"
-Write-Host "================ Complete: AdobeAcrobatReaderDC."
+Write-Host " Complete: AdobeAcrobatReaderDC."
 #endregion

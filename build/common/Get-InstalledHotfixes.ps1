@@ -35,5 +35,5 @@ Function Get-InstalledHotfixes {
 #endregion
 
 # Output the hotfix list to a JSON file that Packer can upload back to the runner
-Write-Host "================ Export hotfix list to: $HotfixFile."
+Write-Host " Export hotfix list to: $HotfixFile."
 Get-InstalledHotfixes | Out-File -FilePath $HotfixFile -Force -Encoding "Utf8"

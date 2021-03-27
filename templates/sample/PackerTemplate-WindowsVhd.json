@@ -89,7 +89,7 @@
             "inline": [
                 "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12",
                 "#AppsUrl parameter used by LoBApps.ps1",
-                "Write-Output \"====== AppsUrl parameter: {{user `AppsUrl`}}\"",
+                "Write-Output \" AppsUrl parameter: {{user `AppsUrl`}}\"",
                 "$env:AppsUrl = '{{user `AppsUrl`}}'",
                 "[System.Environment]::SetEnvironmentVariable('AppsUrl','{{user `AppsUrl`}}',[System.EnvironmentVariableTarget]::User)",
                 "Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/aaronparker/packer/main/scripts/rds/Rds-LobApps.ps1'))"

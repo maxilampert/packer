@@ -94,7 +94,7 @@ Function Invoke-Process {
 }
 
 Function Install-RequiredModules {
-    Write-Host "================ Installing required modules"
+    Write-Host " Installing required modules"
     # Install the Evergreen module; https://github.com/aaronparker/Evergreen
     Install-Module -Name Evergreen -AllowClobber
 
@@ -103,38 +103,38 @@ Function Install-RequiredModules {
 }
 
 Function Install-VcRedistributables ($Path) {
-    Write-Host "================ Microsoft Visual C++ Redistributables"
+    Write-Host " Microsoft Visual C++ Redistributables"
     If (!(Test-Path $Path)) { New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null }
     $VcList = Get-VcList -Release 2010, 2012, 2013, 2019
 
     Save-VcRedist -Path $Path -VcList $VcList -ForceWebRequest -Verbose
     Install-VcRedist -VcList $VcList -Path $Path -Verbose
-    Write-Host "================ Done"
+    Write-Host " Done"
 }
 
 Function Install-MicrosoftEdge ($Path) {
-    Write-Host "================ Microsoft Edge"
+    Write-Host " Microsoft Edge"
     $Edge = Get-MicrosoftEdge | Where-Object { $_.Architecture -eq "x64" -and $_.Channel -eq "Stable" }
     $Edge = $Edge | Sort-Object -Property Version -Descending | Select-Object -First 1
 
     If ($Edge) {
-        Write-Host "================ Downloading Microsoft Edge"
+        Write-Host " Downloading Microsoft Edge"
         If (!(Test-Path $Path)) { New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null }
 
         # Download
         $url = $Edge.URI
         $OutFile = Join-Path -Path $Path -ChildPath $(Split-Path -Path $url -Leaf)
-        Write-Host "================ Downloading to: $OutFile"
+        Write-Host " Downloading to: $OutFile"
         try {
             Invoke-WebRequest -Uri $url -OutFile $OutFile -UseBasicParsing
-            If (Test-Path -Path $OutFile) { Write-Host "================ Downloaded: $OutFile." }
+            If (Test-Path -Path $OutFile) { Write-Host " Downloaded: $OutFile." }
         }
         catch {
             Throw "Failed to download Microsoft Edge."
         }
 
         # Install
-        Write-Host "================ Installing Microsoft Edge"
+        Write-Host " Installing Microsoft Edge"
         try {
             Invoke-Process -FilePath "$env:SystemRoot\System32\msiexec.exe" -ArgumentList "/package $OutFile /quiet /norestart DONOTCREATEDESKTOPSHORTCUT=true" -Verbose
         }
@@ -142,7 +142,7 @@ Function Install-MicrosoftEdge ($Path) {
             Throw "Failed to install Microsoft Edge."
         }
 
-        Write-Host "================ Post-install config"
+        Write-Host " Post-install config"
         $prefs = @{
             "homepage"               = "edge://newtab"
             "homepage_is_newtabpage" = $false
@@ -168,10 +168,10 @@ Function Install-MicrosoftEdge ($Path) {
         ForEach ($service in $services) { Get-Service -Name $service | Set-Service -StartupType "Disabled" }
         ForEach ($task in (Get-ScheduledTask -TaskName *Edge*)) { Unregister-ScheduledTask -TaskName $Task -Confirm:$False -ErrorAction SilentlyContinue }
         Remove-Variable -Name url
-        Write-Host "================ Done"
+        Write-Host " Done"
     }
     Else {
-        Write-Host "================ Failed to retreive Microsoft Edge"
+        Write-Host " Failed to retreive Microsoft Edge"
     }
 }
 #endregion Functions
@@ -193,5 +193,5 @@ Set-Repository
 Install-RequiredModules
 Install-VcRedistributables -Path "$Target\VcRedist"
 Install-MicrosoftEdge -Path "$Target\Edge"
-Write-Host "================ Complete: $($MyInvocation.MyCommand)."
+Write-Host " Complete: $($MyInvocation.MyCommand)."
 #endregion

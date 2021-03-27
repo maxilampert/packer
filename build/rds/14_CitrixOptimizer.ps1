@@ -8,7 +8,7 @@ Param (
     [System.String] $Log = "$env:SystemRoot\Logs\PackerImagePrep.log",
 
     [Parameter(Mandatory = $False)]
-    [System.String] $Path = "$env:SystemDrive\Apps",
+    [System.String] $Path = "$env:SystemDrive\Apps\CitrixOptimizer",
 
     [Parameter(Mandatory = $False)]
     [System.String] $OptimizerTemplate = "Custom-Windows10-20H2.xml"
@@ -98,15 +98,14 @@ $ProgressPreference = "SilentlyContinue"
 
 #region Citrix Optimizer
 $CtxPath = "CitrixOptimizer"
-$OptimizerPath = Join-Path -Path $Path -ChildPath $CtxPath
-New-Item -Path $OptimizerPath -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
-Write-Host "Using path: $OptimizerPath."
-$Installer = Get-ChildItem -Path $OptimizerPath -Filter "$CtxPath.zip" -ErrorAction "SilentlyContinue"
+New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
+Write-Host "Using path: $Path."
+$Installer = Get-ChildItem -Path $Path -Filter "$CtxPath.zip" -ErrorAction "SilentlyContinue"
 
 If ($Null -eq $Installer) {
     $params = @{
         Uri             = "https://raw.githubusercontent.com/aaronparker/packer/main/tools/rds/optimizer/CitrixOptimizer.zip"
-        OutFile         = (Join-Path -Path $OptimizerPath -ChildPath "$CtxPath.zip")
+        OutFile         = (Join-Path -Path $Path -ChildPath "$CtxPath.zip")
         UseBasicParsing = $True
         ErrorAction     = "SilentlyContinue"
     }
@@ -116,22 +115,22 @@ If ($Null -eq $Installer) {
     catch {
         Write-Warning -Message "Invoke-WebRequest exited with: $($_.Exception.Message)."
     }
-    $Installer = Get-ChildItem -Path $OptimizerPath -Filter "$CtxPath.zip"
+    $Installer = Get-ChildItem -Path $Path -Filter "$CtxPath.zip"
 }
 If ($Installer) {
-    Write-Host "Found ZIP file: $($Installer.FullName)."
-    Expand-Archive -Path $Installer.FullName -DestinationPath $OptimizerPath -Force -Verbose
+    Write-Host "Found zip file: $($Installer.FullName)."
+    Expand-Archive -Path $Installer.FullName -DestinationPath $Path -Force -Verbose
 
-    $Template = Get-ChildItem -Path $OptimizerPath -Recurse -Filter $OptimizerTemplate
-    Write-Host "Found zip file: $($Template.FullName)."
+    $Template = Get-ChildItem -Path $Path -Recurse -Filter $OptimizerTemplate
+    Write-Host "Found template file: $($Template.FullName)."
 
     If ($Template) {
         try {
-            $OptimizerBin = Get-ChildItem -Path $OptimizerPath -Recurse -Filter "CtxOptimizerEngine.ps1"
+            $OptimizerBin = Get-ChildItem -Path $Path -Recurse -Filter "CtxOptimizerEngine.ps1"
             Push-Location -Path $OptimizerBin.Directory
             Write-Host "Running: $($OptimizerBin.FullName) -Source $($Template.FullName) -Mode execute"
-            Write-Host "Output will be saved to: $OptimizerPath\$CtxPath.html."
-            & $OptimizerBin.FullName -Source $Template.FullName -Mode execute -OutputHtml "$OptimizerPath\$CtxPath.html"
+            Write-Host "Output will be saved to: $Path\$CtxPath.html."
+            & $OptimizerBin.FullName -Source $Template.FullName -Mode execute -OutputHtml "$Path\$CtxPath.html"
             Pop-Location
         }
         catch {
@@ -139,14 +138,14 @@ If ($Installer) {
         }
     }
     Else {
-        Throw "Failed to find Citrix Optimizer template: [$OptimizerPath\$OptimizerTemplate]."
+        Throw "Failed to find Citrix Optimizer template: [$Path\$OptimizerTemplate]."
     }
 }
 Else {
-    Throw "Failed to find Citrix Optimizer in: $OptimizerPath."
+    Throw "Failed to find Citrix Optimizer in: $Path."
 }
 #endregion
 
 
-Write-Host "================ Complete: Optimise."
+Write-Host " Complete: Optimise."
 #endregion

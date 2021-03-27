@@ -63,7 +63,7 @@ Function Get-InstalledSoftware {
 #endregion
 
 # Output the software list to a JSON file that Packer can upload back to the runner
-Write-Host "================ Export software list to: $SoftwareFile."
+Write-Host " Export software list to: $SoftwareFile."
 $software = Get-InstalledSoftware
 $software | ConvertTo-Json | Out-File -FilePath $SoftwareFile -Force -Encoding "Utf8"
 

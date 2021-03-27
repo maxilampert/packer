@@ -122,7 +122,7 @@ Function Install-Packages ($Path, $PackagesUrl) {
         $Items = Get-AzureBlobItem -Uri "$($PackagesUrl)?comp=list" | Where-Object { $_.Name -match "zip?" }
     }
     catch {
-        Write-Host "================ Failed to retrieve items from: [$PackagesUrl]."
+        Write-Host " Failed to retrieve items from: [$PackagesUrl]."
         Throw "Failed to retrieve items from: [$PackagesUrl]."
     }
 
@@ -131,19 +131,19 @@ Function Install-Packages ($Path, $PackagesUrl) {
         $AppPath = Join-Path -Path $Path -ChildPath $AppName
         If (!(Test-Path $AppPath)) { New-Item -Path $AppPath -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null }
 
-        Write-Host "================ Downloading item: [$($item.Url)]."
+        Write-Host " Downloading item: [$($item.Url)]."
         $OutFile = Join-Path -Path $Path -ChildPath (Split-Path -Path $item.Url -Leaf)
         try {
             Invoke-WebRequest -Uri $item.Url -OutFile $OutFile -UseBasicParsing
         }
         catch {
-            Write-Host "================ Failed to download: $($item.Url)."
+            Write-Host " Failed to download: $($item.Url)."
             Break
         }
         Expand-Archive -Path $OutFile -DestinationPath $AppPath -Force -Verbose
         Remove-Item -Path $OutFile -Force -ErrorAction SilentlyContinue
 
-        Write-Host "================ Installing item: $($AppName)."
+        Write-Host " Installing item: $($AppName)."
         Push-Location $AppPath
         Get-ChildItem -Path $AppPath -Recurse | Unblock-File
         . .\Install.ps1
@@ -164,4 +164,4 @@ New-Item -Path $Target -ItemType "Directory" -Force -ErrorAction "SilentlyContin
 
 # Run tasks
 Install-Packages -Path $Target -PackagesUrl $Env:PackagesUrl
-Write-Host "================ Complete: Packages."
+Write-Host " Complete: Packages."

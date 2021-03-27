@@ -86,7 +86,7 @@ Function Global:Invoke-Process {
 
 Function Invoke-WindowsDefender {
     # Run Windows Defender quick scan
-    Write-Host "=============== Running Windows Defender"
+    Write-Host "Running Windows Defender"
     Start-Process -FilePath "$env:ProgramFiles\Windows Defender\MpCmdRun.exe" -ArgumentList "-SignatureUpdate -MMPC" -Wait
     Start-Process -FilePath "$env:ProgramFiles\Windows Defender\MpCmdRun.exe" -ArgumentList "-Scan -ScanType 1" -Wait
     # Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\RemovalTools\MRT" -Name "GUID" -Value ""
@@ -115,7 +115,7 @@ Function Disable-ScheduledTasks {
     #region Disable Scheduled Tasks
     # This section is for disabling scheduled tasks.  If you find a task that should not be disabled
     # comment or delete from the "SchTaskList.txt" file.
-    Write-Host "========== Disabling scheduled tasks."
+    Write-Host "Disabling scheduled tasks."
 
     # Original list
     $SchTasksList = @("BgTaskRegistrationMaintenanceTask", "Consolidator", "Diagnostics", "FamilySafetyMonitor",
@@ -144,7 +144,7 @@ Function Disable-ScheduledTasks {
 
 Function Disable-WindowsTraces {
     #region Disable Windows Traces
-    Write-Host "========== Disabling Windows traces."
+    Write-Host "Disabling Windows traces."
     $DisableAutologgers = @(
         "HKLM:\SYSTEM\CurrentControlSet\Control\WMI\Autologger\AppModel\",
         "HKLM:\SYSTEM\CurrentControlSet\Control\WMI\Autologger\CloudExperienceHostOOBE\",
@@ -165,7 +165,7 @@ Function Disable-WindowsTraces {
 Function Disable-Services {
     #region Disable Services
     #################### BEGIN: DISABLE SERVICES section ###########################
-    Write-Host "========== Disabling services."
+    Write-Host "Disabling services."
     $ServicesToDisable = @("autotimesvc", "BcastDVRUserService", "CDPSvc", "CDPUserSvc", "CscService",
         "defragsvc", "DiagTrack", "DsmSvc", "DusmSvc", "icssvc", "lfsvc", "MapsBroker",
         "MessagingService", "OneSyncSvc", "PimIndexMaintenanceSvc", "Power", "SEMgrSvc", "SmsRouter",
@@ -174,7 +174,7 @@ Function Disable-Services {
     If ($ServicesToDisable.count -gt 0) {
         Foreach ($Item in $ServicesToDisable) {
             $service = Get-Service -Name $Item -ErrorAction "SilentlyContinue"
-            Write-Host "========== Disabling service: $($service.DisplayName)."
+            Write-Host "Disabling service: $($service.DisplayName)."
             $service | Set-Service -StartupType "Disabled" -ErrorAction "SilentlyContinue"
         }
     }
@@ -188,7 +188,7 @@ Function Disable-SystemRestore {
 Function Optimize-Network {
     #region Network Optimization
     # LanManWorkstation optimizations
-    Write-Host "========== Network optimisations."
+    Write-Host "Network optimisations."
     New-ItemProperty -Path "HKLM:\System\CurrentControlSet\Services\LanmanWorkstation\Parameters\" -Name "DisableBandwidthThrottling" -PropertyType "DWORD" -Value "1" -Force
     New-ItemProperty -Path "HKLM:\System\CurrentControlSet\Services\LanmanWorkstation\Parameters\" -Name "FileInfoCacheEntriesMax" -PropertyType "DWORD" -Value "1024" -Force
     New-ItemProperty -Path "HKLM:\System\CurrentControlSet\Services\LanmanWorkstation\Parameters\" -Name "DirectoryCacheEntriesMax" -PropertyType "DWORD" -Value "1024" -Force
@@ -209,7 +209,7 @@ Function Invoke-Cleanmgr {
     #region Disk Cleanup
     # Disk Cleanup Wizard automation (Cleanmgr.exe /SAGESET:11)
     # If you prefer to skip a particular disk cleanup category, edit the "Win10_1909_DiskCleanRegSettings.txt"
-    Write-Host "========== Cleanmgr."
+    Write-Host "Cleanmgr."
     $DiskCleanupSettings = @(
         "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VolumeCaches\Active Setup Temp Folders\",
         #"HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VolumeCaches\BranchCache\",
@@ -239,7 +239,7 @@ Function Invoke-Cleanmgr {
             New-ItemProperty -Path "$Item" -Name "StateFlags0011" -PropertyType "DWORD" -Value "2" -Force -ErrorAction "SilentlyContinue"
         }
     }
-    Write-Host "=============== Running Disk Cleanup"
+    Write-Host "Running Disk Cleanup"
     Start-Process "$env:SystemRoot\System32\Cleanmgr.exe" -ArgumentList "SAGERUN:11" -Wait
     #endregion
 }
@@ -250,16 +250,16 @@ Function Remove-TempFiles {
     # Delete not in-use files in locations C:\Windows\Temp and %temp%
     # Also sweep and delete *.tmp, *.etl, *.evtx (not in use==not needed)
 
-    Write-Host "========== Remove temp files."
+    Write-Host "Remove temp files."
     $FilesToRemove = Get-ChildItem -Path "$env:SystemDrive\" -Include *.tmp, *.etl, *.evtx -Recurse -Force -ErrorAction SilentlyContinue
     $FilesToRemove | Remove-Item -ErrorAction "SilentlyContinue"
 
     # Delete not in-use anything in the C:\Windows\Temp folder
-    Write-Host "========== Clean $env:SystemRoot\Temp."
+    Write-Host "Clean $env:SystemRoot\Temp."
     Remove-Item -Path $env:windir\Temp\* -Recurse -Force -ErrorAction "SilentlyContinue"
 
     # Delete not in-use anything in your %temp% folder
-    Write-Host "========== Clean $env:Temp."
+    Write-Host "Clean $env:Temp."
     Remove-Item -Path $env:TEMP\* -Recurse -Force -ErrorAction "SilentlyContinue"
     #endregion
 }
@@ -348,5 +348,5 @@ Get-WinEvent -ListLog * | ForEach-Object { Clear-WinEvent $_.LogName -Confirm:$F
 # MicrosoftOptimizer
 #endregion
 
-Write-Host "================ Complete: OptimiseImage."
+Write-Host " Complete: OptimiseImage."
 #endregion

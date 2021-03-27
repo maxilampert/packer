@@ -13,15 +13,15 @@ Param (
 
 #region Functions
 Function Install-VcRedistributables ($Path) {
-    Write-Host "================ Microsoft Visual C++ Redistributables"
+    Write-Host " Microsoft Visual C++ Redistributables"
     If (!(Test-Path $Path)) { New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null }
     $VcList = Get-VcList -Release 2010, 2012, 2013, 2019
 
-    Write-Host "================ Downloading Microsoft Visual C++ Redistributables"
+    Write-Host " Downloading Microsoft Visual C++ Redistributables"
     Save-VcRedist -VcList $VcList -Path $Path > $Null
-    Write-Host "================ Installing Microsoft Visual C++ Redistributables"
+    Write-Host " Installing Microsoft Visual C++ Redistributables"
     Install-VcRedist -VcList $VcList -Path $Path -Silent
-    Write-Host "================ Done"
+    Write-Host " Done"
 }
 #endregion Functions
 
@@ -37,5 +37,5 @@ New-Item -Path $Target -ItemType "Directory" -Force -ErrorAction "SilentlyContin
 
 # Run tasks/install apps
 Install-VcRedistributables -Path "$Target\VcRedist"
-Write-Host "================ Complete: VcRedists."
+Write-Host " Complete: VcRedists."
 #endregion

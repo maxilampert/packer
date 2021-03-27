@@ -85,19 +85,19 @@ Function Global:Invoke-Process {
 }
 
 Function Install-FSLogix ($Path) {
-    Write-Host "================ Microsoft FSLogix agent"
+    Write-Host " Microsoft FSLogix agent"
     $FSLogix = Get-MicrosoftFSLogixApps
 
     If ($FSLogix) {
-        Write-Host "================ Microsoft FSLogix: $($FSLogix.Version)"
+        Write-Host " Microsoft FSLogix: $($FSLogix.Version)"
         If (!(Test-Path $Path)) { New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null }
 
         # Download
         $OutFile = Join-Path -Path $Path -ChildPath (Split-Path -Path $FSLogix.URI -Leaf)
-        Write-Host "================ Downloading to: $OutFile"
+        Write-Host " Downloading to: $OutFile"
         try {
             Invoke-WebRequest -Uri $FSLogix.URI -OutFile $OutFile -UseBasicParsing
-            If (Test-Path -Path $OutFile) { Write-Host "================ Downloaded: $OutFile." }
+            If (Test-Path -Path $OutFile) { Write-Host " Downloaded: $OutFile." }
         }
         catch {
             Throw "Failed to download FSLogix Apps"
@@ -105,7 +105,7 @@ Function Install-FSLogix ($Path) {
 
         # Unpack
         try {
-            Write-Host "================ Unpacking: $OutFile."
+            Write-Host " Unpacking: $OutFile."
             Expand-Archive -Path $OutFile -DestinationPath $Path -Force -Verbose
         }
         catch {
@@ -116,11 +116,11 @@ Function Install-FSLogix ($Path) {
         ForEach ($file in "FSLogixAppsSetup.exe", "FSLogixAppsRuleEditorSetup.exe") {
             $installer = Get-ChildItem -Path $Path -Recurse -Include $file | Where-Object { $_.Directory -match "x64" }
             If ($Null -eq $installer) {
-                Write-Host "================ Failed to find installer: $file in $Path."
+                Write-Host " Failed to find installer: $file in $Path."
             }
             Else {
                 try {
-                    Write-Host "================ Installing: $($installer.FullName)."
+                    Write-Host " Installing: $($installer.FullName)."
                     Invoke-Process -FilePath $installer.FullName -ArgumentList "/install /quiet /norestart" -Verbose
                 }
                 catch {
@@ -128,10 +128,10 @@ Function Install-FSLogix ($Path) {
                 }
             }
         }
-        Write-Host "================ Done"
+        Write-Host " Done"
     }
     Else {
-        Write-Host "================ Failed to retrieve Microsoft FSLogix Apps"
+        Write-Host " Failed to retrieve Microsoft FSLogix Apps"
     }
 }
 #endregion Functions
@@ -148,5 +148,5 @@ New-Item -Path $Target -ItemType "Directory" -Force -ErrorAction "SilentlyContin
 
 # Run tasks/install apps
 Install-FSLogix -Path "$Target\FSLogix"
-Write-Host "================ Complete: FSLogix."
+Write-Host " Complete: FSLogix."
 #endregion

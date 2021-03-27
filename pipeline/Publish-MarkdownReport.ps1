@@ -34,11 +34,11 @@ Param (
 #$OutFile = [System.IO.Path]::Combine("/Users/aaron/Projects/packer/docs", "docs", "index.md")
 
 # Output variable values
-Write-Host "================ Path:              $Path."
-Write-Host "================ ImagePublisher:    $ImagePublisher."
-Write-Host "================ ImageOffer:        $ImageOffer."
-Write-Host "================ ImageSku:          $ImageSku."
-Write-Host "================ DestinationPath:   $ImagePublisher."
+Write-Host " Path:              $Path."
+Write-Host " ImagePublisher:    $ImagePublisher."
+Write-Host " ImageOffer:        $ImageOffer."
+Write-Host " ImageSku:          $ImageSku."
+Write-Host " DestinationPath:   $ImagePublisher."
 
 # Start with a markdown variable
 [System.String] $markdown += New-MDHeader -Text $version -Level 1 -NoNewLine
@@ -50,7 +50,7 @@ ForEach ($file in $InputFile) {
     $TargetFile = Join-Path -Path $Path -ChildPath $file
     If (([System.IO.FileInfo]$TargetFile).Exists) {
         try {
-            Write-Host "================ Reading: $TargetFile."
+            Write-Host " Reading: $TargetFile."
             $table = Get-Content -Path $TargetFile | ConvertFrom-Json
         }
         catch {
@@ -66,7 +66,7 @@ ForEach ($file in $InputFile) {
         }
     }
     Else {
-        Write-Warning -Message "================ Cannot find: $TargetFile."
+        Write-Warning -Message " Cannot find: $TargetFile."
     }
 }
 
@@ -83,7 +83,7 @@ catch {
 # Write the markdown to a file
 try {
     $OutFile = Join-Path -Path $TargetPath -ChildPath "$Version.md"
-    Write-Host "================ Writing markdown to: $OutFile."
+    Write-Host " Writing markdown to: $OutFile."
     ($markdown.TrimEnd("`n")) | Out-File -FilePath $OutFile -Encoding "Utf8" -NoNewLine -Force
 }
 catch {s
