@@ -148,6 +148,7 @@ If ($Installer) {
         
         # Copy BIS-F config files
         Write-Host "Copy BIS-F configuration files from: $BisfPath to $BisfInstall."
+        Get-ChildItem -Path $BisfPath | Select-Object -ExpandProperty FullName
         $ConfigFiles = Get-ChildItem -Path $BisfPath -Recurse -Filter "*.json" -ErrorAction "SilentlyContinue"
         If ($Null -ne $ConfigFiles) {
             try {

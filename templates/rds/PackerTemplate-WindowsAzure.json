@@ -104,13 +104,8 @@
         },
         {
             "type": "file",
-            "source": "{{user `working_directory`}}/tools/rds/optimizer",
-            "destination": "C:\\Apps\\CitrixOptimizer"
-        },
-        {
-            "type": "file",
-            "source": "{{user `working_directory`}}/tools/rds/bisf",
-            "destination": "C:\\Apps\\BISF"
+            "sources": ["{{user `working_directory`}}/tools/rds/citrixoptimizer", "{{user `working_directory`}}/tools/rds/bisf"],
+            "destination": "C:\\Apps"
         },
         {
             "type": "powershell",
