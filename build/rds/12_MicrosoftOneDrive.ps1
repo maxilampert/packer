@@ -96,7 +96,7 @@ New-Item -Path $Target -ItemType "Directory" -Force -ErrorAction "SilentlyContin
 
 # Run tasks/install apps
 Write-Host " Microsoft OneDrive"    
-$Apps = Get-EvergreenApp -Name "MicrosoftOneDrive" | Where-Object { $_.Ring -eq "Production" -and $_.Type -eq "Exe" } | `
+$Apps = Get-EvergreenApp -Name "MicrosoftOneDrive" | Where-Object { $_.Ring -eq "Production" -and $_.Type -eq "Exe" -and $_.Architecture -eq "AMD64" } | `
     Sort-Object -Property @{ Expression = { [System.Version]$_.Version }; Descending = $true } | Select-Object -First 1
 
 If ($Apps) {

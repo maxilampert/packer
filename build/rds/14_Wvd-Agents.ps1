@@ -95,7 +95,7 @@ New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue
 
 # Run tasks/install apps
 #region RTC service
-$App = Get-EvergreenApp -Name "MicrosoftWvdRtcService" | Where-Object { $_.Architecture -eq $env:PROCESS_ARCHITECTURE }
+$App = Get-EvergreenApp -Name "MicrosoftWvdRtcService" | Where-Object { $_.Architecture -eq "x64"}
 If ($App) {
     
     # Download
@@ -124,7 +124,7 @@ Else {
 #region Boot Loader
 Write-Host " Microsoft Windows Virtual Desktop Agent Bootloader"
 Write-Host " Downloading Microsoft Windows Virtual Desktop Agent Bootloader"
-$App = Get-EvergreenApp -Name "MicrosoftWvdBootLoader" | Where-Object { $_.Architecture -eq $env:PROCESS_ARCHITECTURE }
+$App = Get-EvergreenApp -Name "MicrosoftWvdBootLoader" | Where-Object { $_.Architecture -eq "x64"}
 If ($App) {
     If (!(Test-Path $Path)) { New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null }
 
@@ -154,7 +154,7 @@ Else {
 #region Infra agent
 Write-Host " Microsoft WVD Infrastructure Agent"
 Write-Host " Downloading Microsoft WVD Infrastructure Agent"
-$Agent = Get-EvergreenApp -Name "MicrosoftWvdInfraAgent" | Where-Object { $_.Architecture -eq $env:PROCESS_ARCHITECTURE }
+$Agent = Get-EvergreenApp -Name "MicrosoftWvdInfraAgent" | Where-Object { $_.Architecture -eq "x64"}
 If ($Agent) {
 
     # Download

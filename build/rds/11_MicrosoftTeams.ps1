@@ -96,7 +96,7 @@ New-Item -Path $Target -ItemType "Directory" -Force -ErrorAction "SilentlyContin
 
 # Run tasks/install apps
 Write-Host " Microsoft Teams"
-$App = Get-EvergreenApp -Name "MicrosoftTeams" | Where-Object { $_.Architecture -eq $env:PROCESS_ARCHITECTURE -and $_.Ring -eq "General" }
+$App = Get-EvergreenApp -Name "MicrosoftTeams" | Where-Object { $_.Architecture -eq "x64"-and $_.Ring -eq "General" }
 If ($App) {
 
     # Download

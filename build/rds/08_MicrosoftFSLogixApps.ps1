@@ -111,7 +111,7 @@ If ($App) {
     
     # Install
     ForEach ($file in "FSLogixAppsSetup.exe", "FSLogixAppsRuleEditorSetup.exe") {
-        $Installers = Get-ChildItem -Path $Path -Recurse -Include $file | Where-Object { $_.Directory -match $env:PROCESS_ARCHITECTURE }
+        $Installers = Get-ChildItem -Path $Path -Recurse -Include $file | Where-Object { $_.Directory -match "x64" }
         ForEach ($installer in $Installers) {
             try {
                 Write-Host " Installing: $($installer.FullName)."
