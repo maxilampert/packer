@@ -8,7 +8,7 @@ Param (
     [System.String] $Log = "$env:SystemRoot\Logs\PackerImagePrep.log",
 
     [Parameter(Mandatory = $False)]
-    [System.String] $Target = "$env:SystemDrive\Apps"
+    [System.String] $Target = "$env:SystemDrive\Apps\Packages"
 )
 
 #region Functions
@@ -122,7 +122,6 @@ Function Install-Packages ($Path, $PackagesUrl) {
         $Items = Get-AzureBlobItem -Uri "$($PackagesUrl)?comp=list" | Where-Object { $_.Name -match "zip?" }
     }
     catch {
-        Write-Host " Failed to retrieve items from: [$PackagesUrl]."
         Throw "Failed to retrieve items from: [$PackagesUrl]."
     }
 
@@ -164,4 +163,5 @@ New-Item -Path $Target -ItemType "Directory" -Force -ErrorAction "SilentlyContin
 
 # Run tasks
 Install-Packages -Path $Target -PackagesUrl $Env:PackagesUrl
+If (Test-Path -Path $Path) { Remove-Item -Path $Path -Recurse -Confirm:$False -ErrorAction "SilentlyContinue" }
 Write-Host " Complete: Packages."

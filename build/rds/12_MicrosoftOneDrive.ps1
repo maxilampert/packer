@@ -5,7 +5,10 @@
 [CmdletBinding()]
 Param (
     [Parameter(Mandatory = $False)]
-    [System.String] $Path = "$env:SystemDrive\Apps\Microsoft\FSLogix"
+    [System.String] $Log = "$env:SystemRoot\Logs\PackerImagePrep.log",
+
+    [Parameter(Mandatory = $False)]
+    [System.String] $Target = "$env:SystemDrive\Apps\Microsoft\OneDrive"
 )
 
 #region Functions
@@ -89,48 +92,36 @@ $VerbosePreference = "Continue"
 $ProgressPreference = "SilentlyContinue"
 
 # Create target folder
-New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
+New-Item -Path $Target -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
 
-Write-Host " Microsoft FSLogix agent"
-$App = Get-EvergreenApp -Name "MicrosoftFSLogixApps"
+# Run tasks/install apps
+Write-Host " Microsoft OneDrive"    
+$Apps = Get-EvergreenApp -Name "MicrosoftOneDrive" | Where-Object { $_.Ring -eq "Production" -and $_.Type -eq "Exe" } | `
+    Sort-Object -Property @{ Expression = { [System.Version]$_.Version }; Descending = $true } | Select-Object -First 1
 
-If ($App) {
-    
+If ($Apps) {
+
     # Download
-    Write-Host " Microsoft FSLogix: $($App.Version)"
     $OutFile = Save-EvergreenApp -InputObject $App -Path $Path
 
-    # Unpack
+    # Install
     try {
-        Write-Host " Unpacking: $($OutFile.Path)."
-        Expand-Archive -Path $OutFile.Path -DestinationPath $Path -Force -Verbose
+        Write-Host " Installing Microsoft OneDrive"
+        $params = @{
+            FilePath     = $OutFile.Path
+            ArgumentList = "/ALLUSERS"
+            Verbose      = $True
+        }
+        Invoke-Process @params
     }
     catch {
-        Throw "Failed to unpack: $($OutFile.Path)."
-    }
-    
-    # Install
-    ForEach ($file in "FSLogixAppsSetup.exe", "FSLogixAppsRuleEditorSetup.exe") {
-        $Installers = Get-ChildItem -Path $Path -Recurse -Include $file | Where-Object { $_.Directory -match $env:PROCESS_ARCHITECTURE }
-        ForEach ($installer in $Installers) {
-            try {
-                Write-Host " Installing: $($installer.FullName)."
-                $params = @{
-                    FilePath     = $installer.FullName
-                    ArgumentList = "/install /quiet /norestart"
-                    Verbose      = $True
-                }
-                Invoke-Process @params
-            }
-            catch {
-                Throw "Failed to install: $($installer.FullName)."
-            }
-        }
+        Throw "Failed to install Microsoft OneDrive."
     }
 }
 Else {
-    Write-Host " Failed to retrieve Microsoft FSLogix Apps"
+    Write-Host " Failed to retrieve Microsoft OneDrive"
 }
+
 If (Test-Path -Path $Path) { Remove-Item -Path $Path -Recurse -Confirm:$False -ErrorAction "SilentlyContinue" }
-Write-Host " Complete: FSLogix."
+Write-Host " Complete: Microsoft OneDrive."
 #endregion

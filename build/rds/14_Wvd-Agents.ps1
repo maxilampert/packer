@@ -1,11 +1,14 @@
 <# 
     .SYNOPSIS
-        Install evergreen core applications.
+        Downloads / installs the Windows Virtual Desktop agents and services
 #>
 [CmdletBinding()]
 Param (
     [Parameter(Mandatory = $False)]
-    [System.String] $Path = "$env:SystemDrive\Apps\Microsoft\FSLogix"
+    [System.String] $Log = "$env:SystemRoot\Logs\PackerImagePrep.log",
+
+    [Parameter(Mandatory = $False)]
+    [System.String] $Path = "$env:SystemDrive\App\Microsoft\Wvd"
 )
 
 #region Functions
@@ -80,8 +83,7 @@ Function Global:Invoke-Process {
         Remove-Item -Path $stdOutTempFile, $stdErrTempFile -Force -ErrorAction Ignore
     }
 }
-#endregion Functions
-
+#endregion
 
 #region Script logic
 # Set $VerbosePreference so full details are sent to the log; Make Invoke-WebRequest faster
@@ -91,46 +93,91 @@ $ProgressPreference = "SilentlyContinue"
 # Create target folder
 New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
 
-Write-Host " Microsoft FSLogix agent"
-$App = Get-EvergreenApp -Name "MicrosoftFSLogixApps"
-
+# Run tasks/install apps
+#region RTC service
+$App = Get-EvergreenApp -Name "MicrosoftWvdRtcService" | Where-Object { $_.Architecture -eq $env:PROCESS_ARCHITECTURE }
 If ($App) {
     
     # Download
-    Write-Host " Microsoft FSLogix: $($App.Version)"
     $OutFile = Save-EvergreenApp -InputObject $App -Path $Path
 
-    # Unpack
+    # Install RTC
+    Write-Host " Installing Microsoft Remote Desktop WebRTC Redirector Service"
     try {
-        Write-Host " Unpacking: $($OutFile.Path)."
-        Expand-Archive -Path $OutFile.Path -DestinationPath $Path -Force -Verbose
+        $params = @{
+            FilePath     = "$env:SystemRoot\System32\msiexec.exe"
+            ArgumentList = "/package $($OutFile.Path) ALLUSERS=1 /quiet"
+            Verbose      = $True
+        }
+        Invoke-Process @params
     }
     catch {
-        Throw "Failed to unpack: $($OutFile.Path)."
+        Throw "Failed to install Microsoft Remote Desktop WebRTC Redirector Service."
     }
-    
-    # Install
-    ForEach ($file in "FSLogixAppsSetup.exe", "FSLogixAppsRuleEditorSetup.exe") {
-        $Installers = Get-ChildItem -Path $Path -Recurse -Include $file | Where-Object { $_.Directory -match $env:PROCESS_ARCHITECTURE }
-        ForEach ($installer in $Installers) {
-            try {
-                Write-Host " Installing: $($installer.FullName)."
-                $params = @{
-                    FilePath     = $installer.FullName
-                    ArgumentList = "/install /quiet /norestart"
-                    Verbose      = $True
-                }
-                Invoke-Process @params
-            }
-            catch {
-                Throw "Failed to install: $($installer.FullName)."
-            }
-        }
-    }
+    Write-Host " Done"
 }
 Else {
-    Write-Host " Failed to retrieve Microsoft FSLogix Apps"
+    Write-Host " Failed to retrieve Microsoft Remote Desktop WebRTC Redirector Service"
 }
+#endregion
+
+#region Boot Loader
+Write-Host " Microsoft Windows Virtual Desktop Agent Bootloader"
+Write-Host " Downloading Microsoft Windows Virtual Desktop Agent Bootloader"
+$App = Get-EvergreenApp -Name "MicrosoftWvdBootLoader" | Where-Object { $_.Architecture -eq $env:PROCESS_ARCHITECTURE }
+If ($App) {
+    If (!(Test-Path $Path)) { New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null }
+
+    # Download
+    $OutFile = Save-EvergreenApp -InputObject $App -Path $Path
+
+    # Install
+    Write-Host " Installing Microsoft Windows Virtual Desktop Agent Bootloader"
+    try {
+        $params = @{
+            FilePath     = "$env:SystemRoot\System32\msiexec.exe"
+            ArgumentList = "/package $($OutFile.Path) ALLUSERS=1 /quiet"
+            Verbose      = $True
+        }
+        Invoke-Process @params
+    }
+    catch {
+        Throw "Failed to install Microsoft Windows Virtual Desktop Agent Bootloader"
+    }
+    Write-Host " Done"
+}
+Else {
+    Write-Host " Failed to Microsoft Windows Virtual Desktop Agent Bootloader"
+}
+#endregion
+
+#region Infra agent
+Write-Host " Microsoft WVD Infrastructure Agent"
+Write-Host " Downloading Microsoft WVD Infrastructure Agent"
+$Agent = Get-EvergreenApp -Name "MicrosoftWvdInfraAgent" | Where-Object { $_.Architecture -eq $env:PROCESS_ARCHITECTURE }
+If ($Agent) {
+
+    # Download
+    $OutFile = Save-EvergreenApp -InputObject $Agent -Path $Path
+
+    # Install
+    <#
+    Write-Host " Installing Microsoft WVD Infrastructure Agent"
+    try {
+        $ArgumentList = "/package $OutFile ALLUSERS=1 /quiet"
+        Invoke-Process -FilePath "$env:SystemRoot\System32\msiexec.exe" -ArgumentList $ArgumentList -Verbose
+    }
+    catch {
+        Throw "Failed to install Microsoft WVD Infrastructure Agent."
+    }
+    Write-Host " Done"
+    #>
+}
+Else {
+    Write-Host " Failed to retrieve Microsoft WVD Infrastructure Agent"
+}
+#endregion
+
 If (Test-Path -Path $Path) { Remove-Item -Path $Path -Recurse -Confirm:$False -ErrorAction "SilentlyContinue" }
-Write-Host " Complete: FSLogix."
+Write-Host " Complete: WvdAgents."
 #endregion

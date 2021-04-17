@@ -5,7 +5,10 @@
 [CmdletBinding()]
 Param (
     [Parameter(Mandatory = $False)]
-    [System.String] $Path = "$env:SystemDrive\Apps\Microsoft\FSLogix"
+    [System.String] $Log = "$env:SystemRoot\Logs\PackerImagePrep.log",
+
+    [Parameter(Mandatory = $False)]
+    [System.String] $Target = "$env:SystemDrive\Apps\Microsoft\Teams"
 )
 
 #region Functions
@@ -89,48 +92,57 @@ $VerbosePreference = "Continue"
 $ProgressPreference = "SilentlyContinue"
 
 # Create target folder
-New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
+New-Item -Path $Target -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
 
-Write-Host " Microsoft FSLogix agent"
-$App = Get-EvergreenApp -Name "MicrosoftFSLogixApps"
-
+# Run tasks/install apps
+Write-Host " Microsoft Teams"
+$App = Get-EvergreenApp -Name "MicrosoftTeams" | Where-Object { $_.Architecture -eq $env:PROCESS_ARCHITECTURE -and $_.Ring -eq "General" }
 If ($App) {
-    
+
     # Download
-    Write-Host " Microsoft FSLogix: $($App.Version)"
     $OutFile = Save-EvergreenApp -InputObject $App -Path $Path
 
-    # Unpack
+    # Install
     try {
-        Write-Host " Unpacking: $($OutFile.Path)."
-        Expand-Archive -Path $OutFile.Path -DestinationPath $Path -Force -Verbose
+        Write-Host " Installing Microsoft Teams"
+        reg add "HKLM\SOFTWARE\Microsoft\Teams" /v "IsWVDEnvironment" /t REG_DWORD /d 1 /f
+        reg add "HKLM\SOFTWARE\Citrix\PortICA" /v "IsWVDEnvironment" /t REG_DWORD /d 1 /f
+        $params = @{
+            FilePath     = "$env:SystemRoot\System32\msiexec.exe"
+            ArgumentList = "/package $($OutFile.Path) OPTIONS=`"noAutoStart=true`" ALLUSER=1 ALLUSERS=1 /quiet"
+            Verbose      = $True
+        }
+        Invoke-Process @params
     }
     catch {
-        Throw "Failed to unpack: $($OutFile.Path)."
-    }
-    
-    # Install
-    ForEach ($file in "FSLogixAppsSetup.exe", "FSLogixAppsRuleEditorSetup.exe") {
-        $Installers = Get-ChildItem -Path $Path -Recurse -Include $file | Where-Object { $_.Directory -match $env:PROCESS_ARCHITECTURE }
-        ForEach ($installer in $Installers) {
-            try {
-                Write-Host " Installing: $($installer.FullName)."
-                $params = @{
-                    FilePath     = $installer.FullName
-                    ArgumentList = "/install /quiet /norestart"
-                    Verbose      = $True
-                }
-                Invoke-Process @params
-            }
-            catch {
-                Throw "Failed to install: $($installer.FullName)."
-            }
-        }
+        Throw "Failed to install Microsoft Teams."
     }
 }
 Else {
-    Write-Host " Failed to retrieve Microsoft FSLogix Apps"
+    Write-Host " Failed to retrieve Microsoft Teams"
 }
+
+# Teams JSON files
+$ConfigFiles = @((Join-Path -Path "${env:ProgramFiles(x86)}\Teams Installer" -ChildPath "setup.json"), 
+    (Join-Path -Path "${env:ProgramFiles(x86)}\Microsoft\Teams" -ChildPath "setup.json"))
+
+# Read the file and convert from JSON
+ForEach ($Path in $ConfigFiles) {
+    If (Test-Path -Path $Path) {
+        try {
+            $Json = Get-Content -Path $Path | ConvertFrom-Json
+            $Json.noAutoStart = $true
+            $Json | ConvertTo-Json | Set-Content -Path $Path -Force
+        }
+        catch {
+            Throw "Failed to set Teams autostart file: $Path."
+        }
+    }
+}
+
+# Delete the registry auto-start
+REG delete "HKLM\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Run" /v "Teams" /f
+
 If (Test-Path -Path $Path) { Remove-Item -Path $Path -Recurse -Confirm:$False -ErrorAction "SilentlyContinue" }
-Write-Host " Complete: FSLogix."
+Write-Host " Complete: Microsoft Teams."
 #endregion

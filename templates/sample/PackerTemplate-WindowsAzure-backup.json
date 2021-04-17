@@ -122,6 +122,7 @@
                 "AppsUrl={{user `apps_url`}}"
             ],
             "scripts": [
+                "build/rds/12_AdobeAcrobatReaderDC.ps1",
                 "build/rds/13_Rds-LobApps.ps1"
             ]
         },
