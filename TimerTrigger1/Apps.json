@@ -1,0 +1,9 @@
+{
+    "Apps": {
+        "MicrosoftEdge": "Where-Object { $_.Architecture -eq \"x64\" -and $_.Channel -eq \"Stable\" -and $_.Release -eq \"Enterprise\" } | Sort-Object -Property @{ Expression = { [System.Version]$_.Version }; Descending = $true } | Select-Object -First 1",
+        "MicrosoftOneDrive": "Where-Object { $_.Ring -eq \"Production\" -and $_.Type -eq \"Exe\" -and $_.Architecture -eq \"AMD64\" } | Sort-Object -Property @{ Expression = { [System.Version]$_.Version }; Descending = $true } | Select-Object -First 1",
+        "MicrosoftTeams": "Where-Object { $_.Architecture -eq \"x64\"-and $_.Ring -eq \"General\" }",
+        "MicrosoftVisualStudioCode": "Where-Object { $_.Channel -eq \"Stable\" -and $_.Architecture -eq \"x64\" -and $_.Platform -eq \"win32-x64-user\" }",
+        "AdobeAcrobatReaderDC": "Where-Object { $_.Language -eq \"English\" -and $_.Architecture -eq \"x64\" }"
+    }
+}
