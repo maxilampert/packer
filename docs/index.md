@@ -16,6 +16,7 @@
 - [20210303.01](/MicrosoftWindowsDesktop/Windows-10/20h2-ent/20210303.01.md)
 - [20210328.01](/MicrosoftWindowsDesktop/Windows-10/20h2-ent/20210328.01.md)
 - [20210418.09](/MicrosoftWindowsDesktop/Windows-10/20h2-ent/20210418.09.md)
+- [20210418.10](/MicrosoftWindowsDesktop/Windows-10/20h2-ent/20210418.10.md)
 
 ### 20h2-evd
 
