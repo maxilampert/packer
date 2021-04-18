@@ -23,3 +23,9 @@ InstalledSoftware.json
 json/**
 packer-manifest*
 debug.log
+
+# Azure Functions artifacts
+bin
+obj
+appsettings.json
+local.settings.json
