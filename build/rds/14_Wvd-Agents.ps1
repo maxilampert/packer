@@ -113,12 +113,12 @@ If ($App) {
         Invoke-Process @params
     }
     catch {
-        Throw "Failed to install Microsoft Remote Desktop WebRTC Redirector Service."
+        Write-Warning -Message "ERROR: Failed to install Microsoft Remote Desktop WebRTC Redirector Service."
     }
     Write-Host " Done"
 }
 Else {
-    Write-Host " Failed to retrieve Microsoft Remote Desktop WebRTC Redirector Service"
+    Write-Warning -Message "ERROR: Failed to retrieve Microsoft Remote Desktop WebRTC Redirector Service"
 }
 #endregion
 
@@ -143,12 +143,12 @@ If ($App) {
         Invoke-Process @params
     }
     catch {
-        Throw "Failed to install Microsoft Windows Virtual Desktop Agent Bootloader"
+        Write-Warning -Message "ERROR: Failed to install Microsoft Windows Virtual Desktop Agent Bootloader"
     }
     Write-Host " Done"
 }
 Else {
-    Write-Host " Failed to Microsoft Windows Virtual Desktop Agent Bootloader"
+    Write-Warning -Message "ERROR: Failed to Microsoft Windows Virtual Desktop Agent Bootloader"
 }
 #endregion
 
@@ -175,7 +175,7 @@ If ($App) {
     #>
 }
 Else {
-    Write-Host " Failed to retrieve Microsoft WVD Infrastructure Agent"
+    Write-Warning -Message "ERROR: Failed to retrieve Microsoft WVD Infrastructure Agent"
 }
 #endregion
 

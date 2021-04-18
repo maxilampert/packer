@@ -126,7 +126,7 @@ If ($App) {
                 Invoke-Process @params
             }
             catch {
-                Throw "Failed to install: $($installer.FullName)."
+                Write-Warning -Message "ERROR: Failed to install: $($installer.FullName)."
             }
         }
     }

@@ -56,9 +56,6 @@ Function Get-AzureBlobItem {
         }
         $list = Invoke-WebRequest @iwrParams
     }
-    catch [System.Net.WebException] {
-        Write-Warning -Message ([string]::Format("Error : {0}", $_.Exception.Message))
-    }
     catch [System.Exception] {
         Write-Warning -Message "$($MyInvocation.MyCommand): failed to download: $Uri."
         Throw $_.Exception.Message
@@ -90,7 +87,7 @@ Function Install-LobApps ($Path, $AppsUrl) {
     }
     catch {
         Write-Host " Failed to retrieve items from: [$AppsUrl]."
-        Throw "Failed to retrieve items from: [$AppsUrl]."
+        Write-Warning -Message "ERROR: Failed to retrieve items from: [$AppsUrl]."
     }
 
     ForEach ($item in $Items) {
@@ -105,7 +102,7 @@ Function Install-LobApps ($Path, $AppsUrl) {
             Invoke-WebRequest -Uri $item.Url -OutFile $OutFile -UseBasicParsing
         }
         catch {
-            Throw " Failed to download: $($item.Url)."
+            Write-Warning -Message "ERROR: Failed to download: $($item.Url)."
         }
         Expand-Archive -Path $OutFile -DestinationPath $AppPath -Force -Verbose
         Remove-Item -Path $OutFile -Force -ErrorAction "SilentlyContinue"

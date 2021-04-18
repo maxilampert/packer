@@ -115,7 +115,7 @@ If ($App) {
         Invoke-Process @params
     }
     catch {
-        Throw "Failed to install Microsoft Edge."
+        Write-Warning -Message "ERROR: Failed to install Microsoft Edge."
     }
 
     # Post install configuration
@@ -148,7 +148,7 @@ If ($App) {
     Write-Host " Done"
 }
 Else {
-    Write-Host " Failed to retrieve Microsoft Edge"
+    Write-Warning -Message "ERROR: Failed to retrieve Microsoft Edge"
 }
 
 If (Test-Path -Path $Path) { Remove-Item -Path $Path -Recurse -Confirm:$False -ErrorAction "SilentlyContinue" }

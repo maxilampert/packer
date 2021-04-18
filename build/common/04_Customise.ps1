@@ -33,7 +33,7 @@ try {
     Expand-Archive -Path $OutFile -DestinationPath $Path -Force -Verbose
 }
 catch {
-    Throw $_
+    Write-Warning -Message "ERROR: $($_.Exception.Message)."
 }
 
 # Run scripts

@@ -294,8 +294,7 @@ Function MicrosoftOptimizer {
         Invoke-WebRequest @params
     }
     catch {
-        Throw $_
-        Break
+        Write-Warning -Message "ERROR: Failed to download with: $($_.Exception.Message)."
     }
     try {
         $params = @{
@@ -307,8 +306,7 @@ Function MicrosoftOptimizer {
         Expand-Archive @params
     }
     catch {
-        Throw $_
-        Break
+        Write-Warning -Message "ERROR: Failed to expand archive with: $($_.Exception.Message)."
     }
     try {
         Push-Location -Path $Path
@@ -316,8 +314,7 @@ Function MicrosoftOptimizer {
         Pop-Location
     }
     catch {
-        Throw $_
-        Break
+        Write-Warning -Message "ERROR: Failed to run with: $($_.Exception.Message)."
     }
 }
 #endregion

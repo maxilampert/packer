@@ -8,7 +8,7 @@ Param (
     [System.String] $LogPath = "$env:SystemRoot\Logs\Packer",
 
     [Parameter(Mandatory = $False)]
-    [System.String] $Path = "$env:SystemDrive\Apps\Tools\BISF"
+    [System.String] $Path = "$env:SystemDrive\Apps\Tools"
 )
 
 #region Functions

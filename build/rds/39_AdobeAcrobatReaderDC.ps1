@@ -117,7 +117,7 @@ If ($Reader) {
         Invoke-Process @params
     }
     catch {
-        Throw "Failed to install Adobe Acrobat Reader."
+        Write-Warning -Message "ERROR: Failed to install Adobe Acrobat Reader."
     }
 
     
@@ -145,7 +145,7 @@ If ($Reader) {
             Invoke-Process @params
         }
         catch {
-            Throw "Failed to update Adobe Acrobat Reader."
+            Write-Warning -Message "ERROR: Failed to update Adobe Acrobat Reader."
         }
 
         # Configure update tasks
@@ -154,11 +154,11 @@ If ($Reader) {
         Get-ScheduledTask "Adobe Acrobat Update Task*" | Unregister-ScheduledTask -Confirm:$False -ErrorAction "SilentlyContinue"
     }
     Else {
-        Write-Warning -Message " Cannot find Adobe Acrobat Reader install"
+        Write-Warning -Message "ERROR: Cannot find Adobe Acrobat Reader install"
     }
 }
 Else {
-    Write-Host " Failed to retrieve Adobe Acrobat Reader"
+    Write-Warning -Message "ERROR: Failed to retrieve Adobe Acrobat Reader"
 }
 
 If (Test-Path -Path $Path) { Remove-Item -Path $Path -Recurse -Confirm:$False -ErrorAction "SilentlyContinue" }

@@ -21,22 +21,32 @@ $ProgressPreference = "SilentlyContinue"
 Switch -Regex ((Get-WmiObject Win32_OperatingSystem).Caption) {
     "Microsoft Windows Server*" {
         # Add / Remove roles and features (requires reboot at end of deployment)
-        $params = @{
-            FeatureName   = "Printing-XPSServices-Features", "WindowsMediaPlayer"
-            Online        = $true
-            NoRestart     = $true
-            WarningAction = "Continue"
-            ErrorAction   = "Continue"
+        try {
+            $params = @{
+                FeatureName   = "Printing-XPSServices-Features", "WindowsMediaPlayer"
+                Online        = $true
+                NoRestart     = $true
+                WarningAction = "Continue"
+                ErrorAction   = "Continue"
+            }
+            Disable-WindowsOptionalFeature @params
         }
-        Disable-WindowsOptionalFeature @params
+        catch {
+            Write-Warning -Message "ERROR: Failed to set feature state with: $($_.Exception.Message)."
+        }
 
-        $params = @{
-            Name                   = "BitLocker", "EnhancedStorage", "PowerShell-ISE"
-            IncludeManagementTools = $true
-            WarningAction          = "Continue"
-            ErrorAction            = "Continue"
+        try {
+            $params = @{
+                Name                   = "BitLocker", "EnhancedStorage", "PowerShell-ISE"
+                IncludeManagementTools = $true
+                WarningAction          = "Continue"
+                ErrorAction            = "Continue"
+            }
+            Uninstall-WindowsFeature @params
         }
-        Uninstall-WindowsFeature @params
+        catch {
+            Write-Warning -Message "ERROR: Failed to set feature state with: $($_.Exception.Message)."
+        }
 
         $params = @{
             Name          = "RDS-RD-Server", "Server-Media-Foundation", "Search-Service", "NET-Framework-Core"
@@ -58,7 +68,7 @@ Switch -Regex ((Get-WmiObject Win32_OperatingSystem).Caption) {
                     Set-Service @params
                 }
                 catch {
-                    Throw "Failed to set service properties [$service]."
+                    Write-Warning -Message "ERROR: Failed to set service properties with: $($_.Exception.Message)."
                 }
             }
         } 

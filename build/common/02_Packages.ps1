@@ -111,7 +111,7 @@ Function Install-LanguageCapability ($Locale) {
                 Add-WindowsCapability -Online -Name $Capability.Name -LogLevel 2
             }
             catch {
-                Throw "Failed to add capability: $($Capability.Name)."
+                Write-Warning -Message "ERROR: Failed to add capability: $($Capability.Name)."
             }
         }
     }
@@ -126,7 +126,7 @@ Function Install-Packages ($Path, $PackagesUrl) {
         $Items = Get-AzureBlobItem -Uri "$($PackagesUrl)?comp=list" | Where-Object { $_.Name -match "zip?" }
     }
     catch {
-        Throw "Failed to retrieve items from: [$PackagesUrl]."
+        Write-Warning -Message "ERROR: Failed to retrieve items from: [$PackagesUrl]."
     }
 
     ForEach ($item in $Items) {

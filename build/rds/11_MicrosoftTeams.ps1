@@ -115,7 +115,7 @@ If ($App) {
         Invoke-Process @params
     }
     catch {
-        Throw "Failed to install Microsoft Teams."
+        Write-Warning -Message "ERROR: Failed to install Microsoft Teams."
     }
 }
 Else {
@@ -135,7 +135,7 @@ ForEach ($Path in $ConfigFiles) {
             $Json | ConvertTo-Json | Set-Content -Path $Path -Force
         }
         catch {
-            Throw "Failed to set Teams autostart file: $Path."
+            Write-Warning -Message "ERROR: Failed to set Teams autostart file: $Path."
         }
     }
 }

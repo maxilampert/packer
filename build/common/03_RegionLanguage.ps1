@@ -189,7 +189,7 @@ Function Install-LanguageCapability ($Locale) {
                 Add-WindowsCapability -Online -Name $Capability.Name -LogLevel 2
             }
             catch {
-                Throw "Failed to add capability: $($Capability.Name)."
+                Write-Warning -Message "ERROR: Failed to add capability: $($Capability.Name)."
             }
         }
     }

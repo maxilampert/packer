@@ -22,7 +22,6 @@ If (Get-PSRepository | Where-Object { $_.Name -eq $Repository -and $_.Installati
     }
     catch {
         Throw $_
-        Break
     }
 }
 
