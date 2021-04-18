@@ -55,9 +55,6 @@ Function Get-AzureBlobItem {
         }
         $list = Invoke-WebRequest @iwrParams
     }
-    catch [System.Net.WebException] {
-        Write-Warning -Message ([string]::Format("Error : {0}", $_.Exception.Message))
-    }
     catch [System.Exception] {
         Write-Warning -Message "$($MyInvocation.MyCommand): failed to download: $Uri."
         Throw $_.Exception.Message

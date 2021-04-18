@@ -105,7 +105,7 @@ $env:SystemRoot\System32\WindowsPowerShell\v1.0\powershell.exe -NonInteractive -
         Set-WinUserLanguageList $LanguageList -Force
     }
     catch {
-        Throw "Failed to set locale to: $Locale."
+        Write-Error -Message "ERROR: Failed to set locale to: $Locale with: $($_.Exception.Message)."
     }
 
     # Run language.xml
@@ -114,8 +114,7 @@ $env:SystemRoot\System32\WindowsPowerShell\v1.0\powershell.exe -NonInteractive -
         Out-File -FilePath $OutFile -InputObject $languageXmlContent -Encoding "utf8"
     }
     catch {
-        Write-Host "Failed to create language file: $OutFile."
-        Write-Error -Message $_.Exception.Message
+        Write-Error -Message "ERROR: Failed to create language file: $OutFile with: $($_.Exception.Message)."
     }
 
     # Set-Region.ps1
@@ -123,7 +122,7 @@ $env:SystemRoot\System32\WindowsPowerShell\v1.0\powershell.exe -NonInteractive -
         & $env:SystemRoot\System32\control.exe "intl.cpl,,/f:$OutFile"
     }
     catch {
-        Throw "Failed to set regional settings."
+        Write-Error -Message "ERROR: Failed to set regional settings with: $($_.Exception.Message)."
     }
     #endregion
 
@@ -132,16 +131,14 @@ $env:SystemRoot\System32\WindowsPowerShell\v1.0\powershell.exe -NonInteractive -
         Out-File -FilePath $languageXML -InputObject $languageXmlContent -Encoding "utf8"
     }
     catch {
-        Write-Host "Failed to create language file: $languageXML."
-        Write-Error -Message $_.Exception.Message
+        Write-Error -Message "ERROR: Failed to create language file with: $($_.Exception.Message)."
     }
 
     try {
         Out-File -FilePath $languagePS1 -InputObject $languagePS1Content -Encoding "utf8"
     }
     catch {
-        Write-Host "Failed to create set-language script: $languagePS1."
-        Write-Error -Message $_.Exception.Message
+        Write-Error -Message "ERROR: Failed to create set-language script with: $($_.Exception.Message)."
     }
 
     ##Disable Language Pack Cleanup##

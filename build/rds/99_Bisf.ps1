@@ -91,127 +91,108 @@ $VerbosePreference = "Continue"
 $ProgressPreference = "SilentlyContinue"
 
 # Set TLS to 1.2; Create target folder
-[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-
 
 #region BIS-F
 New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
 Write-Host "Using path: $Path."
 
-$Bisf = Get-EvergreenApp -Name "BISF"
-If ($Bisf) {
+$App = Get-EvergreenApp -Name "BISF"
+If ($App) {
     
     # Download the latest BIS-F
+    $OutFile = Save-EvergreenApp -InputObject $App -Path $Path
+    
+    # Install BIS-F
     try {
-        $Installer = Join-Path -Path $Path -ChildPath (Split-Path -Path $Bisf.URI -Leaf)
+        Write-Host "Found MSI file: $($Installer.FullName)."
         $params = @{
-            Uri             = $Bisf.URI
-            OutFile         = $Installer
-            UseBasicParsing = $True
-            Verbose         = $True
+            FilePath     = "$env:SystemRoot\System32\msiexec.exe"
+            ArgumentList = "/i $($OutFile.Path) ALLUSERS=1 /quiet"
+            Verbose      = $True
         }
-        Invoke-WebRequest @params
+        Invoke-Process @params
     }
     catch {
-        Write-Warning -Message "Invoke-WebRequest exited with: $($_.Exception.Message)."
+        Write-Warning -Message "ERROR: Failed to install BIS-F with: $($_.Exception.Message)."
     }
 
-    $Installer = Get-ChildItem -Path $Path -Filter $(Split-Path -Path $Bisf.URI -Leaf) -ErrorAction "SilentlyContinue" 
-    If ($Installer) {
-    
-        # Install BIS-F
-        try {
-            Write-Host "Found MSI file: $($Installer.FullName)."
-            $params = @{
-                FilePath     = "$env:SystemRoot\System32\msiexec.exe"
-                ArgumentList = "/i $($Installer.FullName) ALLUSERS=1 /quiet"
-                Verbose      = $True
-            }
-            Invoke-Process @params
-        }
-        catch {
-            Throw "Failed to install BIS-F with: $($_.Exception.Message)."
-        }
-
-        # If BIS-F installed OK, continue
-        $BisfInstall = Join-Path -Path ${env:ProgramFiles(x86)} -ChildPath "Base Image Script Framework (BIS-F)"
-        Write-Host "BIS-F install path: $BisfInstall."
-        If (Test-Path -Path $BisfInstall -ErrorAction "SilentlyContinue") {
+    # If BIS-F installed OK, continue
+    $BisfInstall = Join-Path -Path ${env:ProgramFiles(x86)} -ChildPath "Base Image Script Framework (BIS-F)"
+    Write-Host "BIS-F install path: $BisfInstall."
+    If (Test-Path -Path $BisfInstall -ErrorAction "SilentlyContinue") {
         
-            # Remove Start menu shortcut if it exists
-            Write-Host "Remove BIS-F Start menu shortcut."
+        # Remove Start menu shortcut if it exists
+        Write-Host "Remove BIS-F Start menu shortcut."
+        $params = @{
+            Path        = "$env:ProgramData\Microsoft\Windows\Start Menu\Programs\Base Image Script Framework (BIS-F).lnk"
+            Force       = $True
+            Verbose     = $True
+            ErrorAction = "SilentlyContinue"
+        }
+        Remove-Item @params
+        
+        # Copy BIS-F config files
+        try {
+            Write-Host "Copy BIS-F configuration files from: $Path to $BisfInstall."
+            Switch -Regex ((Get-WmiObject Win32_OperatingSystem).Caption) {
+                "Microsoft Windows Server*" {
+                    $Config = "BISFconfig_MicrosoftWindowsServer2019Standard_64-bit.json"
+                }
+                "Microsoft Windows 10*" {
+                    $Config = "BISFconfig_MicrosoftWindows10Enterprise_64-bit.json"
+                }
+                Default {
+                }
+            }
+            $ConfigFile = Get-ChildItem -Path $Path -Recurse -Filter $Config
             $params = @{
-                Path        = "$env:ProgramData\Microsoft\Windows\Start Menu\Programs\Base Image Script Framework (BIS-F).lnk"
+                Path        = $ConfigFile.FullName
+                Destination = $BisfInstall
                 Force       = $True
                 Verbose     = $True
                 ErrorAction = "SilentlyContinue"
             }
-            Remove-Item @params
-        
-            # Copy BIS-F config files
-            Write-Host "Copy BIS-F configuration files from: $Path to $BisfInstall."
-            try {
-                Switch -Regex ((Get-WmiObject Win32_OperatingSystem).Caption) {
-                    "Microsoft Windows Server*" {
-                        $ConfigFile = "BISFconfig_MicrosoftWindowsServer2019Standard_64-bit.json"
-                    }
-                    "Microsoft Windows 10*" {
-                        $ConfigFile = "BISFconfig_MicrosoftWindows10Enterprise_64-bit.json"
-                    }
-                    Default {
-                    }
-                }
-                $params = @{
-                    Path        = (Join-Path -Path $Path -ChildPath $ConfigFile)
-                    Destination = $BisfInstall
-                    Force       = $True
-                    Verbose     = $True
-                    ErrorAction = "SilentlyContinue"
-                }
-                Write-Host "Copy BIS-F configuration file: $ConfigFile."
-                Copy-Item @params
-            }
-            catch {
-                Throw "Failed to copy BIS-F config file: $ConfigFile with: $($_.Exception.Message)."
-            }
-            try {
-                $json = [PSCustomObject] @{
-                    ConfigFile = [System.IO.Path]::Combine(${env:ProgramFiles(x86)}, "Base Image Script Framework (BIS-F)", $ConfigFile) 
-                }
-                $params = @{
-                    FilePath    = [System.IO.Path]::Combine(${env:ProgramFiles(x86)}, "Base Image Script Framework (BIS-F)", "BISFSharedConfig.json")
-                    Encoding    = "utf8"
-                    Force       = $True
-                    Verbose     = $True
-                    ErrorAction = "SilentlyContinue"
-                }
-                Write-Host "Set BIS-F shared configuration file: BISFSharedConfig.json."
-                $json | ConvertTo-Json | Out-File @params
-            }
-            catch {
-                Throw "Failed to set BIS-F shared config file: $ConfigFile with: $($_.Exception.Message)."
-            }
-
-            # Run BIS-F
-            Write-Host "Run BIS-F."
-            try {
-                $VerbosePreference = "SilentlyContinue"
-                Push-Location -Path (Join-Path -Path $BisfInstall -ChildPath "Framework")
-                & "${env:ProgramFiles(x86)}\Base Image Script Framework (BIS-F)\Framework\PrepBISF_Start.ps1"
-                Pop-Location
-                $VerbosePreference = "Continue"
-            }
-            catch {
-                Write-Warning -Message "BIS-F exited with: $($_.Exception.Message)."
-            }
+            Write-Host "Copy BIS-F configuration file: $($ConfigFile.FullName)."
+            Copy-Item @params
         }
-        Else {
-            Throw "Failed to find BIS-F in: ${env:ProgramFiles(x86)}\Base Image Script Framework (BIS-F)."
+        catch {
+            Write-Warning -Message "ERROR: Failed to copy BIS-F config file: $($ConfigFile.FullName) with: $($_.Exception.Message)."
+        }
+        try {
+            $json = [PSCustomObject] @{
+                ConfigFile = [System.IO.Path]::Combine(${env:ProgramFiles(x86)}, "Base Image Script Framework (BIS-F)", $ConfigFile) 
+            }
+            $params = @{
+                FilePath    = [System.IO.Path]::Combine(${env:ProgramFiles(x86)}, "Base Image Script Framework (BIS-F)", "BISFSharedConfig.json")
+                Encoding    = "utf8"
+                Force       = $True
+                Verbose     = $True
+                ErrorAction = "SilentlyContinue"
+            }
+            Write-Host "Set BIS-F shared configuration file: BISFSharedConfig.json."
+            $json | ConvertTo-Json | Out-File @params
+        }
+        catch {
+            Write-Warning -Message "ERROR: Failed to set BIS-F shared config file: $ConfigFile with: $($_.Exception.Message)."
+        }
+
+        # Run BIS-F
+        Write-Host "Run BIS-F."
+        try {
+            $VerbosePreference = "SilentlyContinue"
+            Push-Location -Path (Join-Path -Path $BisfInstall -ChildPath "Framework")
+            & "${env:ProgramFiles(x86)}\Base Image Script Framework (BIS-F)\Framework\PrepBISF_Start.ps1"
+            Pop-Location
+            $VerbosePreference = "Continue"
+        }
+        catch {
+            Write-Warning -Message "ERROR: BIS-F exited with: $($_.Exception.Message)."
         }
     }
     Else {
-        Throw "Failed to find BIS-F in: $Path."
+        Write-Warning -Message "ERROR: Failed to find BIS-F in: ${env:ProgramFiles(x86)}\Base Image Script Framework (BIS-F)."
     }
+
 }
 #endregion
 

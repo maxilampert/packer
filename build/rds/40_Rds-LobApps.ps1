@@ -104,7 +104,7 @@ Function Install-LobApps ($Path, $AppsUrl) {
         catch {
             Write-Warning -Message "ERROR: Failed to download: $($item.Url)."
         }
-        Expand-Archive -Path $OutFile -DestinationPath $AppPath -Force -Verbose
+        Expand-Archive -Path $OutFile -DestinationPath $AppPath -Force
         Remove-Item -Path $OutFile -Force -ErrorAction "SilentlyContinue"
 
         Write-Host " Installing item: $($AppName)."

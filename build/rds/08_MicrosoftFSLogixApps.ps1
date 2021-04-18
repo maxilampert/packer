@@ -109,7 +109,7 @@ If ($App) {
         Expand-Archive -Path $OutFile.Path -DestinationPath $Path -Force -Verbose
     }
     catch {
-        Throw "Failed to unpack: $($OutFile.Path)."
+        Write-Error -Message "ERROR: Failed to unpack: $($OutFile.Path)."
     }
     
     # Install
