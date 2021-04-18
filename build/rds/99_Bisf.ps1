@@ -8,7 +8,7 @@ Param (
     [System.String] $LogPath = "$env:SystemRoot\Logs\Packer",
 
     [Parameter(Mandatory = $False)]
-    [System.String] $Path = "$env:SystemDrive\Apps\BISF"
+    [System.String] $Path = "$env:SystemDrive\Apps\Tools\BISF"
 )
 
 #region Functions
@@ -215,5 +215,6 @@ If ($Bisf) {
 }
 #endregion
 
+# If (Test-Path -Path $Path) { Remove-Item -Path $Path -Recurse -Confirm:$False -ErrorAction "SilentlyContinue" }
 Write-Host " Complete: Bisf."
 #endregion

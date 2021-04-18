@@ -131,9 +131,15 @@
             "type": "windows-restart"
         },
         {
+            "type": "powershell",
+            "inline": [
+                "New-Item -Path \"C:\\Apps\\Tools\" -ItemType \"Directory\" -Force -ErrorAction \"SilentlyContinue\" > $Null"
+            ]
+        },
+        {
             "type": "file",
-            "sources": ["{{user `working_directory`}}/tools/rds/citrixoptimizer", "{{user `working_directory`}}/tools/rds/bisf"],
-            "destination": "C:\\Apps"
+            "sources": ["{{user `working_directory`}}/tools/rds"],
+            "destination": "C:\\Apps\\Tools"
         },
         {
             "type": "powershell",

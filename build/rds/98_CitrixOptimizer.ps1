@@ -8,7 +8,7 @@ Param (
     [System.String] $LogPath = "$env:SystemRoot\Logs\Packer",
 
     [Parameter(Mandatory = $False)]
-    [System.String] $Path = "$env:SystemDrive\Apps\Citrix\Optimizer",
+    [System.String] $Path = "$env:SystemDrive\Apps\Tools\CitrixOptimizer",
 
     [Parameter(Mandatory = $False)]
     [System.String] $OptimizerTemplate = "Custom-Windows10-20H2.xml"
@@ -95,16 +95,15 @@ $ProgressPreference = "SilentlyContinue"
 
 # Set TLS to 1.2; Create target folder
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
 
 #region Citrix Optimizer
 $CtxPath = "CitrixOptimizer"
-New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
 Write-Host "Using path: $Path."
 $Installer = Get-ChildItem -Path $Path -Filter "$CtxPath.zip" -ErrorAction "SilentlyContinue"
-
 If ($Null -eq $Installer) {
     $params = @{
-        Uri             = "https://raw.githubusercontent.com/aaronparker/packer/main/tools/rds/optimizer/CitrixOptimizer.zip"
+        Uri             = "https://raw.githubusercontent.com/aaronparker/packer/main/tools/rds/citrixoptimizer/CitrixOptimizer.zip"
         OutFile         = (Join-Path -Path $Path -ChildPath "$CtxPath.zip")
         UseBasicParsing = $True
         ErrorAction     = "SilentlyContinue"
@@ -146,6 +145,6 @@ Else {
 }
 #endregion
 
-
+# If (Test-Path -Path $Path) { Remove-Item -Path $Path -Recurse -Confirm:$False -ErrorAction "SilentlyContinue" }
 Write-Host " Complete: Optimise."
 #endregion
