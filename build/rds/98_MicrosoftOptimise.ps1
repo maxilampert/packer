@@ -5,10 +5,10 @@
 [CmdletBinding()]
 Param (
     [Parameter(Mandatory = $False)]
-    [System.String] $Log = "$env:SystemRoot\Logs\PackerImagePrep.log",
+    [System.String] $LogPath = "$env:SystemRoot\Logs\Packer",
 
     [Parameter(Mandatory = $False)]
-    [System.String] $Target = "$env:SystemDrive\Apps"
+    [System.String] $Path = "$env:SystemDrive\Apps\Microsoft\Optimise"
 )
 
 #region Individual optimisation functions
@@ -330,7 +330,7 @@ $ProgressPreference = "SilentlyContinue"
 
 # Set TLS to 1.2; Create target folder
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-New-Item -Path $Target -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
+New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
 
 #region Manual seal image tasks
 Invoke-WindowsDefender

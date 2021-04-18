@@ -5,10 +5,10 @@
 [CmdletBinding()]
 Param (
     [Parameter(Mandatory = $False)]
-    [System.String] $Log = "$env:SystemRoot\Logs\PackerImagePrep.log",
+    [System.String] $LogPath = "$env:SystemRoot\Logs\Packer",
 
     [Parameter(Mandatory = $False)]
-    [System.String] $Target = "$env:SystemDrive\Apps"
+    [System.String] $Path = "$env:SystemDrive\Apps\Locale"
 )
 
 #region Functions
@@ -202,9 +202,8 @@ Function Install-LanguageCapability ($Locale) {
 $VerbosePreference = "Continue"
 $ProgressPreference = "SilentlyContinue"
 
-# Set TLS to 1.2; Create target folder
-[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-New-Item -Path $Target -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
+# Create target folder
+New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
 
 # Run tasks
 If (Test-Path -Path env:Locale) {
@@ -214,6 +213,6 @@ Else {
     Write-Output " Can't find passed parameter, setting Locale to en-AU."
     $Locale = "en-AU"
 }
-Set-RegionSettings -Path $Target -Locale $Locale
+Set-RegionSettings -Path $Path -Locale $Locale
 #Install-LanguageCapability -Locale $Locale
 Write-Host " Complete: RegionLanguage."

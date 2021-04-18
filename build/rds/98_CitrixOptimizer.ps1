@@ -5,10 +5,10 @@
 [CmdletBinding()]
 Param (
     [Parameter(Mandatory = $False)]
-    [System.String] $Log = "$env:SystemRoot\Logs\PackerImagePrep.log",
+    [System.String] $LogPath = "$env:SystemRoot\Logs\Packer",
 
     [Parameter(Mandatory = $False)]
-    [System.String] $Path = "$env:SystemDrive\Apps\CitrixOptimizer",
+    [System.String] $Path = "$env:SystemDrive\Apps\Citrix\Optimizer",
 
     [Parameter(Mandatory = $False)]
     [System.String] $OptimizerTemplate = "Custom-Windows10-20H2.xml"

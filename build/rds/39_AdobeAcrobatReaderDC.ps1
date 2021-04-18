@@ -5,7 +5,7 @@
 [CmdletBinding()]
 Param (
     [Parameter(Mandatory = $False)]
-    [System.String] $Log = "$env:SystemRoot\Logs\PackerImagePrep.log",
+    [System.String] $LogPath = "$env:SystemRoot\Logs\Packer",
 
     [Parameter(Mandatory = $False)]
     [System.String] $Target = "$env:SystemDrive\Apps\Adobe\AcrobatReaderDC"
@@ -102,6 +102,7 @@ $Reader = Get-EvergreenApp -Name "AdobeAcrobatReaderDC" | Where-Object { $_.Lang
 If ($Reader) {
         
     # Download Adobe Acrobat Reader
+    Write-Host " Download Adobe Acrobat Reader DC"
     $OutFile = Save-EvergreenApp -InputObject $Reader -Path $Path
 
     # Install Adobe Acrobat Reader

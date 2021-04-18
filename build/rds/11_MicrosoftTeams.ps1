@@ -5,10 +5,10 @@
 [CmdletBinding()]
 Param (
     [Parameter(Mandatory = $False)]
-    [System.String] $Log = "$env:SystemRoot\Logs\PackerImagePrep.log",
+    [System.String] $LogPath = "$env:SystemRoot\Logs\Packer",
 
     [Parameter(Mandatory = $False)]
-    [System.String] $Target = "$env:SystemDrive\Apps\Microsoft\Teams"
+    [System.String] $Path = "$env:SystemDrive\Apps\Microsoft\Teams"
 )
 
 #region Functions

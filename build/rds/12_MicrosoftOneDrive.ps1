@@ -5,10 +5,10 @@
 [CmdletBinding()]
 Param (
     [Parameter(Mandatory = $False)]
-    [System.String] $Log = "$env:SystemRoot\Logs\PackerImagePrep.log",
+    [System.String] $LogPath = "$env:SystemRoot\Logs\Packer",
 
     [Parameter(Mandatory = $False)]
-    [System.String] $Target = "$env:SystemDrive\Apps\Microsoft\OneDrive"
+    [System.String] $Path = "$env:SystemDrive\Apps\Microsoft\OneDrive"
 )
 
 #region Functions
@@ -98,7 +98,6 @@ New-Item -Path $Target -ItemType "Directory" -Force -ErrorAction "SilentlyContin
 Write-Host " Microsoft OneDrive"    
 $Apps = Get-EvergreenApp -Name "MicrosoftOneDrive" | Where-Object { $_.Ring -eq "Production" -and $_.Type -eq "Exe" -and $_.Architecture -eq "AMD64" } | `
     Sort-Object -Property @{ Expression = { [System.Version]$_.Version }; Descending = $true } | Select-Object -First 1
-
 If ($Apps) {
 
     # Download

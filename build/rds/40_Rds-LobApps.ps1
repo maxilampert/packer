@@ -6,10 +6,10 @@
 [CmdletBinding()]
 Param (
     [Parameter(Mandatory = $False)]
-    [System.String] $Log = "$env:SystemRoot\Logs\PackerImagePrep.log",
+    [System.String] $LogPath = "$env:SystemRoot\Logs\Packer",
 
     [Parameter(Mandatory = $False)]
-    [System.String] $Target = "$env:SystemDrive\Apps"
+    [System.String] $Path = "$env:SystemDrive\Apps"
 )
 
 #region Functions
@@ -123,13 +123,13 @@ Function Install-LobApps ($Path, $AppsUrl) {
 $VerbosePreference = "Continue"
 $ProgressPreference = "SilentlyContinue"
 
-# Set TLS to 1.2; Create target folder
+# Set TLS to 1.2; Create $Path folder
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-New-Item -Path $Target -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
+New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
 
 # Run tasks
 If (Test-Path -Path env:AppsUrl) {
-    Install-LobApps -Path $Target -AppsUrl $env:AppsUrl
+    Install-LobApps -Path $Path -AppsUrl $env:AppsUrl
 }
 Write-Host " Complete: LoBApps."
 #endregion

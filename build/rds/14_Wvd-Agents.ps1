@@ -5,7 +5,7 @@
 [CmdletBinding()]
 Param (
     [Parameter(Mandatory = $False)]
-    [System.String] $Log = "$env:SystemRoot\Logs\PackerImagePrep.log",
+    [System.String] $LogPath = "$env:SystemRoot\Logs\Packer",
 
     [Parameter(Mandatory = $False)]
     [System.String] $Path = "$env:SystemDrive\App\Microsoft\Wvd"
@@ -99,11 +99,12 @@ $App = Get-EvergreenApp -Name "MicrosoftWvdRtcService" | Where-Object { $_.Archi
 If ($App) {
     
     # Download
+    Write-Host " Downloading Microsoft Remote Desktop WebRTC Redirector Service"
     $OutFile = Save-EvergreenApp -InputObject $App -Path $Path
 
     # Install RTC
-    Write-Host " Installing Microsoft Remote Desktop WebRTC Redirector Service"
     try {
+        Write-Host " Installing Microsoft Remote Desktop WebRTC Redirector Service"
         $params = @{
             FilePath     = "$env:SystemRoot\System32\msiexec.exe"
             ArgumentList = "/package $($OutFile.Path) ALLUSERS=1 /quiet"
@@ -123,12 +124,12 @@ Else {
 
 #region Boot Loader
 Write-Host " Microsoft Windows Virtual Desktop Agent Bootloader"
-Write-Host " Downloading Microsoft Windows Virtual Desktop Agent Bootloader"
 $App = Get-EvergreenApp -Name "MicrosoftWvdBootLoader" | Where-Object { $_.Architecture -eq "x64"}
 If ($App) {
     If (!(Test-Path $Path)) { New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null }
 
     # Download
+    Write-Host " Downloading Microsoft Windows Virtual Desktop Agent Bootloader"
     $OutFile = Save-EvergreenApp -InputObject $App -Path $Path
 
     # Install
@@ -153,11 +154,11 @@ Else {
 
 #region Infra agent
 Write-Host " Microsoft WVD Infrastructure Agent"
-Write-Host " Downloading Microsoft WVD Infrastructure Agent"
 $Agent = Get-EvergreenApp -Name "MicrosoftWvdInfraAgent" | Where-Object { $_.Architecture -eq "x64"}
 If ($Agent) {
 
     # Download
+    Write-Host " Downloading Microsoft WVD Infrastructure Agent"
     $OutFile = Save-EvergreenApp -InputObject $Agent -Path $Path
 
     # Install

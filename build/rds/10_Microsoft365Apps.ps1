@@ -5,7 +5,7 @@
 [CmdletBinding()]
 Param (
     [Parameter(Mandatory = $False)]
-    [System.String] $Log = "$env:SystemRoot\Logs\PackerImagePrep.log",
+    [System.String] $LogPath = "$env:SystemRoot\Logs\Packer",
 
     [Parameter(Mandatory = $False)]
     [System.String] $Path = "$env:SystemDrive\Apps\Microsoft\Office"
@@ -91,7 +91,7 @@ Function Global:Invoke-Process {
 $VerbosePreference = "Continue"
 $ProgressPreference = "SilentlyContinue"
 
-# Set TLS to 1.2; Create target folder
+# Create target folder
 New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
 
 # Run tasks/install apps
@@ -141,7 +141,7 @@ $OfficeXml = @"
 "@
 
 # Get Office version
-Write-Host " Microsoft Office"
+Write-Host " Microsoft 365 Apps"
 $App = Get-EvergreenApp -Name "Microsoft365Apps" | Where-Object { $_.Channel -eq "Monthly" }
 If ($App) {
 
@@ -170,6 +170,6 @@ Else {
     Write-Host " Failed to retrieve Microsoft 365 Apps setup."
 }
 
-If (Test-Path -Path $Path) { Remove-Item -Path $Path -Recurse -Confirm:$False -ErrorAction "SilentlyContinue" }
+# If (Test-Path -Path $Path) { Remove-Item -Path $Path -Recurse -Confirm:$False -ErrorAction "SilentlyContinue" }
 Write-Host " Complete: Microsoft 365 Apps."
 #endregion

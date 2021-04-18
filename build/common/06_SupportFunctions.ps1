@@ -3,7 +3,13 @@
         Install evergreen core applications.
 #>
 [CmdletBinding()]
-Param ()
+Param (
+    [Parameter(Mandatory = $False)]
+    [System.String] $LogPath = "$env:SystemRoot\Logs\Support",
+
+    [Parameter(Mandatory = $False)]
+    [System.String] $Path = "$env:SystemDrive\Apps\Customise"
+)
 
 #region Script logic
 # Trust the PSGallery for modules

@@ -5,10 +5,10 @@
 [CmdletBinding()]
 Param (
     [Parameter(Mandatory = $False)]
-    [System.String] $Log = "$env:SystemRoot\Logs\PackerImagePrep.log",
+    [System.String] $LogPath = "$env:SystemRoot\Logs\Packer",
 
     [Parameter(Mandatory = $False)]
-    [System.String] $Target = "$env:SystemDrive\Apps\Packages"
+    [System.String] $Path = "$env:SystemDrive\Apps\Packages"
 )
 
 #region Functions
@@ -45,6 +45,7 @@ Function Get-AzureBlobItem {
     )
 
     # Get response from Azure blog storage; Convert contents into usable XML, removing extraneous leading characters
+    [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
     try {
         $iwrParams = @{
             Uri             = $Uri
@@ -117,6 +118,9 @@ Function Install-LanguageCapability ($Locale) {
 }
 
 Function Install-Packages ($Path, $PackagesUrl) {
+    
+    [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+    
     # Get the list of items from blob storage
     try {
         $Items = Get-AzureBlobItem -Uri "$($PackagesUrl)?comp=list" | Where-Object { $_.Name -match "zip?" }
@@ -157,11 +161,10 @@ Function Install-Packages ($Path, $PackagesUrl) {
 $VerbosePreference = "Continue"
 $ProgressPreference = "SilentlyContinue"
 
-# Set TLS to 1.2; Create target folder
-[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-New-Item -Path $Target -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
+# Create target folder
+New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
 
 # Run tasks
-Install-Packages -Path $Target -PackagesUrl $Env:PackagesUrl
+Install-Packages -Path $Path -PackagesUrl $Env:PackagesUrl
 If (Test-Path -Path $Path) { Remove-Item -Path $Path -Recurse -Confirm:$False -ErrorAction "SilentlyContinue" }
 Write-Host " Complete: Packages."
