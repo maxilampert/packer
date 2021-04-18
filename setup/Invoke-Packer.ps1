@@ -71,15 +71,15 @@ catch {
 # Install the Windows Update Packer plugin, https://github.com/rgl/packer-provisioner-windows-update
 $url = "https://github.com/rgl/packer-provisioner-windows-update/releases/download/v0.9.0/packer-provisioner-windows-update-windows.zip"
 $zip = "$env:Temp\packer-provisioner-windows-update-windows.zip"
-$target = "$env:AppData\packer.d\plugins"
+$Path = "$env:AppData\packer.d\plugins"
 $exe = "packer-provisioner-windows-update.exe"
-If (Test-Path -Path (Join-Path -Path $target -ChildPath $exe)) {
+If (Test-Path -Path (Join-Path -Path $Path -ChildPath $exe)) {
     Write-Host "Windows Update Packer plugin exists." -ForegroundColor Cyan
 }
 Else {
     Write-Host "Downloading Windows Update Packer plugin." -ForegroundColor Cyan
     Invoke-WebRequest -Uri $url -OutFile $zip -UseBasicParsing
-    Expand-Archive -Path $zip -DestinationPath $target
+    Expand-Archive -Path $zip -DestinationPath $Path
     Remove-Item -Path $zip
 }
 

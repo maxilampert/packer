@@ -8,7 +8,7 @@ Param (
     [System.String] $LogPath = "$env:SystemRoot\Logs\Packer",
 
     [Parameter(Mandatory = $False)]
-    [System.String] $Target = "$env:SystemDrive\Apps\Adobe\AcrobatReaderDC"
+    [System.String] $Path = "$env:SystemDrive\Apps\Adobe\AcrobatReaderDC"
 )
 
 #region Functions
@@ -92,7 +92,7 @@ $VerbosePreference = "Continue"
 $ProgressPreference = "SilentlyContinue"
 
 # Create target folder
-New-Item -Path $Target -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
+New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
 
 # Run tasks/install apps
 # Enforce settings with GPO: https://www.adobe.com/devnet-docs/acrobatetk/tools/AdminGuide/gpo.html

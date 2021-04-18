@@ -282,7 +282,7 @@ Function Global:Clear-WinEvent {
 Function MicrosoftOptimizer {
     # https://github.com/The-Virtual-Desktop-Team/Virtual-Desktop-Optimization-Tool
     $Url = "https://github.com/The-Virtual-Desktop-Team/Virtual-Desktop-Optimization-Tool/archive/master.zip"
-    $Path = Join-Path -Path $Target -ChildPath "VirtualDesktopOptimizationTool"
+    $Path = Join-Path -Path $Path -ChildPath "VirtualDesktopOptimizationTool"
     New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
     $OutFile = Join-Path -Path $Path -ChildPath (Split-Path -Path $Url -Leaf)
     try {

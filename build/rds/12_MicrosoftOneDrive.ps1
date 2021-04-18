@@ -92,7 +92,7 @@ $VerbosePreference = "Continue"
 $ProgressPreference = "SilentlyContinue"
 
 # Create target folder
-New-Item -Path $Target -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
+New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
 
 # Run tasks/install apps
 Write-Host " Microsoft OneDrive"    
