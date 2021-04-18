@@ -87,7 +87,7 @@ Function Install-LobApps ($Path, $AppsUrl) {
     }
     catch {
         Write-Host " Failed to retrieve items from: [$AppsUrl]."
-        Write-Warning -Message "ERROR: Failed to retrieve items from: [$AppsUrl]."
+        Write-Warning -Message " ERR: Failed to retrieve items from: [$AppsUrl]."
     }
 
     ForEach ($item in $Items) {
@@ -102,7 +102,7 @@ Function Install-LobApps ($Path, $AppsUrl) {
             Invoke-WebRequest -Uri $item.Url -OutFile $OutFile -UseBasicParsing
         }
         catch {
-            Write-Warning -Message "ERROR: Failed to download: $($item.Url)."
+            Write-Warning -Message " ERR: Failed to download: $($item.Url)."
         }
         Expand-Archive -Path $OutFile -DestinationPath $AppPath -Force
         Remove-Item -Path $OutFile -Force -ErrorAction "SilentlyContinue"

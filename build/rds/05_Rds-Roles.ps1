@@ -32,7 +32,7 @@ Switch -Regex ((Get-WmiObject Win32_OperatingSystem).Caption) {
             Disable-WindowsOptionalFeature @params
         }
         catch {
-            Write-Warning -Message "ERROR: Failed to set feature state with: $($_.Exception.Message)."
+            Write-Warning -Message " ERR: Failed to set feature state with: $($_.Exception.Message)."
         }
 
         try {
@@ -45,7 +45,7 @@ Switch -Regex ((Get-WmiObject Win32_OperatingSystem).Caption) {
             Uninstall-WindowsFeature @params
         }
         catch {
-            Write-Warning -Message "ERROR: Failed to set feature state with: $($_.Exception.Message)."
+            Write-Warning -Message " ERR: Failed to set feature state with: $($_.Exception.Message)."
         }
 
         $params = @{
@@ -68,7 +68,7 @@ Switch -Regex ((Get-WmiObject Win32_OperatingSystem).Caption) {
                     Set-Service @params
                 }
                 catch {
-                    Write-Warning -Message "ERROR: Failed to set service properties with: $($_.Exception.Message)."
+                    Write-Warning -Message " ERR: Failed to set service properties with: $($_.Exception.Message)."
                 }
             }
         } 

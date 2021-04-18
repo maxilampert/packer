@@ -127,20 +127,28 @@ If ($Installer) {
             $OptimizerBin = Get-ChildItem -Path $Path -Recurse -Filter "CtxOptimizerEngine.ps1"
             Push-Location -Path $OptimizerBin.Directory
             Write-Host "Running: $($OptimizerBin.FullName) -Source $($Template.FullName) -Mode execute"
-            Write-Host "Output will be saved to: $Path\$CtxPath.html."
-            & $OptimizerBin.FullName -Source $Template.FullName -Mode execute -OutputHtml "$Path\$CtxPath.html"
+            Write-Host "Report will be saved to: $Path\$CtxPath.html."
+            Write-Host "Logs will be saved to: $LogPath."
+            $params = @{
+                Source          = $Template.FullName
+                Mode            = "Execute"
+                OutputLogFolder = $LogPath
+                OutputHtml      = "$Path\$CtxPath.html"
+                Verbose         = $False
+            }
+            & $OptimizerBin.FullName @params
             Pop-Location
         }
         catch {
-            Write-Warning -Message "ERROR: Citrix Optimizer exited with: $($_.Exception.Message)."
+            Write-Warning -Message " ERR: Citrix Optimizer exited with: $($_.Exception.Message)."
         }
     }
     Else {
-        Write-Warning -Message "ERROR: Failed to find Citrix Optimizer template: $OptimizerTemplate in $Path."
+        Write-Warning -Message " ERR: Failed to find Citrix Optimizer template: $OptimizerTemplate in $Path."
     }
 }
 Else {
-    Write-Warning -Message "ERROR: Failed to find Citrix Optimizer in: $Path."
+    Write-Warning -Message " ERR: Failed to find Citrix Optimizer in: $Path."
 }
 #endregion
 

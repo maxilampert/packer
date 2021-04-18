@@ -20,14 +20,14 @@ Function Get-InstalledHotfixes {
         $HotfixList = Get-Hotfix | Select-Object -Property "Description", "HotFixID", "Caption" | Sort-Object -Property "HotFixID"
     }
     catch {
-        Write-Warning -Message "ERROR: $($_.Exception.Message)."
+        Write-Warning -Message " ERR: $($_.Exception.Message)."
     }
     
     try {
         $HotfixJson = $HotfixList | ConvertTo-Json
     }
     catch {
-        Write-Warning -Message "ERROR: $($_.Exception.Message)."
+        Write-Warning -Message " ERR: $($_.Exception.Message)."
     }
 
     If ($Null -ne $HotfixJson) { Write-Output -InputObject $HotfixJson }

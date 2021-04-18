@@ -113,7 +113,7 @@ If ($App) {
         Invoke-Process @params
     }
     catch {
-        Write-Warning -Message "ERROR: Failed to install BIS-F with: $($_.Exception.Message)."
+        Write-Warning -Message " ERR: Failed to install BIS-F with: $($_.Exception.Message)."
     }
 
     # If BIS-F installed OK, continue
@@ -156,7 +156,7 @@ If ($App) {
             Copy-Item @params
         }
         catch {
-            Write-Warning -Message "ERROR: Failed to copy BIS-F config file: $($ConfigFile.FullName) with: $($_.Exception.Message)."
+            Write-Warning -Message " ERR: Failed to copy BIS-F config file: $($ConfigFile.FullName) with: $($_.Exception.Message)."
         }
         try {
             $json = [PSCustomObject] @{
@@ -173,24 +173,22 @@ If ($App) {
             $json | ConvertTo-Json | Out-File @params
         }
         catch {
-            Write-Warning -Message "ERROR: Failed to set BIS-F shared config file: $ConfigFile with: $($_.Exception.Message)."
+            Write-Warning -Message " ERR: Failed to set BIS-F shared config file: $ConfigFile with: $($_.Exception.Message)."
         }
 
         # Run BIS-F
         Write-Host "Run BIS-F."
         try {
-            $VerbosePreference = "SilentlyContinue"
             Push-Location -Path (Join-Path -Path $BisfInstall -ChildPath "Framework")
-            & "${env:ProgramFiles(x86)}\Base Image Script Framework (BIS-F)\Framework\PrepBISF_Start.ps1"
+            & "${env:ProgramFiles(x86)}\Base Image Script Framework (BIS-F)\Framework\PrepBISF_Start.ps1" -Verbose:$False
             Pop-Location
-            $VerbosePreference = "Continue"
         }
         catch {
-            Write-Warning -Message "ERROR: BIS-F exited with: $($_.Exception.Message)."
+            Write-Warning -Message " ERR: BIS-F exited with: $($_.Exception.Message)."
         }
     }
     Else {
-        Write-Warning -Message "ERROR: Failed to find BIS-F in: ${env:ProgramFiles(x86)}\Base Image Script Framework (BIS-F)."
+        Write-Warning -Message " ERR: Failed to find BIS-F in: ${env:ProgramFiles(x86)}\Base Image Script Framework (BIS-F)."
     }
 
 }

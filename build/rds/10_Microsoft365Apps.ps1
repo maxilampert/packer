@@ -163,7 +163,7 @@ If ($App) {
         Pop-Location
     }
     catch {
-        Write-Warning -Message "ERROR: Failed to install Microsoft 365 Apps."
+        Write-Warning -Message " ERR: Failed to install Microsoft 365 Apps."
     }
 }
 Else {

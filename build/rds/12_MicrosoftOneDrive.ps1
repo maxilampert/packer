@@ -114,11 +114,11 @@ If ($App) {
         Invoke-Process @params
     }
     catch {
-        Write-Warning -Message "ERROR: Failed to install Microsoft OneDrive."
+        Write-Warning -Message " ERR: Failed to install Microsoft OneDrive."
     }
 }
 Else {
-    Write-Warning -Message "ERROR: Failed to retrieve Microsoft OneDrive"
+    Write-Warning -Message " ERR: Failed to retrieve Microsoft OneDrive"
 }
 
 If (Test-Path -Path $Path) { Remove-Item -Path $Path -Recurse -Confirm:$False -ErrorAction "SilentlyContinue" }
