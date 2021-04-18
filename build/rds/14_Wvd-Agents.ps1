@@ -154,12 +154,12 @@ Else {
 
 #region Infra agent
 Write-Host " Microsoft WVD Infrastructure Agent"
-$Agent = Get-EvergreenApp -Name "MicrosoftWvdInfraAgent" | Where-Object { $_.Architecture -eq "x64"}
-If ($Agent) {
+$App = Get-EvergreenApp -Name "MicrosoftWvdInfraAgent" | Where-Object { $_.Architecture -eq "x64"}
+If ($App) {
 
     # Download
     Write-Host " Downloading Microsoft WVD Infrastructure Agent"
-    $OutFile = Save-EvergreenApp -InputObject $Agent -Path $Path
+    $OutFile = Save-EvergreenApp -InputObject $App -Path $Path
 
     # Install
     <#

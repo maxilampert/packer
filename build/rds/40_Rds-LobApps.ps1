@@ -47,6 +47,7 @@ Function Get-AzureBlobItem {
 
     # Get response from Azure blog storage; Convert contents into usable XML, removing extraneous leading characters
     try {
+        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
         $iwrParams = @{
             Uri             = $Uri
             UseBasicParsing = $True
@@ -97,20 +98,20 @@ Function Install-LobApps ($Path, $AppsUrl) {
         $AppPath = Join-Path -Path $Path -ChildPath $AppName
         If (!(Test-Path $AppPath)) { New-Item -Path $AppPath -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null }
 
-        Write-Host " Downloading item: [$($item.Url)]."
-        $OutFile = Join-Path -Path $Path -ChildPath (Split-Path -Path $item.Url -Leaf)
         try {
+            [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+            $OutFile = Join-Path -Path $Path -ChildPath (Split-Path -Path $item.Url -Leaf)
+            Write-Host " Downloading item: [$($item.Url)]."
             Invoke-WebRequest -Uri $item.Url -OutFile $OutFile -UseBasicParsing
         }
         catch {
-            Write-Host " Failed to download: $($item.Url)."
-            Break
+            Throw " Failed to download: $($item.Url)."
         }
         Expand-Archive -Path $OutFile -DestinationPath $AppPath -Force -Verbose
-        Remove-Item -Path $OutFile -Force -ErrorAction SilentlyContinue
+        Remove-Item -Path $OutFile -Force -ErrorAction "SilentlyContinue"
 
         Write-Host " Installing item: $($AppName)."
-        Push-Location $AppPath
+        Push-Location -Path $AppPath
         Get-ChildItem -Path $AppPath -Recurse | Unblock-File
         . .\Deploy-Application.ps1
         Pop-Location
@@ -123,8 +124,7 @@ Function Install-LobApps ($Path, $AppsUrl) {
 $VerbosePreference = "Continue"
 $ProgressPreference = "SilentlyContinue"
 
-# Set TLS to 1.2; Create $Path folder
-[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+# Create $Path folder
 New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
 
 # Run tasks
