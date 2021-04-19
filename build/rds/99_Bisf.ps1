@@ -158,6 +158,8 @@ If ($App) {
         catch {
             Write-Warning -Message " ERR: Failed to copy BIS-F config file: $($ConfigFile.FullName) with: $($_.Exception.Message)."
         }
+
+        # Set BISFSharedConfig.json
         try {
             $json = [PSCustomObject] @{
                 ConfigFile = [System.IO.Path]::Combine(${env:ProgramFiles(x86)}, "Base Image Script Framework (BIS-F)", $ConfigFile) 
