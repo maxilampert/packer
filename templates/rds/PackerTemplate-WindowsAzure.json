@@ -10,6 +10,7 @@
         "vm_size": "Standard_D2as_v4",
         "image_date": "",
         "working_directory": "{{env `System_DefaultWorkingDirectory`}}",
+        "app_directory": "C:\\Apps",
         "winrmuser": "packer",
         "managed_image_resource_group_name": "",
         "managed_image_name": "{{user `image_offer`}}-{{user `image_sku`}}-{{user `image_date`}}",
@@ -79,19 +80,25 @@
                 "build/rds/01_Rds-PrepImage.ps1",
                 "build/common/02_Packages.ps1",
                 "build/common/03_RegionLanguage.ps1",
-                "build/common/04_Customise.ps1",
                 "build/rds/05_Rds-Roles.ps1"
             ]
         },
         {
-            "type": "windows-update",
-            "search_criteria": "IsInstalled=0",
-            "filters": [
-                "exclude:$_.Title -like '*Silverlight*'",
-                "exclude:$_.Title -like '*Preview*'",
-                "include:$true"
-            ],
-            "update_limit": 25
+            "type": "powershell",
+            "inline": [
+                "New-Item -Path \"{{user `apps_directory`}}\\image-customise\" -ItemType \"Directory\" -Force -ErrorAction \"SilentlyContinue\" > $Null"
+            ]
+        },
+        {
+            "type": "file",
+            "sources": ["{{user `working_directory`}}/image-customise"],
+            "destination": "{{user `apps_directory`}}\\image-customise"
+        },
+        {
+            "type": "powershell",
+            "scripts": [
+                "build/common/04_Customise.ps1"
+            ]
         },
         {
             "type": "powershell",
@@ -99,11 +106,7 @@
                 "build/common/06_SupportFunctions.ps1",
                 "build/rds/07_MicrosoftVcRedists.ps1",
                 "build/rds/08_MicrosoftFSLogixApps.ps1",
-                "build/rds/09_MicrosoftEdge.ps1",
-                "build/rds/10_Microsoft365Apps.ps1",
-                "build/rds/11_MicrosoftTeams.ps1",
-                "build/rds/12_MicrosoftOneDrive.ps1",
-                "build/rds/14_Wvd-Agents.ps1"
+                "build/rds/09_MicrosoftEdge.ps1"
             ]
         },
         {
@@ -115,7 +118,6 @@
                 "AppsUrl={{user `apps_url`}}"
             ],
             "scripts": [
-                "build/rds/39_AdobeAcrobatReaderDC.ps1",
                 "build/rds/40_Rds-LobApps.ps1"
             ]
         },
@@ -129,31 +131,19 @@
             ]
         },
         {
-            "type": "windows-update",
-            "search_criteria": "IsInstalled=0",
-            "filters": [
-                "exclude:$_.Title -like '*Silverlight*'",
-                "exclude:$_.Title -like '*Preview*'",
-                "include:$true"
-            ],
-            "update_limit": 25
-        },
-        {
             "type": "powershell",
             "inline": [
-                "New-Item -Path \"C:\\Apps\\Tools\" -ItemType \"Directory\" -Force -ErrorAction \"SilentlyContinue\" > $Null"
+                "New-Item -Path \"{{user `apps_directory`}}\\Tools\" -ItemType \"Directory\" -Force -ErrorAction \"SilentlyContinue\" > $Null"
             ]
         },
         {
             "type": "file",
             "sources": ["{{user `working_directory`}}/tools/rds"],
-            "destination": "C:\\Apps\\Tools"
+            "destination": "{{user `apps_directory`}}\\Tools"
         },
         {
             "type": "powershell",
             "scripts": [
-                "build/rds/98_CitrixOptimizer.ps1",
-                "build/rds/99_Bisf.ps1",
                 "build/common/Get-InstalledSoftware.ps1",
                 "build/common/Get-InstalledHotfixes.ps1"
             ]

@@ -8,7 +8,7 @@ Param (
     [System.String] $LogPath = "$env:SystemRoot\Logs\Packer",
 
     [Parameter(Mandatory = $False)]
-    [System.String] $Path = "$env:SystemDrive\Apps\Customise",
+    [System.String] $Path = "$env:SystemDrive\Apps\image-customise",
 
     [Parameter(Mandatory = $False)]
     [System.String] $URL = "https://github.com/aaronparker/image-customise/archive/main.zip",
@@ -23,22 +23,29 @@ $VerbosePreference = "Continue"
 $ProgressPreference = "SilentlyContinue"
 
 # Create target folder
+Write-Host " Start: Customise."
 New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
 
-# Customisation scripts
-try {
-    [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-    $OutFile = Join-Path -Path $Path -ChildPath $(Split-Path $URL -Leaf)
-    Invoke-WebRequest -Uri $URL -OutFile $OutFile -UseBasicParsing
-    Expand-Archive -Path $OutFile -DestinationPath $Path -Force -Verbose
+# Validate customisation scripts
+$Script = Get-ChildItem -Path $Path -Recurse -Filter $InvokeScript
+If (Test-Path -Path $Script) {
+    Write-Host " Scripts validated in $Path."
 }
-catch {
-    Write-Warning -Message " ERR: $($_.Exception.Message)."
+Else {
+    Write-Host " Scripts not in $Path. Downloading from repository."
+    try {
+        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+        $OutFile = Join-Path -Path $Path -ChildPath $(Split-Path $URL -Leaf)
+        Invoke-WebRequest -Uri $URL -OutFile $OutFile -UseBasicParsing
+        Expand-Archive -Path $OutFile -DestinationPath $Path -Force -Verbose
+    }
+    catch {
+        Write-Warning -Message " ERR: $($_.Exception.Message)."
+    }
+    $Script = Get-ChildItem -Path $Path -Recurse -Filter $InvokeScript
 }
 
 # Run scripts
-Write-Host " Start: Customise."
-$Script = Get-ChildItem -Path $Path -Recurse -Filter $InvokeScript
 Push-Location -Path (Split-Path -Path $Script.FullName -Parent)
 . ".\$InvokeScript"
 Pop-Location

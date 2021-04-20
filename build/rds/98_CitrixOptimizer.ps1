@@ -28,6 +28,7 @@ $CtxPath = "CitrixOptimizer"
 Write-Host "Using path: $Path."
 $Installer = Get-ChildItem -Path $Path -Filter "$CtxPath.zip" -Recurse -ErrorAction "SilentlyContinue"
 If ($Null -eq $Installer) {
+    Write-Host " Citrix Optimizer not in $Path. Downloading from repository."
     try {
         $params = @{
             Uri             = "https://raw.githubusercontent.com/aaronparker/packer/main/tools/rds/citrixoptimizer/CitrixOptimizer.zip"

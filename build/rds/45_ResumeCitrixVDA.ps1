@@ -15,6 +15,7 @@ Param (
 )
 
 If (Test-Path -Path $FilePath) {
+    Write-Host " Citrix VDA found. Starting resume."
     try {
         $params = @{
             FilePath     = "$Env:ProgramData\Citrix\XenDesktopSetup\XenDesktopVdaSetup.exe"
@@ -33,3 +34,4 @@ If (Test-Path -Path $FilePath) {
 Else {
     Write-Host " Citrix VDA not found. Skipping resume."
 }
+Write-Host " Citrix VDA resume complete."
