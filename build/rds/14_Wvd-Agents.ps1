@@ -40,7 +40,7 @@ If ($App) {
             PassThru     = $True
             Verbose      = $True
         }
-        Start-Process @params
+        $process = Start-Process @params
     }
     catch {
         Write-Warning -Message " ERR: Failed to install Microsoft Remote Desktop WebRTC Redirector Service."
@@ -73,7 +73,7 @@ If ($App) {
             PassThru     = $True
             Verbose      = $True
         }
-        Start-Process @params
+        $process = Start-Process @params
     }
     catch {
         Write-Warning -Message " ERR: Failed to install Microsoft Windows Virtual Desktop Agent Bootloader"
@@ -106,7 +106,7 @@ If ($App) {
             PassThru     = $True
             Verbose      = $True
         }
-        Start-Process @params
+        $process = Start-Process @params
     }
     catch {
         Throw "Failed to install Microsoft WVD Infrastructure Agent."

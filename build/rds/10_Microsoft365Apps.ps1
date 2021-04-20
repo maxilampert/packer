@@ -88,7 +88,7 @@ If ($App) {
             PassThru     = $True
             Verbose      = $True
         }
-        Start-Process @params
+        $process = Start-Process @params
         
         Pop-Location
     }

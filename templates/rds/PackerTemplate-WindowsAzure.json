@@ -91,7 +91,7 @@
         },
         {
             "type": "file",
-            "sources": ["{{user `working_directory`}}/image-customise"],
+            "sources": ["{{user `working_directory`}}\\image-customise"],
             "destination": "C:\\Apps\\image-customise"
         },
         {

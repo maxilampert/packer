@@ -40,7 +40,7 @@ If ($App) {
             PassThru     = $True
             Verbose      = $True
         }
-        Start-Process @params
+        $process = Start-Process @params
     }
     catch {
         Write-Warning -Message " ERR: Failed to install Microsoft Edge."

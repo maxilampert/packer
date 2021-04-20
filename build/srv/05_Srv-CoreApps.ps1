@@ -72,7 +72,7 @@ Function Install-MicrosoftEdge ($Path) {
                 PassThru     = $True
                 Verbose      = $True
             }
-            Start-Process @params
+            $process = Start-Process @params
         }
         catch {
             Throw "Failed to install Microsoft Edge."
