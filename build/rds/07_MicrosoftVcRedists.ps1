@@ -26,6 +26,6 @@ Save-VcRedist -VcList (Get-VcList) -Path $Path > $Null
 Write-Host " Installing Microsoft Visual C++ Redistributables"
 $VcRedists = Install-VcRedist -VcList (Get-VcList) -Path $Path -Silent -Verbose
 
-If (Test-Path -Path $Path) { Remove-Item -Path $Path -Recurse -Confirm:$False -ErrorAction "SilentlyContinue" }
+# If (Test-Path -Path $Path) { Remove-Item -Path $Path -Recurse -Confirm:$False -ErrorAction "SilentlyContinue" }
 Write-Host " Complete: VcRedists."
 #endregion

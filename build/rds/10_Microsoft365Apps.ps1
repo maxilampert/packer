@@ -100,6 +100,6 @@ Else {
     Write-Host " Failed to retrieve Microsoft 365 Apps setup."
 }
 
-# If (Test-Path -Path $Path) { Remove-Item -Path $Path -Recurse -Confirm:$False -ErrorAction "SilentlyContinue" }
+# # If (Test-Path -Path $Path) { Remove-Item -Path $Path -Recurse -Confirm:$False -ErrorAction "SilentlyContinue" }
 Write-Host " Complete: Microsoft 365 Apps."
 #endregion

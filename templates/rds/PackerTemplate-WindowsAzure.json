@@ -92,7 +92,7 @@
         {
             "type": "file",
             "sources": ["{{user `working_directory`}}\\image-customise"],
-            "destination": "C:\\Apps\\image-customise"
+            "destination": "C:\\Apps"
         },
         {
             "type": "powershell",
@@ -195,7 +195,8 @@
                 "If (Get-Service -Name RdAgent -ErrorAction SilentlyContinue) { Set-Service RdAgent -StartupType Disabled }",
                 "If (Get-Service -Name WindowsAzureTelemetryService -ErrorAction SilentlyContinue) { Set-Service WindowsAzureTelemetryService -StartupType Disabled }",
                 "If (Get-Service -Name WindowsAzureGuestAgent -ErrorAction SilentlyContinue) { Set-Service WindowsAzureGuestAgent -StartupType Disabled }",
-                "Remove-ItemProperty -Path 'HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Setup\\SysPrepExternal\\Generalize' -Name '*'"
+                "Remove-ItemProperty -Path 'HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Setup\\SysPrepExternal\\Generalize' -Name '*'",
+                "If (Test-Path -Path \"C:\\Apps\") { Remove-Item -Path \"C:\\Apps\" -Recurse -Confirm:$False -ErrorAction \"SilentlyContinue\" }"
             ]
         },
         {

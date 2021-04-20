@@ -79,6 +79,6 @@ Else {
     Write-Warning -Message " ERR: Failed to retrieve Microsoft Edge"
 }
 
-If (Test-Path -Path $Path) { Remove-Item -Path $Path -Recurse -Confirm:$False -ErrorAction "SilentlyContinue" }
+# If (Test-Path -Path $Path) { Remove-Item -Path $Path -Recurse -Confirm:$False -ErrorAction "SilentlyContinue" }
 Write-Host " Complete: MicrosoftEdge."
 #endregion

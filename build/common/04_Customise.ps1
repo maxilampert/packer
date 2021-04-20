@@ -26,42 +26,21 @@ $ProgressPreference = "SilentlyContinue"
 Write-Host " Start: Customise."
 New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
 
-# Validate customisation scripts
-Write-Host " Directory listing:"
-Get-ChildItem -Path $Path -Recurse
-$Script = Get-ChildItem -Path $Path -Recurse -Filter $InvokeScript
-
-# Validate customisation scripts 
-If (Test-Path -Path $Script) {
-    Write-Host " Scripts validated in $Path."
-}
-Else {
-    Write-Host " Scripts not in $Path. Downloading from repository."
+# Validate customisation scripts; Run scripts
+If (Test-Path -Path $(Join-Path -Path $Path -ChildPath $InvokeScript)) {
     try {
-        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-        $OutFile = Join-Path -Path $Path -ChildPath $(Split-Path $URL -Leaf)
-        Invoke-WebRequest -Uri $URL -OutFile $OutFile -UseBasicParsing
-        Expand-Archive -Path $OutFile -DestinationPath $Path -Force -Verbose
+        Push-Location -Path $Path
+        . $InvokeScript
+        Pop-Location
     }
     catch {
-        Write-Warning -Message " ERR: $($_.Exception.Message)."
+        Write-Warning -Message " ERR: $InvokeScript error with: $($_.Exception.Message)."
     }
-
-    Write-Host " Directory listing:"
-    Get-ChildItem -Path $Path -Recurse
-    $Script = Get-ChildItem -Path $Path -Recurse -Filter $InvokeScript
-}
-
-# Run scripts
-IF ($Null -ne $Script) {
-    Push-Location -Path (Split-Path -Path $Script.FullName -Parent)
-    . $Script.FullName
-    Pop-Location
 }
 Else {
-    Write-Warning -Message " ERR: Could not find $InvokeScript in $Path."
+    Write-Warning -Message " ERR: Could not find: $(Join-Path -Path $Path -ChildPath $InvokeScript)."
 }
 
-If (Test-Path -Path $Path) { Remove-Item -Path $Path -Recurse -Confirm:$False -ErrorAction "SilentlyContinue" }
+# If (Test-Path -Path $Path) { Remove-Item -Path $Path -Recurse -Confirm:$False -ErrorAction "SilentlyContinue" }
 Write-Host " Complete: Customise."
 #endregion

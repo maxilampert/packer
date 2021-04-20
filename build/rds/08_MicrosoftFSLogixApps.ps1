@@ -63,6 +63,6 @@ If ($App) {
 Else {
     Write-Host " Failed to retrieve Microsoft FSLogix Apps"
 }
-If (Test-Path -Path $Path) { Remove-Item -Path $Path -Recurse -Confirm:$False -ErrorAction "SilentlyContinue" }
+# If (Test-Path -Path $Path) { Remove-Item -Path $Path -Recurse -Confirm:$False -ErrorAction "SilentlyContinue" }
 Write-Host " Complete: FSLogix."
 #endregion

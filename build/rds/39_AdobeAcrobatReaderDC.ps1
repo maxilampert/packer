@@ -92,6 +92,6 @@ Else {
     Write-Warning -Message " ERR: Failed to retrieve Adobe Acrobat Reader"
 }
 
-If (Test-Path -Path $Path) { Remove-Item -Path $Path -Recurse -Confirm:$False -ErrorAction "SilentlyContinue" }
+# If (Test-Path -Path $Path) { Remove-Item -Path $Path -Recurse -Confirm:$False -ErrorAction "SilentlyContinue" }
 Write-Host " Complete: AdobeAcrobatReaderDC."
 #endregion
