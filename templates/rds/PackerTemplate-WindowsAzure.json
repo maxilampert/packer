@@ -65,14 +65,6 @@
                 "Owner": "{{user `tag_owner`}}",
                 "Billing": "Packer",
                 "Source": "{{user `build_source_repo`}}"
-            },
-            "shared_image_gallery_destination": {
-                "subscription": "{{user `subscription_id`}}",
-                "resource_group": "{{user `destination_gallery_resource_group`}}",
-                "gallery_name": "{{user `destination_gallery_name`}}",
-                "image_name": "{{user `destination_image_name`}}",
-                "image_version": "{{user `destination_image_version`}}",
-                "replication_regions": "{{user `destination_replication_regions`}}"
             }
         }
     ],
@@ -129,6 +121,22 @@
         },
         {
             "type": "windows-restart"
+        },
+        {
+            "type": "powershell",
+            "scripts": [
+                "build/rds/45_ResumeCitrixVDA.ps1"
+            ]
+        },
+        {
+            "type": "windows-update",
+            "search_criteria": "IsInstalled=0",
+            "filters": [
+                "exclude:$_.Title -like '*Silverlight*'",
+                "exclude:$_.Title -like '*Preview*'",
+                "include:$true"
+            ],
+            "update_limit": 25
         },
         {
             "type": "powershell",
