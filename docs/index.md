@@ -35,4 +35,5 @@
 - [20210224.05](/MicrosoftWindowsServer/WindowsServer/2019-Datacenter/20210224.05.md)
 - [20210420.01](/MicrosoftWindowsServer/WindowsServer/2019-Datacenter/20210420.01.md)
 - [20210420.03](/MicrosoftWindowsServer/WindowsServer/2019-Datacenter/20210420.03.md)
-- [20210420.04](/MicrosoftWindowsServer/WindowsServer/2019-Datacenter/20210420.04.md)
+- [20210420.04](/MicrosoftWindowsServer/WindowsServer/2019-Datacenter/20210420.04.md)
+- [20210420.06](/MicrosoftWindowsServer/WindowsServer/2019-Datacenter/20210420.06.md)
