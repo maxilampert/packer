@@ -46,6 +46,9 @@ Else {
     catch {
         Write-Warning -Message " ERR: $($_.Exception.Message)."
     }
+
+    Write-Host " Directory listing:"
+    Get-ChildItem -Path $Path -Recurse
     $Script = Get-ChildItem -Path $Path -Recurse -Filter $InvokeScript
 }
 
