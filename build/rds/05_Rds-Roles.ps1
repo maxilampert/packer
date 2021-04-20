@@ -49,7 +49,7 @@ Switch -Regex ((Get-WmiObject Win32_OperatingSystem).Caption) {
         }
 
         $params = @{
-            Name          = "RDS-RD-Server", "Server-Media-Foundation", "Search-Service", "NET-Framework-Core"
+            Name          = "RDS-RD-Server", "Server-Media-Foundation", "Search-Service", "NET-Framework-Core", "Remote-Assistance"
             WarningAction = "Continue"
             ErrorAction   = "Continue"
         }
