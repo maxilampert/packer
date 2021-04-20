@@ -27,7 +27,11 @@ Write-Host " Start: Customise."
 New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
 
 # Validate customisation scripts
+Write-Host " Directory listing:"
+Get-ChildItem -Path $Path -Recurse
 $Script = Get-ChildItem -Path $Path -Recurse -Filter $InvokeScript
+
+# Validate customisation scripts 
 If (Test-Path -Path $Script) {
     Write-Host " Scripts validated in $Path."
 }
@@ -46,9 +50,14 @@ Else {
 }
 
 # Run scripts
-Push-Location -Path (Split-Path -Path $Script.FullName -Parent)
-. ".\$InvokeScript"
-Pop-Location
+IF ($Null -ne $Script) {
+    Push-Location -Path (Split-Path -Path $Script.FullName -Parent)
+    . $Script.FullName
+    Pop-Location
+}
+Else {
+    Write-Warning -Message " ERR: Could not find $InvokeScript in $Path."
+}
 
 If (Test-Path -Path $Path) { Remove-Item -Path $Path -Recurse -Confirm:$False -ErrorAction "SilentlyContinue" }
 Write-Host " Complete: Customise."
