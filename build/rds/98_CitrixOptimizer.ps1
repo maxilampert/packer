@@ -27,25 +27,6 @@ New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue
 Write-Host "Using path: $Path."
 $Installer = Get-ChildItem -Path $Path -Filter "CitrixOptimizer.zip" -Recurse -ErrorAction "SilentlyContinue"
 
-<#
-If ($Null -eq $Installer) {
-    Write-Host " Citrix Optimizer not in $Path. Downloading from repository."
-    try {
-        $params = @{
-            Uri             = "https://raw.githubusercontent.com/aaronparker/packer/main/tools/rds/citrixoptimizer/CitrixOptimizer.zip"
-            OutFile         = (Join-Path -Path $Path -ChildPath "CitrixOptimizer.zip")
-            UseBasicParsing = $True
-            ErrorAction     = "SilentlyContinue"
-        }
-        Invoke-WebRequest @params
-    }
-    catch {
-        Write-Warning -Message "Invoke-WebRequest exited with: $($_.Exception.Message)."
-    }
-    $Installer = Get-ChildItem -Path $Path -Filter "CitrixOptimizer.zip" -Recurse -ErrorAction "SilentlyContinue"
-}
-#>
-
 If ($Installer) {
     Write-Host "Found zip file: $($Installer.FullName)."
     Expand-Archive -Path $Installer.FullName -DestinationPath $Path -Force -Verbose
@@ -66,7 +47,7 @@ If ($Installer) {
                 OutputHtml      = "$Path\CitrixOptimizer.html"
                 Verbose         = $False
             }
-            & $OptimizerBin.FullName @params
+            & $OptimizerBin.FullName @params 2> $Null
             Pop-Location
         }
         catch {
@@ -83,5 +64,5 @@ Else {
 #endregion
 
 # If (Test-Path -Path $Path) { Remove-Item -Path $Path -Recurse -Confirm:$False -ErrorAction "SilentlyContinue" }
-Write-Host " Complete: Optimise."
+Write-Host " Complete: Citrix Optimizer."
 #endregion

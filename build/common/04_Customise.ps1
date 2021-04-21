@@ -26,9 +26,6 @@ $ProgressPreference = "SilentlyContinue"
 Write-Host " Start: Customise."
 New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
 
-Write-Host " Directory listing:"
-Get-ChildItem -Path $Path -Recurse
-
 # Validate customisation scripts; Run scripts
 If (Test-Path -Path $(Join-Path -Path $Path -ChildPath $InvokeScript)) {
     try {
