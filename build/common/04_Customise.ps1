@@ -11,9 +11,6 @@ Param (
     [System.String] $Path = "$env:SystemDrive\Apps\image-customise",
 
     [Parameter(Mandatory = $False)]
-    [System.String] $URL = "https://github.com/aaronparker/image-customise/archive/main.zip",
-
-    [Parameter(Mandatory = $False)]
     [System.String] $InvokeScript = "Invoke-Scripts.ps1"
 )
 
