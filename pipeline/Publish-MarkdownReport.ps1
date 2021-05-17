@@ -1,15 +1,15 @@
-<# 
+<#
     .SYNOPSIS
-        Creates markdown from JSON ouput generated from Azure DevOps builds
+        Creates markdown from JSON output generated from Azure DevOps builds
         Uses environment variables created inside the Azure DevOps environment
 #>
 [CmdletBinding()]
 Param (
     [Parameter()]
-    [System.String] $Path = $env:SYSTEM_DEFAULTWORKINGDIRECTORY,
+    [System.String] $Path = ([System.IO.Path]::Combine($env:SYSTEM_DEFAULTWORKINGDIRECTORY, "reports")),
 
     [Parameter()]
-    [System.String[]] $InputFile = @("InstalledSoftware.json", "InstalledHotfixes.json"),
+    [System.Array] $InputFile = (Get-ChildItem -Path $Path -Filter "*.json"),
 
     [Parameter()]
     [System.String] $ImagePublisher = $env:IMAGE_PUBLISHER,
@@ -24,7 +24,7 @@ Param (
     [System.String] $Version = $env:CREATED_DATE,
 
     [Parameter()]
-    [System.String] $DestinationPath = [System.IO.Path]::Combine($env:SYSTEM_DEFAULTWORKINGDIRECTORY, "docs")
+    [System.String] $DestinationPath = ([System.IO.Path]::Combine($env:SYSTEM_DEFAULTWORKINGDIRECTORY, "docs"))
 )
 
 # Local testing
@@ -46,27 +46,20 @@ $markdown += "`n`n"
 
 # Read the contents of the output files, convert to markdown
 ForEach ($file in $InputFile) {
-    
-    $TargetFile = Join-Path -Path $Path -ChildPath $file
-    If (([System.IO.FileInfo]$TargetFile).Exists) {
-        try {
-            Write-Host " Reading: $TargetFile."
-            $table = Get-Content -Path $TargetFile | ConvertFrom-Json
-        }
-        catch {
-            Write-Warning -Message $_.Exception.Message
-        }
-
-        If ($table) {
-            $markdown += New-MDHeader -Text ($file -replace ".json", "") -Level 2 -NoNewLine
-            $markdown += "`n`n"
-            $markdown += $table | Sort-Object -Property "Publisher", "Name", "Version" | New-MDTable
-            $markdown += "`n"
-            Remove-Variable -Name "table" -ErrorAction "SilentlyContinue"
-        }
+    try {
+        Write-Host " Reading: $($file.FullPath)."
+        $table = Get-Content -Path $file.FullPath | ConvertFrom-Json
     }
-    Else {
-        Write-Warning -Message " Cannot find: $TargetFile."
+    catch {
+        Write-Warning -Message $_.Exception.Message
+    }
+
+    If ($table) {
+        $markdown += New-MDHeader -Text ($file.Name -replace ".json", "") -Level 2 -NoNewLine
+        $markdown += "`n`n"
+        $markdown += $table | Sort-Object -Property "Publisher", "Name", "Version" | New-MDTable
+        $markdown += "`n"
+        Remove-Variable -Name "table" -ErrorAction "SilentlyContinue"
     }
 }
 
@@ -77,16 +70,14 @@ try {
 }
 catch {
     Throw $_
-    Break
 }
 
 # Write the markdown to a file
 try {
     $OutFile = Join-Path -Path $TargetPath -ChildPath "$Version.md"
     Write-Host " Writing markdown to: $OutFile."
-    ($markdown.TrimEnd("`n")) | Out-File -FilePath $OutFile -Encoding "Utf8" -NoNewLine -Force
+    ($markdown.TrimEnd("`n")) | Out-File -FilePath $OutFile -Encoding "Utf8" -NoNewline -Force
 }
-catch {s
+catch {
     Throw $_
-    Break
 }

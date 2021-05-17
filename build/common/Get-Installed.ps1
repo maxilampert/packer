@@ -3,8 +3,23 @@
 [CmdletBinding()]
 param (
     [Parameter()]
-    [System.String] $SoftwareFile = "$env:SystemRoot\Temp\InstalledSoftware.json"
+    [System.String] $SoftwareFile = "$env:SystemRoot\Temp\Reports\InstalledSoftware.json",
+
+    [Parameter()]
+    [System.String] $PackagesFile = "$env:SystemRoot\Temp\Reports\InstalledPackages.json",
+
+    [Parameter()]
+    [System.String] $HotfixFile = "$env:SystemRoot\Temp\Reports\InstalledHotfixes.json",
+
+    [Parameter()]
+    [System.String] $FeaturesFile = "$env:SystemRoot\Temp\Reports\InstalledFeatures.json",
+
+    [Parameter()]
+    [System.String] $CapabilitiesFile = "$env:SystemRoot\Temp\Reports\InstalledCapabilities.json"
 )
+
+# Create the target directory
+New-Item -Path "$env:SystemRoot\Temp\Reports" -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" | Out-Null
 
 #region Functions
 Function Get-InstalledSoftware {
@@ -62,10 +77,31 @@ Function Get-InstalledSoftware {
 }
 #endregion
 
-# Output the software list to a JSON file that Packer can upload back to the runner
+#region Output details of the image to JSON files that Packer can upload back to the runner
+# Get the Software list; Output the installed software to the pipeline for Packer output
 Write-Host " Export software list to: $SoftwareFile."
 $software = Get-InstalledSoftware
+Write-Output -InputObject ($software | Sort-Object -Property "Publisher", "Version")
 $software | ConvertTo-Json | Out-File -FilePath $SoftwareFile -Force -Encoding "Utf8"
 
-# Output the installed software to the pipeline for Packer output
-Return (Get-InstalledSoftware | Sort-Object -Property "Publisher", "Version")
+# Get the installed packages
+Write-Host " Export packages list to: $PackagesFile."
+$packages = Get-ProvisionedAppPackage -Online | Select-Object -Property "DisplayName", "Version"
+If ($Null -ne $packages) { $packages | ConvertTo-Json | Out-File -FilePath $PackagesFile -Force -Encoding "Utf8" }
+
+# Get the installed hotfixes
+Write-Host " Export hotfix list to: $HotfixFile."
+$hotfixes = Get-Hotfix | Select-Object -Property "Description", "HotFixID", "Caption" | Sort-Object -Property "HotFixID"
+$hotfixes | ConvertTo-Json | Out-File -FilePath $HotfixFile -Force -Encoding "Utf8"
+
+# Get installed features
+Write-Host " Export features list to: $FeaturesFile."
+$features = Get-WindowsOptionalFeature -Online | Where-Object { $_.State -eq "Enabled" } | `
+    Select-Object -Property "FeatureName", "State" | Sort-Object -Property "FeatureName" -Descending
+$features | ConvertTo-Json | Out-File -FilePath $FeaturesFile -Force -Encoding "Utf8"
+
+# Get installed capabilities
+Write-Host " Export capabilities list to: $CapabilitiesFile."
+$capabilities = Get-WindowsCapability -Online | Where-Object { $_.State -eq "Installed" }
+$capabilities | ConvertTo-Json | Out-File -FilePath $CapabilitiesFile -Force -Encoding "Utf8"
+#endregion

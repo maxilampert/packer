@@ -23,6 +23,7 @@ InstalledSoftware.json
 json/**
 packer-manifest*
 debug.log
+reports/*.json
 
 # Azure Functions artifacts
 bin
