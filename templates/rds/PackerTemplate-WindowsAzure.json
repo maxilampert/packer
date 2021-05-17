@@ -177,7 +177,7 @@
         {
             "type": "file",
             "direction": "download",
-            "source": "C:\\Windows\\Temp\\Reports",
+            "source": "C:\\Windows\\Temp\\Reports\\",
             "destination": "{{user `working_directory`}}\\reports"
         },
         {
