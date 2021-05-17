@@ -80,8 +80,7 @@ Function Get-InstalledSoftware {
 #region Output details of the image to JSON files that Packer can upload back to the runner
 # Get the Software list; Output the installed software to the pipeline for Packer output
 Write-Host " Export software list to: $SoftwareFile."
-$software = Get-InstalledSoftware
-Write-Output -InputObject ($software | Sort-Object -Property "Publisher", "Version")
+$software = Get-InstalledSoftware | Sort-Object -Property "Publisher", "Version"
 $software | ConvertTo-Json | Out-File -FilePath $SoftwareFile -Force -Encoding "Utf8"
 
 # Get the installed packages
@@ -105,3 +104,6 @@ Write-Host " Export capabilities list to: $CapabilitiesFile."
 $capabilities = Get-WindowsCapability -Online | Where-Object { $_.State -eq "Installed" }
 $capabilities | ConvertTo-Json | Out-File -FilePath $CapabilitiesFile -Force -Encoding "Utf8"
 #endregion
+
+# Write the installed software list to the pipeline
+Write-Output -InputObject $software
