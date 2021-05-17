@@ -34,13 +34,12 @@ If ($App) {
     try {
         $params = @{
             FilePath     = "$env:SystemRoot\System32\msiexec.exe"
-            ArgumentList = "/package $($OutFile.Path) /quiet /norestart DONOTCREATEDESKTOPSHORTCUT=true"
+            ArgumentList = "/package $($OutFile.FullName) /quiet /norestart DONOTCREATEDESKTOPSHORTCUT=true"
             WindowStyle  = "Hidden"
             Wait         = $True
-            PassThru     = $True
             Verbose      = $True
         }
-        $process = Start-Process @params
+        Start-Process @params
     }
     catch {
         Write-Warning -Message " ERR: Failed to install Microsoft Edge."

@@ -22,7 +22,7 @@ New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue
 
 # Run tasks/install apps
 #region RTC service
-$App = Get-EvergreenApp -Name "MicrosoftWvdRtcService" | Where-Object { $_.Architecture -eq "x64"}
+$App = Get-EvergreenApp -Name "MicrosoftWvdRtcService" | Where-Object { $_.Architecture -eq "x64"} | Select-Object -First 1
 If ($App) {
     
     # Download
@@ -34,13 +34,12 @@ If ($App) {
         Write-Host " Installing Microsoft Remote Desktop WebRTC Redirector Service"
         $params = @{
             FilePath     = "$env:SystemRoot\System32\msiexec.exe"
-            ArgumentList = "/package $($OutFile.Path) ALLUSERS=1 /quiet"
+            ArgumentList = "/package $($OutFile.FullName) ALLUSERS=1 /quiet"
             WindowStyle  = "Hidden"
             Wait         = $True
-            PassThru     = $True
             Verbose      = $True
         }
-        $process = Start-Process @params
+        Start-Process @params
     }
     catch {
         Write-Warning -Message " ERR: Failed to install Microsoft Remote Desktop WebRTC Redirector Service."
@@ -54,7 +53,7 @@ Else {
 
 #region Boot Loader
 Write-Host " Microsoft Windows Virtual Desktop Agent Bootloader"
-$App = Get-EvergreenApp -Name "MicrosoftWvdBootLoader" | Where-Object { $_.Architecture -eq "x64"}
+$App = Get-EvergreenApp -Name "MicrosoftWvdBootLoader" | Where-Object { $_.Architecture -eq "x64"} | Select-Object -First 1
 If ($App) {
     If (!(Test-Path $Path)) { New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null }
 
@@ -67,13 +66,12 @@ If ($App) {
     try {
         $params = @{
             FilePath     = "$env:SystemRoot\System32\msiexec.exe"
-            ArgumentList = "/package $($OutFile.Path) ALLUSERS=1 /quiet"
+            ArgumentList = "/package $($OutFile.FullName) ALLUSERS=1 /quiet"
             WindowStyle  = "Hidden"
             Wait         = $True
-            PassThru     = $True
             Verbose      = $True
         }
-        $process = Start-Process @params
+        Start-Process @params
     }
     catch {
         Write-Warning -Message " ERR: Failed to install Microsoft Windows Virtual Desktop Agent Bootloader"
@@ -100,7 +98,7 @@ If ($App) {
     try {
         $params = @{
             FilePath     = "$env:SystemRoot\System32\msiexec.exe"
-            ArgumentList = "/package $($OutFile.Path) ALLUSERS=1 /quiet"
+            ArgumentList = "/package $($OutFile.FullName) ALLUSERS=1 /quiet"
             WindowStyle  = "Hidden"
             Wait         = $True
             PassThru     = $True

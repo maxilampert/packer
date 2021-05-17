@@ -8,7 +8,7 @@ Param (
     [System.String] $Log = "$env:SystemRoot\Logs\PackerImagePrep.log",
 
     [Parameter(Mandatory = $False)]
-    [System.String] $Target = "$env:SystemDrive\Apps"
+    [System.String] $Path = "$env:SystemDrive\Apps"
 )
 
 #region Functions
@@ -42,40 +42,31 @@ Function Install-VcRedistributables ($Path) {
 
 Function Install-MicrosoftEdge ($Path) {
     Write-Host " Microsoft Edge"
-    $Edge = Get-MicrosoftEdge | Where-Object { $_.Architecture -eq "x64" -and $_.Channel -eq "Stable" }
-    $Edge = $Edge | Sort-Object -Property Version -Descending | Select-Object -First 1
+    $App = Get-EvergreenApp -Name "MicrosoftEdge" | Where-Object { $_.Architecture -eq "x64" -and $_.Channel -eq "Stable" -and $_.Release -eq "Enterprise" } `
+    | Sort-Object -Property @{ Expression = { [System.Version]$_.Version }; Descending = $true } | Select-Object -First 1
 
-    If ($Edge) {
+    If ($App) {
         Write-Host " Downloading Microsoft Edge"
         If (!(Test-Path $Path)) { New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null }
 
         # Download
-        $url = $Edge.URI
-        $OutFile = Join-Path -Path $Path -ChildPath $(Split-Path -Path $url -Leaf)
-        Write-Host " Downloading to: $OutFile"
-        try {
-            Invoke-WebRequest -Uri $url -OutFile $OutFile -UseBasicParsing
-            If (Test-Path -Path $OutFile) { Write-Host " Downloaded: $OutFile." }
-        }
-        catch {
-            Throw "Failed to download Microsoft Edge."
-        }
+        Write-Host " Downloading Microsoft Edge"
+        $OutFile = Save-EvergreenApp -InputObject $App -Path $Path
 
         # Install
         Write-Host " Installing Microsoft Edge"
         try {
             $params = @{
                 FilePath     = "$env:SystemRoot\System32\msiexec.exe"
-                ArgumentList = "/package $OutFile /quiet /norestart DONOTCREATEDESKTOPSHORTCUT=true"
+                ArgumentList = "/package $($OutFile.FullName) /quiet /norestart DONOTCREATEDESKTOPSHORTCUT=true"
                 WindowStyle  = "Hidden"
                 Wait         = $True
-                PassThru     = $True
                 Verbose      = $True
             }
-            $process = Start-Process @params
+            Start-Process @params
         }
         catch {
-            Throw "Failed to install Microsoft Edge."
+            Write-Warning -Message " ERR: Failed to install Microsoft Edge."
         }
 
         Write-Host " Post-install config"
@@ -118,16 +109,16 @@ Function Install-MicrosoftEdge ($Path) {
 $VerbosePreference = "Continue"
 $ProgressPreference = "SilentlyContinue"
 
-If (!(Test-Path $Target)) { New-Item -Path $Target -Type Directory -Force -ErrorAction SilentlyContinue }
+If (!(Test-Path $Path)) { New-Item -Path $Path -Type Directory -Force -ErrorAction SilentlyContinue }
 
 # Set TLS to 1.2; Create target folder
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-New-Item -Path $Target -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
+New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
 
 # Run tasks/install apps
 Set-Repository
 Install-RequiredModules
-Install-VcRedistributables -Path "$Target\VcRedist"
-Install-MicrosoftEdge -Path "$Target\Edge"
+Install-VcRedistributables -Path "$Path\VcRedist"
+Install-MicrosoftEdge -Path "$Path\Edge"
 Write-Host " Complete: $($MyInvocation.MyCommand)."
 #endregion

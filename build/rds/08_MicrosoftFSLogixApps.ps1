@@ -21,8 +21,7 @@ $ProgressPreference = "SilentlyContinue"
 New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
 
 Write-Host " Microsoft FSLogix agent"
-$App = Get-EvergreenApp -Name "MicrosoftFSLogixApps"
-
+$App = Get-EvergreenApp -Name "MicrosoftFSLogixApps" | Select-Object -First 1
 If ($App) {
     
     # Download
@@ -31,11 +30,11 @@ If ($App) {
 
     # Unpack
     try {
-        Write-Host " Unpacking: $($OutFile.Path)."
-        Expand-Archive -Path $OutFile.Path -DestinationPath $Path -Force -Verbose
+        Write-Host " Unpacking: $($OutFile.FullName)."
+        Expand-Archive -Path $OutFile.FullName -DestinationPath $Path -Force -Verbose
     }
     catch {
-        Write-Error -Message "ERROR: Failed to unpack: $($OutFile.Path)."
+        Write-Error -Message "ERROR: Failed to unpack: $($OutFile.FullName)."
     }
     
     # Install
@@ -49,10 +48,9 @@ If ($App) {
                     ArgumentList = "/install /quiet /norestart"
                     WindowStyle  = "Hidden"
                     Wait         = $True
-                    PassThru     = $True
                     Verbose      = $True
                 }
-                $process = Start-Process @params
+                Start-Process @params
             }
             catch {
                 Write-Warning -Message " ERR: Failed to install: $($installer.FullName)."

@@ -8,7 +8,13 @@ Param (
     [System.String] $LogPath = "$env:SystemRoot\Logs\Packer",
 
     [Parameter(Mandatory = $False)]
-    [System.String] $Path = "$env:SystemDrive\Apps\Adobe\AcrobatReaderDC"
+    [System.String] $Path = "$env:SystemDrive\Apps\Adobe\AcrobatReaderDC",
+
+    [Parameter(Mandatory = $False)]
+    [System.String] $Architecture = "x64",
+
+    [Parameter(Mandatory = $False)]
+    [System.String] $Language = "English"
 )
 
 #region Script logic
@@ -23,7 +29,8 @@ New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue
 # Enforce settings with GPO: https://www.adobe.com/devnet-docs/acrobatetk/tools/AdminGuide/gpo.html
 # Download Reader installer and updater
 Write-Host " Adobe Acrobat Reader DC"
-$Reader = Get-EvergreenApp -Name "AdobeAcrobatReaderDC" | Where-Object { $_.Language -eq "English" -and $_.Architecture -eq "x64" }
+$Reader = Get-EvergreenApp -Name "AdobeAcrobatReaderDC" | Where-Object { $_.Language -eq $Language -and $_.Architecture -eq $Architecture } | `
+    Select-Object -First 1
 If ($Reader) {
         
     # Download Adobe Acrobat Reader
@@ -35,7 +42,7 @@ If ($Reader) {
         Write-Host " Installing Adobe Acrobat Reader DC"
         $ArgumentList = "-sfx_nu /sALL /rps /l /msi EULA_ACCEPT=YES ENABLE_CHROMEEXT=0 DISABLE_BROWSER_INTEGRATION=1 ENABLE_OPTIMIZATION=YES ADD_THUMBNAILPREVIEW=0 DISABLEDESKTOPSHORTCUT=1"
         $params = @{
-            FilePath     = $OutFile.Path
+            FilePath     = $OutFile.FullName
             ArgumentList = $ArgumentList
             WindowStyle  = "Hidden"
             Wait         = $True
@@ -50,7 +57,9 @@ If ($Reader) {
 
     
     # Get the latest update; Download the updater if the updater version is greater than the installer
-    $Updater = Get-EvergreenApp -Name "AdobeAcrobat" | Where-Object { $_.Product -eq "Reader" -and $_.Track -eq "DC" -and $_.Language -eq "Neutral" } | Select-Object -First 1
+    $Updater = Get-EvergreenApp -Name "AdobeAcrobat" | `
+        Where-Object { $_.Product -eq "Reader" -and $_.Track -eq "DC" -and $_.Language -eq "Neutral" -and $_.Architecture -eq $Architecture } | `
+        Select-Object -First 1
     If ($Updater.Version -gt $Reader.Version) {
         $UpdateOutFile = Save-EvergreenApp -InputObject $Updater -Path $Path
     }
@@ -67,13 +76,12 @@ If ($Reader) {
             Write-Host " Installing update: $($msp.FullName)."
             $params = @{
                 FilePath     = "$env:SystemRoot\System32\msiexec.exe"
-                ArgumentList = "/update $($UpdateOutFile.Path) /quiet /qn"
+                ArgumentList = "/update $($UpdateOutFile.FullName) /quiet /qn"
                 WindowStyle  = "Hidden"
                 Wait         = $True
-                PassThru     = $True
                 Verbose      = $True
             }
-            $process = Start-Process @params
+            Start-Process @params
         }
         catch {
             Write-Warning -Message " ERR: Failed to update Adobe Acrobat Reader."

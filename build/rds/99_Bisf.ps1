@@ -16,7 +16,6 @@ Param (
 $VerbosePreference = "Continue"
 $ProgressPreference = "SilentlyContinue"
 
-# Set TLS to 1.2; Create target folder
 
 #region BIS-F
 New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
@@ -33,13 +32,12 @@ If ($App) {
         Write-Host "Found MSI file: $($Installer.FullName)."
         $params = @{
             FilePath     = "$env:SystemRoot\System32\msiexec.exe"
-            ArgumentList = "/i $($OutFile.Path) ALLUSERS=1 /quiet"
+            ArgumentList = "/i $($OutFile.FullName) ALLUSERS=1 /quiet"
             WindowStyle  = "Hidden"
             Wait         = $True
-            PassThru     = $True
             Verbose      = $True
         }
-        $process = Start-Process @params
+        Start-Process @params
     }
     catch {
         Write-Warning -Message " ERR: Failed to install BIS-F with: $($_.Exception.Message)."

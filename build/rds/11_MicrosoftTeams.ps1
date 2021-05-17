@@ -21,7 +21,7 @@ New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue
 
 # Run tasks/install apps
 Write-Host " Microsoft Teams"
-$App = Get-EvergreenApp -Name "MicrosoftTeams" | Where-Object { $_.Architecture -eq "x64"-and $_.Ring -eq "General" }
+$App = Get-EvergreenApp -Name "MicrosoftTeams" | Where-Object { $_.Architecture -eq "x64"-and $_.Ring -eq "General" } | Select-Object -First 1
 If ($App) {
 
     # Download
@@ -35,13 +35,12 @@ If ($App) {
 
         $params = @{
             FilePath     = "$env:SystemRoot\System32\msiexec.exe"
-            ArgumentList = "/package $($OutFile.Path) OPTIONS=`"noAutoStart=true`" ALLUSER=1 ALLUSERS=1 /quiet"
+            ArgumentList = "/package $($OutFile.FullName) OPTIONS=`"noAutoStart=true`" ALLUSER=1 ALLUSERS=1 /quiet"
             WindowStyle  = "Hidden"
             Wait         = $True
-            PassThru     = $True
             Verbose      = $True
         }
-        $process = Start-Process @params
+        Start-Process @params
     }
     catch {
         Write-Warning -Message " ERR: Failed to install Microsoft Teams."
@@ -70,7 +69,7 @@ ForEach ($Path in $ConfigFiles) {
 }
 
 # Delete the registry auto-start
-REG delete "HKLM\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Run" /v "Teams" /f
+REG delete "HKLM\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Run" /v "Teams" /f 2> $Null
 
 # If (Test-Path -Path $Path) { Remove-Item -Path $Path -Recurse -Confirm:$False -ErrorAction "SilentlyContinue" }
 Write-Host " Complete: Microsoft Teams."

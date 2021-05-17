@@ -90,7 +90,7 @@ $OfficeXml = @"
 
 # Get Office version
 Write-Host " Microsoft 365 Apps: $Channel"
-$App = Get-EvergreenApp -Name "Microsoft365Apps" | Where-Object { $_.Channel -eq $Channel }
+$App = Get-EvergreenApp -Name "Microsoft365Apps" | Where-Object { $_.Channel -eq $Channel } | Select-Object -First 1
 If ($App) {
 
     # Download setup.exe
@@ -103,15 +103,14 @@ If ($App) {
         Out-File -FilePath $XmlFile -InputObject $OfficeXml -Encoding "utf8"
 
         $params = @{
-            FilePath     = $OutFile.Path
+            FilePath     = $OutFile.FullName
             ArgumentList = "/configure $XmlFile"
             WindowStyle  = "Hidden"
             Wait         = $True
-            PassThru     = $True
             Verbose      = $True
         }
         Push-Location -Path $Path
-        $process = Start-Process @params
+        Start-Process @params
         Pop-Location
     }
     catch {

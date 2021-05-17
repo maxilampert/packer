@@ -32,14 +32,13 @@ If ($App) {
     try {
         Write-Host " Installing Microsoft OneDrive"
         $params = @{
-            FilePath     = $OutFile.Path
+            FilePath     = $OutFile.FullName
             ArgumentList = "/ALLUSERS"
             WindowStyle  = "Hidden"
             Wait         = $True
-            PassThru     = $True
             Verbose      = $True
         }
-        $process = Start-Process @params
+        Start-Process @params
     }
     catch {
         Write-Warning -Message " ERR: Failed to install Microsoft OneDrive."
