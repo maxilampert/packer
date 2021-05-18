@@ -183,7 +183,7 @@
         {
             "type": "file",
             "direction": "download",
-            "source": [
+            "sources": [
                 "C:\\Windows\\Temp\\Reports\\InstalledSoftware.json",
                 "C:\\Windows\\Temp\\Reports\\InstalledPackages.json",
                 "C:\\Windows\\Temp\\Reports\\InstalledHotfixes.json",
