@@ -27,7 +27,7 @@ New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue
 If (Test-Path -Path $(Join-Path -Path $Path -ChildPath $InvokeScript)) {
     try {
         Push-Location -Path $Path
-        . ".\$InvokeScript"
+        . ".\$InvokeScript" -Path $Path
         Pop-Location
     }
     catch {

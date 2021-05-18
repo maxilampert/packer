@@ -91,7 +91,10 @@
         },
         {
             "type": "file",
-            "sources": ["{{user `working_directory`}}\\image-customise"],
+            "direction": "upload",
+            "sources": [
+                "{{user `working_directory`}}\\image-customise"
+            ],
             "destination": "C:\\Apps"
         },
         {
@@ -163,7 +166,10 @@
         },
         {
             "type": "file",
-            "sources": ["{{user `working_directory`}}/tools/rds"],
+            "direction": "upload",
+            "sources": [
+                "{{user `working_directory`}}/tools/rds"
+            ],
             "destination": "C:\\Apps\\Tools"
         },
         {
@@ -177,8 +183,14 @@
         {
             "type": "file",
             "direction": "download",
-            "source": "C:\\Windows\\Temp\\Reports\\",
-            "destination": "{{user `working_directory`}}\\reports"
+            "source": [
+                "C:\\Windows\\Temp\\Reports\\InstalledSoftware.json",
+                "C:\\Windows\\Temp\\Reports\\InstalledPackages.json",
+                "C:\\Windows\\Temp\\Reports\\InstalledHotfixes.json",
+                "C:\\Windows\\Temp\\Reports\\InstalledFeatures.json",
+                "C:\\Windows\\Temp\\Reports\\InstalledCapabilities.json"
+            ],
+            "destination": "{{user `working_directory`}}\\reports\\"
         },
         {
             "type": "powershell",
