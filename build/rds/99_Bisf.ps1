@@ -25,7 +25,7 @@ $App = Get-EvergreenApp -Name "BISF"
 If ($App) {
     
     # Download the latest BIS-F
-    $OutFile = Save-EvergreenApp -InputObject $App -Path $Path
+    $OutFile = Save-EvergreenApp -InputObject $App -Path $Path -WarningAction "SilentlyContinue"
     
     # Install BIS-F
     try {

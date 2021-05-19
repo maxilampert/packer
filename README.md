@@ -1,2 +1,3 @@
 # packer
-Build images with Hashicorp Packer
+
+Build Windows images with [Hashicorp Packer](https://packer.io/).

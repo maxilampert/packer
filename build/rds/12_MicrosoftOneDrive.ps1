@@ -26,7 +26,7 @@ $App = Get-EvergreenApp -Name "MicrosoftOneDrive" | Where-Object { $_.Ring -eq "
 If ($App) {
 
     # Download
-    $OutFile = Save-EvergreenApp -InputObject $App -Path $Path
+    $OutFile = Save-EvergreenApp -InputObject $App -Path $Path -WarningAction "SilentlyContinue"
 
     # Install
     try {

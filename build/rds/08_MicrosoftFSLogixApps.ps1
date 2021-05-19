@@ -26,7 +26,7 @@ If ($App) {
     
     # Download
     Write-Host " Microsoft FSLogix: $($App.Version)"
-    $OutFile = Save-EvergreenApp -InputObject $App -Path $Path
+    $OutFile = Save-EvergreenApp -InputObject $App -Path $Path -WarningAction "SilentlyContinue"
 
     # Unpack
     try {

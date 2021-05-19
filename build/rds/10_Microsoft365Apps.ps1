@@ -94,7 +94,7 @@ $App = Get-EvergreenApp -Name "Microsoft365Apps" | Where-Object { $_.Channel -eq
 If ($App) {
 
     # Download setup.exe
-    $OutFile = Save-EvergreenApp -InputObject $App -Path $Path
+    $OutFile = Save-EvergreenApp -InputObject $App -Path $Path -WarningAction "SilentlyContinue"
 
     try {
         # Download Office package, Setup fails to exit, so wait 9-10 mins for Office install to complete

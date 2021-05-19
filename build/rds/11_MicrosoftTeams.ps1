@@ -25,7 +25,7 @@ $App = Get-EvergreenApp -Name "MicrosoftTeams" | Where-Object { $_.Architecture 
 If ($App) {
 
     # Download
-    $OutFile = Save-EvergreenApp -InputObject $App -Path $Path
+    $OutFile = Save-EvergreenApp -InputObject $App -Path $Path -WarningAction "SilentlyContinue"
 
     # Install
     try {

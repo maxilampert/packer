@@ -51,7 +51,7 @@ Function Install-MicrosoftEdge ($Path) {
 
         # Download
         Write-Host " Downloading Microsoft Edge"
-        $OutFile = Save-EvergreenApp -InputObject $App -Path $Path
+        $OutFile = Save-EvergreenApp -InputObject $App -Path $Path -WarningAction "SilentlyContinue"
 
         # Install
         Write-Host " Installing Microsoft Edge"

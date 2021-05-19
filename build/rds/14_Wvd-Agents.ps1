@@ -27,7 +27,7 @@ If ($App) {
     
     # Download
     Write-Host " Downloading Microsoft Remote Desktop WebRTC Redirector Service"
-    $OutFile = Save-EvergreenApp -InputObject $App -Path $Path
+    $OutFile = Save-EvergreenApp -InputObject $App -Path $Path -WarningAction "SilentlyContinue"
 
     # Install RTC
     try {
@@ -59,7 +59,7 @@ If ($App) {
 
     # Download
     Write-Host " Downloading Microsoft Windows Virtual Desktop Agent Bootloader"
-    $OutFile = Save-EvergreenApp -InputObject $App -Path $Path
+    $OutFile = Save-EvergreenApp -InputObject $App -Path $Path -WarningAction "SilentlyContinue"
 
     # Install
     Write-Host " Installing Microsoft Windows Virtual Desktop Agent Bootloader"
@@ -90,7 +90,7 @@ If ($App) {
 
     # Download
     Write-Host " Downloading Microsoft WVD Infrastructure Agent"
-    $OutFile = Save-EvergreenApp -InputObject $App -Path $Path
+    $OutFile = Save-EvergreenApp -InputObject $App -Path $Path -WarningAction "SilentlyContinue"
 
     # Install
     <#

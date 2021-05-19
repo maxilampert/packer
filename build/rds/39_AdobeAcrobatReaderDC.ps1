@@ -35,7 +35,7 @@ If ($Reader) {
         
     # Download Adobe Acrobat Reader
     Write-Host " Download Adobe Acrobat Reader DC"
-    $OutFile = Save-EvergreenApp -InputObject $Reader -Path $Path
+    $OutFile = Save-EvergreenApp -InputObject $Reader -Path $Path -WarningAction "SilentlyContinue"
 
     # Install Adobe Acrobat Reader
     try {
@@ -61,7 +61,7 @@ If ($Reader) {
         Where-Object { $_.Product -eq "Reader" -and $_.Track -eq "DC" -and $_.Language -eq "Neutral" -and $_.Architecture -eq $Architecture } | `
         Select-Object -First 1
     If ($Updater.Version -gt $Reader.Version) {
-        $UpdateOutFile = Save-EvergreenApp -InputObject $Updater -Path $Path
+        $UpdateOutFile = Save-EvergreenApp -InputObject $Updater -Path $Path -WarningAction "SilentlyContinue"
     }
 
     # Run post install actions
