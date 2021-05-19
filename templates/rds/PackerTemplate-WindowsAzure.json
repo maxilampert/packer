@@ -185,10 +185,37 @@
         {
             "type": "file",
             "direction": "download",
-            "generated": true,
-            "max_retries": 2,
-            "source": "C:\\Windows\\Temp\\Reports\\",
-            "destination": "{{user `working_directory`}}\\reports\\"
+            "max_retries": 1,
+            "source": "C:\\Windows\\Temp\\Reports\\InstalledSoftware.json",
+            "destination": "{{user `working_directory`}}\\reports\\InstalledSoftware.json"
+        },
+        {
+            "type": "file",
+            "direction": "download",
+            "max_retries": 1,
+            "source": "C:\\Windows\\Temp\\Reports\\InstalledHotfixes.json",
+            "destination": "{{user `working_directory`}}\\reports\\InstalledHotfixes.json"
+        },
+        {
+            "type": "file",
+            "direction": "download",
+            "max_retries": 1,
+            "source": "C:\\Windows\\Temp\\Reports\\InstalledPackages.json",
+            "destination": "{{user `working_directory`}}\\reports\\InstalledPackages.json"
+        },
+        {
+            "type": "file",
+            "direction": "download",
+            "max_retries": 1,
+            "source": "C:\\Windows\\Temp\\Reports\\InstalledFeatures.json",
+            "destination": "{{user `working_directory`}}\\reports\\InstalledFeatures.json"
+        },
+        {
+            "type": "file",
+            "direction": "download",
+            "max_retries": 1,
+            "source": "C:\\Windows\\Temp\\Reports\\InstalledCapabilities.json",
+            "destination": "{{user `working_directory`}}\\reports\\InstalledCapabilities.json"
         },
         {
             "type": "powershell",
