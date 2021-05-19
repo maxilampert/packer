@@ -29,7 +29,7 @@ If ($App) {
     
     # Install BIS-F
     try {
-        Write-Host "Found MSI file: $($Installer.FullName)."
+        Write-Host "Found MSI file: $($OutFile.FullName)."
         $params = @{
             FilePath     = "$env:SystemRoot\System32\msiexec.exe"
             ArgumentList = "/i $($OutFile.FullName) ALLUSERS=1 /quiet"
