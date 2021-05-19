@@ -92,6 +92,7 @@
         {
             "type": "file",
             "direction": "upload",
+            "max_retries": 2,
             "sources": [
                 "{{user `working_directory`}}\\image-customise"
             ],
@@ -167,6 +168,7 @@
         {
             "type": "file",
             "direction": "upload",
+            "max_retries": 2,
             "sources": [
                 "{{user `working_directory`}}/tools/rds"
             ],
@@ -183,14 +185,9 @@
         {
             "type": "file",
             "direction": "download",
-            "sources": [
-                "C:\\Windows\\Temp\\Reports\\InstalledSoftware.json",
-                "C:\\Windows\\Temp\\Reports\\InstalledPackages.json",
-                "C:\\Windows\\Temp\\Reports\\InstalledHotfixes.json",
-                "C:\\Windows\\Temp\\Reports\\InstalledFeatures.json",
-                "C:\\Windows\\Temp\\Reports\\InstalledCapabilities.json"
-            ],
-            "destination": "{{user `working_directory`}}\\reports\\"
+            "max_retries": 2,
+            "source": "C:\\Windows\\Temp\\Reports\\",
+            "destination": "{{user `working_directory`}}\\reports"
         },
         {
             "type": "powershell",
