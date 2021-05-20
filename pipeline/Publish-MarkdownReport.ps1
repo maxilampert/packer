@@ -45,8 +45,8 @@ $markdown += "`n`n"
 [System.Array] $InputFile = Get-ChildItem -Path $Path -Filter "*.json"
 ForEach ($file in $InputFile) {
     try {
-        Write-Host " Reading: $($file.FullPath)."
-        $table = Get-Content -Path $file.FullPath | ConvertFrom-Json
+        Write-Host " Reading: $($file.FullName)."
+        $table = Get-Content -Path $file.FullName | ConvertFrom-Json
     }
     catch {
         Write-Warning -Message $_.Exception.Message
