@@ -9,9 +9,6 @@ Param (
     [System.String] $Path = ([System.IO.Path]::Combine($env:SYSTEM_DEFAULTWORKINGDIRECTORY, "reports")),
 
     [Parameter()]
-    [System.Array] $InputFile = (Get-ChildItem -Path $Path -Filter "*.json"),
-
-    [Parameter()]
     [System.String] $ImagePublisher = $env:IMAGE_PUBLISHER,
 
     [Parameter()]
@@ -45,6 +42,7 @@ Write-Host " DestinationPath:   $ImagePublisher."
 $markdown += "`n`n"
 
 # Read the contents of the output files, convert to markdown
+[System.Array] $InputFile = Get-ChildItem -Path $Path -Filter "*.json"
 ForEach ($file in $InputFile) {
     try {
         Write-Host " Reading: $($file.FullPath)."
