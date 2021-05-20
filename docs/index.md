@@ -4,18 +4,11 @@
 
 ### 20h2-ent
 
-- [20210225.01](/MicrosoftWindowsDesktop/Windows-10/20h2-ent/20210225.01.md)
-- [20210301.01](/MicrosoftWindowsDesktop/Windows-10/20h2-ent/20210301.01.md)
-- [20210303.01](/MicrosoftWindowsDesktop/Windows-10/20h2-ent/20210303.01.md)
-- [20210328.01](/MicrosoftWindowsDesktop/Windows-10/20h2-ent/20210328.01.md)
-- [20210418.09](/MicrosoftWindowsDesktop/Windows-10/20h2-ent/20210418.09.md)
-- [20210418.10](/MicrosoftWindowsDesktop/Windows-10/20h2-ent/20210418.10.md)
-- [20210418.12](/MicrosoftWindowsDesktop/Windows-10/20h2-ent/20210418.12.md)
 - [20210425.01](/MicrosoftWindowsDesktop/Windows-10/20h2-ent/20210425.01.md)
 - [20210429.01](/MicrosoftWindowsDesktop/Windows-10/20h2-ent/20210429.01.md)
 - [20210429.02](/MicrosoftWindowsDesktop/Windows-10/20h2-ent/20210429.02.md)
 - [20210429.03](/MicrosoftWindowsDesktop/Windows-10/20h2-ent/20210429.03.md)
-- [20210520.01](/MicrosoftWindowsDesktop/Windows-10/20h2-ent/20210520.01.md)
+- [20210520.02](/MicrosoftWindowsDesktop/Windows-10/20h2-ent/20210520.02.md)
 
 ### 20h2-evd
 
