@@ -1,4 +1,5 @@
-<# 
+#Requires -Modules Evergreen
+<#
     .SYNOPSIS
         Optimise and seal a Windows image.
 #>

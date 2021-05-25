@@ -1,4 +1,5 @@
-<# 
+#Requires -Modules Evergreen
+<#
     .SYNOPSIS
         Install evergreen core applications.
 #>

@@ -1,4 +1,5 @@
-<# 
+#Requires -Modules Evergreen
+<#
     .SYNOPSIS
         Downloads / installs the Windows Virtual Desktop agents and services
 #>

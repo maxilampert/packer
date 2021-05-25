@@ -1,3 +1,4 @@
+#Requires -Modules VcRedist
 <# 
     .SYNOPSIS
         Install evergreen core applications.
