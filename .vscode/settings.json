@@ -4,6 +4,8 @@
     "azureFunctions.projectRuntime": "~3",
     "debug.internalConsoleOptions": "neverOpen",
     "cSpell.words": [
-        "Hotfixes"
+        "Hotfixes",
+        "edgeupdate",
+        "edgeupdatem"
     ]
 }
