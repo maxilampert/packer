@@ -4,6 +4,7 @@
     "azureFunctions.projectRuntime": "~3",
     "debug.internalConsoleOptions": "neverOpen",
     "cSpell.words": [
+        "DEFAULTWORKINGDIRECTORY",
         "Hashicorp",
         "Hotfixes",
         "edgeupdate",
