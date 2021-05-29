@@ -13,7 +13,7 @@ param (
 
 try {
     $params = @{
-        Path            = (Join-Path -Path $Path -ChildPath $ZipFile)
+        Path            = $(Join-Path -Path $Path -ChildPath $ZipFile)
         DestinationPath = $Path
         Force           = $True
         Verbose         = $True

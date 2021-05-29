@@ -115,8 +115,8 @@ $capabilities | ConvertTo-Json | Out-File -FilePath $CapabilitiesFile -Force -En
 #region Zip JSON files
 try {
     $params = @{
-        Path             = (Get-ChildItem -Path $Path -Filter "*.json")
-        DestinationPath  = (Join-Path -Path $Path -ChildPath $ZipFile)
+        Path             = $(Get-ChildItem -Path $Path -Filter "*.json").FullName
+        DestinationPath  = $(Join-Path -Path $Path -ChildPath $ZipFile)
         CompressionLevel = "NoCompression"
         Verbose          = $True
     }
