@@ -24,6 +24,7 @@ json/**
 packer-manifest*
 debug.log
 reports/*.json
+reports/*.zip
 
 # Azure Functions artifacts
 bin

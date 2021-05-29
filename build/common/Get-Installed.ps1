@@ -3,23 +3,29 @@
 [CmdletBinding()]
 param (
     [Parameter()]
-    [System.String] $SoftwareFile = "$env:SystemRoot\Temp\Reports\InstalledSoftware.json",
+    [System.String] $Path = "$env:SystemRoot\Temp\Reports",
 
     [Parameter()]
-    [System.String] $PackagesFile = "$env:SystemRoot\Temp\Reports\InstalledPackages.json",
+    [System.String] $SoftwareFile = "$Path\InstalledSoftware.json",
 
     [Parameter()]
-    [System.String] $HotfixFile = "$env:SystemRoot\Temp\Reports\InstalledHotfixes.json",
+    [System.String] $PackagesFile = "$Path\InstalledPackages.json",
 
     [Parameter()]
-    [System.String] $FeaturesFile = "$env:SystemRoot\Temp\Reports\InstalledFeatures.json",
+    [System.String] $HotfixFile = "$Path\InstalledHotfixes.json",
 
     [Parameter()]
-    [System.String] $CapabilitiesFile = "$env:SystemRoot\Temp\Reports\InstalledCapabilities.json"
+    [System.String] $FeaturesFile = "$Path\InstalledFeatures.json",
+
+    [Parameter()]
+    [System.String] $CapabilitiesFile = "$Path\InstalledCapabilities.json",
+
+    [Parameter()]
+    [System.String] $ZipFile = "Installed.zip"
 )
 
 # Create the target directory
-New-Item -Path "$env:SystemRoot\Temp\Reports" -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" | Out-Null
+New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" | Out-Null
 
 #region Functions
 Function Get-InstalledSoftware {
@@ -101,8 +107,24 @@ $features | ConvertTo-Json | Out-File -FilePath $FeaturesFile -Force -Encoding "
 
 # Get installed capabilities
 Write-Host " Export capabilities list to: $CapabilitiesFile."
-$capabilities = Get-WindowsCapability -Online | Where-Object { $_.State -eq "Installed" }
+$capabilities = Get-WindowsCapability -Online | Where-Object { $_.State -eq "Installed" } | `
+    Select-Object -Property "Name", "State" | Sort-Object -Property "Name" -Descending
 $capabilities | ConvertTo-Json | Out-File -FilePath $CapabilitiesFile -Force -Encoding "Utf8"
+#endregion
+
+#region Zip JSON files
+try {
+    $params = @{
+        Path             = (Get-ChildItem -Path $Path -Filter "*.json")
+        DestinationPath  = (Join-Path -Path $Path -ChildPath $ZipFile)
+        CompressionLevel = "Fastest"
+        Verbose          = $True
+    }
+    Compress-Archive @params
+}
+catch {
+    Write-Warning -Message " ERR: Compress-Archive failed with: $($_.Exception.Message)."
+}
 #endregion
 
 # Write the installed software list to the pipeline

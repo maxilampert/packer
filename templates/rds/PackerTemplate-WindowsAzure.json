@@ -186,46 +186,8 @@
             "type": "file",
             "direction": "download",
             "max_retries": 1,
-            "source": "C:\\Windows\\Temp\\Reports\\InstalledSoftware.json",
-            "destination": "{{user `working_directory`}}\\reports\\InstalledSoftware.json"
-        },
-        {
-            "type": "file",
-            "direction": "download",
-            "max_retries": 1,
-            "source": "C:\\Windows\\Temp\\Reports\\InstalledHotfixes.json",
-            "destination": "{{user `working_directory`}}\\reports\\InstalledHotfixes.json"
-        },
-        {
-            "type": "file",
-            "direction": "download",
-            "max_retries": 1,
-            "source": "C:\\Windows\\Temp\\Reports\\InstalledPackages.json",
-            "destination": "{{user `working_directory`}}\\reports\\InstalledPackages.json"
-        },
-        {
-            "type": "file",
-            "direction": "download",
-            "max_retries": 1,
-            "source": "C:\\Windows\\Temp\\Reports\\InstalledFeatures.json",
-            "destination": "{{user `working_directory`}}\\reports\\InstalledFeatures.json"
-        },
-        {
-            "type": "file",
-            "direction": "download",
-            "max_retries": 1,
-            "source": "C:\\Windows\\Temp\\Reports\\InstalledCapabilities.json",
-            "destination": "{{user `working_directory`}}\\reports\\InstalledCapabilities.json"
-        },
-        {
-            "type": "powershell",
-            "inline": [
-                "If (Get-Service -Name RdAgent -ErrorAction SilentlyContinue) { Set-Service RdAgent -StartupType Disabled }",
-                "If (Get-Service -Name WindowsAzureTelemetryService -ErrorAction SilentlyContinue) { Set-Service WindowsAzureTelemetryService -StartupType Disabled }",
-                "If (Get-Service -Name WindowsAzureGuestAgent -ErrorAction SilentlyContinue) { Set-Service WindowsAzureGuestAgent -StartupType Disabled }",
-                "Remove-ItemProperty -Path 'HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Setup\\SysPrepExternal\\Generalize' -Name '*'",
-                "If (Test-Path -Path \"C:\\Apps\") { Remove-Item -Path \"C:\\Apps\" -Recurse -Confirm:$False -ErrorAction \"SilentlyContinue\" }"
-            ]
+            "source": "C:\\Windows\\Temp\\Reports\\Installed.zip",
+            "destination": "{{user `working_directory`}}\\reports\\Installed.zip"
         },
         {
             "type": "windows-restart"

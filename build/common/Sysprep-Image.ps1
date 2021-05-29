@@ -17,7 +17,7 @@ reg delete HKLM\Software\Policies\Microsoft\WindowsStore /v AutoDownload /f
 
 # Remove C:\Apps folder
 try {
-    Remove-Item -Path $Path -Recurse -Force
+    If (Test-Path -Path $Path) { Remove-Item -Path $Path -Recurse -Force }
 }
 catch {
     Write-Warning "Failed to remove $Path with: $($_.Exception.Message)."

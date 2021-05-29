@@ -1,6 +1,6 @@
 <# 
     .SYNOPSIS
-        Installs modules required for updating the markdown and commiting changes
+        Installs modules required for updating the markdown and committing changes
 #>
 [CmdletBinding()]
 Param (
