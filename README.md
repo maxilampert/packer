@@ -4,7 +4,7 @@ Hasicorp [Packer](https://www.packer.io/) templates for building Windows Server 
 
 Leverages [Evergreen](https://stealthpuppy.com/evergreen) to create images with the latest application versions so that each image is always up to date.
 
-Outputs reports in markdown format for basic tracking of image updates: [https://stealthpuppy.com/packer].
+Outputs reports in markdown format for basic tracking of image updates: [https://stealthpuppy.com/packer](https://stealthpuppy.com/packer).
 
 | Operating System | Status |
 |:--|:--|
