@@ -25,7 +25,6 @@
         "build_key_vault": "stpyimageaustraliaeast",
         "build_vnet": "vnet-ImageBuild-AustraliaEast",
         "build_subnet": "subnet-Packer",
-        "build_source_repo": "",
         "destination_gallery_resource_group": "rg-Images-AustraliaEast",
         "destination_gallery_name": "sigWindowsVirtualDesktop",
         "destination_image_name": "{{user `image_publisher`}}-{{user `image_offer`}}-{{user `image_sku`}}",
