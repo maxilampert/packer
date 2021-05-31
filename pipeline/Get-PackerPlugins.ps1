@@ -121,34 +121,34 @@ Function Get-Platform {
 $Latest = Get-GitHubRepoRelease -Uri "https://api.github.com/repos/rgl/packer-plugin-windows-update/releases/latest" | `
     Where-Object { $_.Platform -eq "Windows" } | Select-Object -First 1
 
+# Temporarily use 0.11.0
+$Latest = [PSCustomObject]@{
+    Version = "0.11.0"
+    URI     = "https://github.com/rgl/packer-plugin-windows-update/releases/download/v0.11.0/packer-provisioner-windows-update_0.11.0_windows_amd64.zip"
+}
+
 If ($Null -ne $Latest) {
     Write-Host " Found version: $($Latest.Version)."
     $OutFile = Join-Path -Path $([System.IO.Path]::GetTempPath()) -ChildPath (Split-Path -Path $Latest.URI -Leaf)
-    $exe = "packer-provisioner-windows-update.exe"
 
-    If (Test-Path -Path (Join-Path -Path $Path -ChildPath $exe)) {
-        Write-Host " Windows Update Packer plugin exists." -ForegroundColor "Cyan"
+    Write-Host " Downloading Windows Update Packer plugin." -ForegroundColor "Cyan"
+    try {
+        $ProgressPreference = "SilentlyContinue"
+        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+        $params = @{
+            Uri             = $Latest.URI
+            OutFile         = $OutFile
+            UseBasicParsing = $True
+            ErrorAction     = "SilentlyContinue"
+        }
+        Invoke-WebRequest @params
     }
-    Else {
-        Write-Host " Downloading Windows Update Packer plugin." -ForegroundColor "Cyan"
-        try {
-            $ProgressPreference = "SilentlyContinue"
-            [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-            $params = @{
-                Uri             = $Latest.URI
-                OutFile         = $OutFile
-                UseBasicParsing = $True
-                ErrorAction     = "SilentlyContinue"
-            }
-            Invoke-WebRequest @params
-        }
-        catch {
-            Write-Error -Message $_.Exception.Message
-            Break
-        }
-        finally {
-            Expand-Archive -Path $OutFile -DestinationPath $Path -Verbose
-            Remove-Item -Path $OutFile -ErrorAction "SilentlyContinue"
-        }
+    catch {
+        Write-Error -Message $_.Exception.Message
+        Break
+    }
+    finally {
+        Expand-Archive -Path $OutFile -DestinationPath $Path -Verbose
+        Remove-Item -Path $OutFile -ErrorAction "SilentlyContinue"
     }
 }
