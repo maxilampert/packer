@@ -10,6 +10,7 @@
 - [20210429.03](/MicrosoftWindowsDesktop/Windows-10/20h2-ent/20210429.03.md)
 - [20210520.04](/MicrosoftWindowsDesktop/Windows-10/20h2-ent/20210520.04.md)
 - [20210529.03](/MicrosoftWindowsDesktop/Windows-10/20h2-ent/20210529.03.md)
+- [20210601.01](/MicrosoftWindowsDesktop/Windows-10/20h2-ent/20210601.01.md)
 
 ### 20h2-evd
 
@@ -17,6 +18,7 @@
 - [20210207.01](/MicrosoftWindowsDesktop/Windows-10/20h2-evd/20210207.01.md)
 - [20210211.01](/MicrosoftWindowsDesktop/Windows-10/20h2-evd/20210211.01.md)
 - [20210303.03](/MicrosoftWindowsDesktop/Windows-10/20h2-evd/20210303.03.md)
+- [20210601.02](/MicrosoftWindowsDesktop/Windows-10/20h2-evd/20210601.02.md)
 
 # MicrosoftWindowsServer
 
