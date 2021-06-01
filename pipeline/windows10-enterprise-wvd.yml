@@ -1,18 +1,6 @@
 # Variable Group 'Windows10Enterprise-enAU' was defined in the Variables tab
 # Variable Group 'WindowsVirtualDesktop-enAU' was defined in the Variables tab
 # Variable Group 'GitHub' was defined in the Variables tab
-trigger:
-  branches:
-    include:
-    - main
-  paths:
-    include:
-    - build/rds/**
-    - build/srv/**
-    - build/common/**
-    - templates/rds/**
-    - templates/srv/**
-  batch: True
 name: $(Date:yyyyMMdd).$(Rev:rr)
 resources:
   repositories:
@@ -27,33 +15,15 @@ jobs:
     vmImage: windows-2019
   steps:
   - checkout: self
+    clean: true
+    submodules: recursive
   - task: PackerTool@0
-    displayName: Use Packer 1.6.5
-    inputs:
-      version: 1.6.5
+    displayName: Install Packer
   - task: PowerShell@2
     displayName: Download Packer plugins
     inputs:
       filePath: pipeline/Get-PackerPlugins.ps1
-      script: >-
-        $url = "https://github.com/rgl/packer-provisioner-windows-update/releases/download/v0.9.0/packer-provisioner-windows-update-windows.zip"
-
-        $zip = "$env:Temp\packer-provisioner-windows-update-windows.zip"
-
-        $target = "$env:AppData\packer.d\plugins"
-
-        $exe = "packer-provisioner-windows-update.exe"
-
-        If (Test-Path -Path (Join-Path -Path $target -ChildPath $exe)) {
-            Write-Host "Windows Update Packer plugin exists." -ForegroundColor Cyan
-        }
-
-        Else {
-            Write-Host "Downloading Windows Update Packer plugin." -ForegroundColor Cyan
-            Invoke-WebRequest -Uri $url -OutFile $zip -UseBasicParsing
-            Expand-Archive -Path $zip -DestinationPath $target
-            Remove-Item -Path $zip
-        }
+      script: ''
   - task: Packer@1
     name: packerValidate
     displayName: Packer validate
@@ -144,16 +114,15 @@ jobs:
         destination_image_version=1.0.$(Build.BuildId)
 
         destination_replication_regions=$(destination_replication_regions)
-  - task: CopyFiles@2
-    displayName: 'Copy Files to: $(System.DefaultWorkingDirectory)\json'
+  - task: PowerShell@2
+    displayName: Expand report archive
     inputs:
-      SourceFolder: $(System.DefaultWorkingDirectory)
-      Contents: '*.json'
-      TargetFolder: $(System.DefaultWorkingDirectory)\json
+      filePath: pipeline/Expand-ReportFiles.ps1
+      arguments: -Verbose
   - task: PublishBuildArtifacts@1
     displayName: 'Publish Artifact: image-details'
     inputs:
-      PathtoPublish: $(System.DefaultWorkingDirectory)\json
+      PathtoPublish: $(System.DefaultWorkingDirectory)\reports
       ArtifactName: image-details
   - task: PowerShell@2
     displayName: Install required modules

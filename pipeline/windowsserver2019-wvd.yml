@@ -1,6 +1,6 @@
-# Variable Group 'Windows10MultiSession-enAU' was defined in the Variables tab
 # Variable Group 'WindowsVirtualDesktop-enAU' was defined in the Variables tab
 # Variable Group 'GitHub' was defined in the Variables tab
+# Variable Group 'WindowsServer2019-enAU' was defined in the Variables tab
 name: $(Date:yyyyMMdd).$(Rev:rr)
 resources:
   repositories:
@@ -18,14 +18,13 @@ jobs:
     clean: true
     submodules: recursive
   - task: PackerTool@0
-    displayName: Install Packer
+    displayName: 'Install Packer '
   - task: PowerShell@2
     displayName: Download Packer plugins
     inputs:
       filePath: pipeline/Get-PackerPlugins.ps1
       script: ''
   - task: Packer@1
-    name: packerValidate
     displayName: Packer validate
     inputs:
       connectedServiceAzure: ef1deb8d-e2cc-46bb-9cc8-5dc5551d9594
@@ -70,12 +69,10 @@ jobs:
 
         destination_replication_regions=$(destination_replication_regions)
   - task: Packer@1
-    name: packerBuild
     displayName: Packer build
     inputs:
       connectedServiceAzure: ef1deb8d-e2cc-46bb-9cc8-5dc5551d9594
       templatePath: templates/rds/PackerTemplate-WindowsAzure.json
-      force: true
       variables: >-
         image_publisher=$(image_publisher)
 
