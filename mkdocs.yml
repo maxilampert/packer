@@ -34,14 +34,14 @@ theme:
     - navigation.expand
   palette:
     - scheme: default
-      primary: light blue
-      accent: light blue
+      primary: white
+      accent: white
       toggle:
         icon: material/toggle-switch-off-outline
         name: Switch to dark mode
     - scheme: slate
-      primary: light blue
-      accent: light blue
+      primary: white
+      accent: white
       toggle:
         icon: material/toggle-switch
         name: Switch to light mode
@@ -51,7 +51,7 @@ theme:
   favicon: assets/favicon.png
   #icon:
     #logo: logo
-  logo: assets/images/packerlogo.png
+  logo: assets/images/packer.svg
 
   # Table sort
 extra_javascript:
