@@ -51,7 +51,7 @@ theme:
   favicon: assets/favicon.png
   #icon:
     #logo: logo
-  logo: assets/images/packer.svg
+  logo: assets/images/packer.png
 
   # Table sort
 extra_javascript:
