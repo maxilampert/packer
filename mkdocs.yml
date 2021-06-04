@@ -29,9 +29,9 @@ theme:
   language: en
   features:
     - navigation.instant
-    - navigation.sections
     - navigation.top
-    #- navigation.tabs
+    - navigation.tabs
+    - navigation.expand
   palette:
     - scheme: default
       primary: light blue
@@ -58,7 +58,6 @@ plugins:
   - search
   - redirects:
       redirect_maps:
-        changelog/insiders.md: insiders/changelog.md
   - minify:
       minify_html: true
       minify_js: true
@@ -108,19 +107,19 @@ nav:
   - MicrosoftWindowsDesktop:
     - Windows-10:
       - 20h2-ent:
-        - 20210425.01: MicrosoftWindowsDesktop/20h2-ent/20210425.01.md
-        - 20210429.01: MicrosoftWindowsDesktop/20h2-ent/20210429.01.md
-        - 20210429.02: MicrosoftWindowsDesktop/20h2-ent/20210429.02.md
-        - 20210429.03: MicrosoftWindowsDesktop/20h2-ent/20210429.03.md
-        - 20210520.04: MicrosoftWindowsDesktop/20h2-ent/20210520.04.md
-        - 20210529.03: MicrosoftWindowsDesktop/20h2-ent/20210529.03.md
-        - 20210601.01: MicrosoftWindowsDesktop/20h2-ent/20210601.01.md
+        - 20210425.01: MicrosoftWindowsDesktop/Windows-10/20h2-ent/20210425.01.md
+        - 20210429.01: MicrosoftWindowsDesktop/Windows-10/20h2-ent/20210429.01.md
+        - 20210429.02: MicrosoftWindowsDesktop/Windows-10/20h2-ent/20210429.02.md
+        - 20210429.03: MicrosoftWindowsDesktop/Windows-10/20h2-ent/20210429.03.md
+        - 20210520.04: MicrosoftWindowsDesktop/Windows-10/20h2-ent/20210520.04.md
+        - 20210529.03: MicrosoftWindowsDesktop/Windows-10/20h2-ent/20210529.03.md
+        - 20210601.01: MicrosoftWindowsDesktop/Windows-10/20h2-ent/20210601.01.md
       - 20h2-evd:
-        - 20210204.05: MicrosoftWindowsDesktop/20h2-evd/20210204.05.md
-        - 20210207.01: MicrosoftWindowsDesktop/20h2-evd20210207.01.md
-        - 20210211.01: MicrosoftWindowsDesktop/20h2-evd20210211.01.md
-        - 20210303.03: MicrosoftWindowsDesktop/20h2-evd20210303.03.md
-        - 20210601.02: MicrosoftWindowsDesktop/20h2-evd20210601.02.md
+        - 20210204.05: MicrosoftWindowsDesktop/Windows-10/20h2-evd/20210204.05.md
+        - 20210207.01: MicrosoftWindowsDesktop/Windows-10/20h2-evd20210207.01.md
+        - 20210211.01: MicrosoftWindowsDesktop/Windows-10/20h2-evd20210211.01.md
+        - 20210303.03: MicrosoftWindowsDesktop/Windows-10/20h2-evd20210303.03.md
+        - 20210601.02: MicrosoftWindowsDesktop/Windows-10/20h2-evd20210601.02.md
     - MicrosoftWindowsServer:
       - WindowsServer:
         - 2019-Datacenter:
