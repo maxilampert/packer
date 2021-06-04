@@ -53,6 +53,11 @@ theme:
     #logo: logo
   logo: assets/images/packerlogo.png
 
+  # Table sort
+extra_javascript:
+  - https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.2.1/tablesort.min.js
+  - javascripts/tables.js
+
 # Plugins
 plugins:
   - search
