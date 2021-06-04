@@ -1,33 +1,13 @@
-﻿# MicrosoftWindowsDesktop
+﻿# Packer image reports
 
-## Windows-10
+Reports here are for Windows images built using Hasicorp [Packer](https://www.packer.io/) for Windows Server and Windows 10 images for Windows Virtual Desktop, Citrix Cloud etc., in Azure. Images are built via Azure DevOps and stored in a [Shared Image Library](https://docs.microsoft.com/en-us/azure/virtual-machines/shared-image-galleries).
 
-### 20h2-ent
+Leverages [Evergreen](https://stealthpuppy.com/evergreen) to create images with the latest application versions so that each image is always up to date.
 
-- [20210425.01](/MicrosoftWindowsDesktop/Windows-10/20h2-ent/20210425.01.md)
-- [20210429.01](/MicrosoftWindowsDesktop/Windows-10/20h2-ent/20210429.01.md)
-- [20210429.02](/MicrosoftWindowsDesktop/Windows-10/20h2-ent/20210429.02.md)
-- [20210429.03](/MicrosoftWindowsDesktop/Windows-10/20h2-ent/20210429.03.md)
-- [20210520.04](/MicrosoftWindowsDesktop/Windows-10/20h2-ent/20210520.04.md)
-- [20210529.03](/MicrosoftWindowsDesktop/Windows-10/20h2-ent/20210529.03.md)
-- [20210601.01](/MicrosoftWindowsDesktop/Windows-10/20h2-ent/20210601.01.md)
+Reports are created in markdown format for basic tracking of image updates.
 
-### 20h2-evd
-
-- [20210204.05](/MicrosoftWindowsDesktop/Windows-10/20h2-evd/20210204.05.md)
-- [20210207.01](/MicrosoftWindowsDesktop/Windows-10/20h2-evd/20210207.01.md)
-- [20210211.01](/MicrosoftWindowsDesktop/Windows-10/20h2-evd/20210211.01.md)
-- [20210303.03](/MicrosoftWindowsDesktop/Windows-10/20h2-evd/20210303.03.md)
-- [20210601.02](/MicrosoftWindowsDesktop/Windows-10/20h2-evd/20210601.02.md)
-
-# MicrosoftWindowsServer
-
-## WindowsServer
-
-### 2019-Datacenter
-
-- [20210420.04](/MicrosoftWindowsServer/WindowsServer/2019-Datacenter/20210420.04.md)
-- [20210420.06](/MicrosoftWindowsServer/WindowsServer/2019-Datacenter/20210420.06.md)
-- [20210421.01](/MicrosoftWindowsServer/WindowsServer/2019-Datacenter/20210421.01.md)
-- [20210421.03](/MicrosoftWindowsServer/WindowsServer/2019-Datacenter/20210421.03.md)
-- [20210601.02](/MicrosoftWindowsServer/WindowsServer/2019-Datacenter/20210601.02.md)
+| Operating System | Status |
+|:--|:--|
+| Windows 10 Enterprise | [![Build Status](https://dev.azure.com/stealthpuppyLab/Packer/_apis/build/status/windows10-enterprise-wvd?branchName=main)](https://dev.azure.com/stealthpuppyLab/Packer/_build/latest?definitionId=2&branchName=main) |
+| Windows 10 multi-session | [![Build Status](https://dev.azure.com/stealthpuppyLab/Packer/_apis/build/status/windows10-multisession-wvd?branchName=main)](https://dev.azure.com/stealthpuppyLab/Packer/_build/latest?definitionId=2&branchName=main) |
+| Windows Server 2019 | [![Build Status](https://dev.azure.com/stealthpuppyLab/Packer/_apis/build/status/windowsserver2019-wvd?branchName=main)](https://dev.azure.com/stealthpuppyLab/Packer/_build/latest?definitionId=2&branchName=main) |
