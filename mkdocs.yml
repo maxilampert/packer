@@ -1,0 +1,142 @@
+# Project information
+site_name: Packer image reports
+site_url: https://stealthpuppy.com/packer
+site_author: Aaron Parker
+site_description: >-
+  Application and update reports for Windows images built in Azure DevOps using Hashicorp Packer and Evergreen
+
+# Repository
+repo_name: aaronparker/packer
+repo_url: https://github.com/aaronparker/packer
+edit_uri: ""
+
+# Copyright
+copyright: Copyright &copy; 2021 Aaron Parker
+
+# Configuration
+theme:
+  name: material
+
+  # Static files
+  static_templates:
+    - 404.html
+
+  # Don't include MkDocs' JavaScript
+  include_search_page: false
+  search_index_only: true
+
+  # Default values, taken from mkdocs_theme.yml
+  language: en
+  features:
+    - navigation.instant
+    - navigation.sections
+    - navigation.top
+    #- navigation.tabs
+  palette:
+    - scheme: default
+      primary: light blue
+      accent: light blue
+      toggle:
+        icon: material/toggle-switch-off-outline
+        name: Switch to dark mode
+    - scheme: slate
+      primary: light blue
+      accent: light blue
+      toggle:
+        icon: material/toggle-switch
+        name: Switch to light mode
+  font:
+    text: Roboto
+    code: Roboto Mono
+  favicon: assets/favicon.png
+  #icon:
+    #logo: logo
+  logo: assets/images/EvergreenLeaf-256-White.png
+
+# Plugins
+plugins:
+  - search
+  - redirects:
+      redirect_maps:
+        changelog/insiders.md: insiders/changelog.md
+  - minify:
+      minify_html: true
+      minify_js: true
+
+# Extensions
+markdown_extensions:
+  - admonition
+  - abbr
+  - attr_list
+  - def_list
+  - footnotes
+  - meta
+  - md_in_html
+  - toc:
+      permalink: true
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.caret
+  - pymdownx.critic
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+  - pymdownx.highlight
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.magiclink:
+      repo_url_shorthand: true
+      user: squidfunk
+      repo: mkdocs-material
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
+
+# Page tree
+nav:
+  - MicrosoftWindowsDesktop:
+    - Windows-10:
+      - 20h2-ent:
+        - 20210425.01: MicrosoftWindowsDesktop/20h2-ent/20210425.01.md
+        - 20210429.01: MicrosoftWindowsDesktop/20h2-ent/20210429.01.md
+        - 20210429.02: MicrosoftWindowsDesktop/20h2-ent/20210429.02.md
+        - 20210429.03: MicrosoftWindowsDesktop/20h2-ent/20210429.03.md
+        - 20210520.04: MicrosoftWindowsDesktop/20h2-ent/20210520.04.md
+        - 20210529.03: MicrosoftWindowsDesktop/20h2-ent/20210529.03.md
+        - 20210601.01: MicrosoftWindowsDesktop/20h2-ent/20210601.01.md
+      - 20h2-evd:
+        - 20210204.05: MicrosoftWindowsDesktop/20h2-evd/20210204.05.md
+        - 20210207.01: MicrosoftWindowsDesktop/20h2-evd20210207.01.md
+        - 20210211.01: MicrosoftWindowsDesktop/20h2-evd20210211.01.md
+        - 20210303.03: MicrosoftWindowsDesktop/20h2-evd20210303.03.md
+        - 20210601.02: MicrosoftWindowsDesktop/20h2-evd20210601.02.md
+    - MicrosoftWindowsServer:
+      - WindowsServer:
+        - 2019-Datacenter:
+          - 20210420.04: MicrosoftWindowsServer/WindowsServer/2019-Datacenter/20210420.04.md
+          - 20210420.06: MicrosoftWindowsServer/WindowsServer/2019-Datacenter/20210420.06.md
+          - 20210421.01: MicrosoftWindowsServer/WindowsServer/2019-Datacenter/20210421.01.md
+          - 20210421.03: MicrosoftWindowsServer/WindowsServer/2019-Datacenter/20210421.03.md
+          - 20210601.02: MicrosoftWindowsServer/WindowsServer/2019-Datacenter/20210601.02.md
+
+# Customization
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/aaronparker
+    - icon: fontawesome/brands/twitter
+      link: https://twitter.com/stealthpuppy
+    - icon: fontawesome/brands/linkedin
+      link: https://linkedin.com/in/aaronedwardparker/
+  generator: false
