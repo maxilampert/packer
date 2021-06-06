@@ -1,4 +1,10 @@
-﻿# Packer image reports
+﻿---
+title: Home
+summary: Application and update reports for Windows images built in Azure DevOps using Hashicorp Packer and Evergreen
+authors:
+    - Aaron Parker
+---
+# Packer image reports
 
 Reports here are for Windows images built using Hasicorp [Packer](https://www.packer.io/) for Windows Server and Windows 10 images for Windows Virtual Desktop, Citrix Cloud etc., in Azure. Images are built via Azure DevOps and stored in a [Shared Image Library](https://docs.microsoft.com/en-us/azure/virtual-machines/shared-image-galleries).
 

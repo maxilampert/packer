@@ -25,7 +25,7 @@ Write-Host " Input: $Path."
 Write-Host " Output: $OutFile."
 
 # Start with a blank markdown variable
-Remove-Variable -Name markdown -ErrorAction "SilentlyContinue"
+Remove-Variable -Name "markdown" -ErrorAction "SilentlyContinue"
 [System.String] $markdown
 
 # Get a listing of files in the /docs folder
@@ -99,5 +99,4 @@ try {
 }
 catch {
     Throw $_
-    Break
 }

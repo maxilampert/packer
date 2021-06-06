@@ -5,7 +5,7 @@
 [CmdletBinding()]
 Param (
     [Parameter()]
-    [System.String[]] $Modules = @("MarkdownPS", "posh-git")
+    [System.String[]] $Modules = @("MarkdownPS", "powershell-yaml", "posh-git")
 )
 
 #region Trust the PSGallery and install modules
