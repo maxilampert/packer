@@ -42,7 +42,7 @@ Write-Host " DestinationPath:   $ImagePublisher."
 $markdown += "`n`n"
 
 # Read the contents of the output files, convert to markdown
-[System.Array] $InputFile = Get-ChildItem -Path $Path -Filter "*.json"
+[System.Array] $InputFile = Get-ChildItem -Path $Path -Filter "*.json" | Sort-Object -Descending
 ForEach ($file in $InputFile) {
     try {
         Write-Host " Reading: $($file.FullName)."
