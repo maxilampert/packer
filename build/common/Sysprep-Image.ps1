@@ -23,29 +23,38 @@ catch {
     Write-Warning "Failed to remove $Path with: $($_.Exception.Message)."
 }
 
-# Sysprep
-#region Prepare
-Write-Output " Run Sysprep"
-If (Get-Service -Name "RdAgent" -ErrorAction "SilentlyContinue") { Set-Service -Name "RdAgent" -StartupType "Disabled" }
-If (Get-Service -Name "WindowsAzureTelemetryService" -ErrorAction "SilentlyContinue") { Set-Service -Name "WindowsAzureTelemetryService" -StartupType "Disabled" }
-If (Get-Service -Name "WindowsAzureGuestAgent" -ErrorAction "SilentlyContinue") { Set-Service -Name "WindowsAzureGuestAgent" -StartupType "Disabled" }
-Remove-ItemProperty -Path 'HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Setup\\SysPrepExternal\\Generalize' -Name '*'
-#endregion
-
-#region Sysprep
-$RegPath = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Setup\State"
-& $env:SystemRoot\System32\Sysprep\Sysprep.exe /oobe /generalize /quiet /quit
-While ($True) {
-    $imageState = Get-ItemProperty $RegPath | Select-Object ImageState
-    If ($imageState.ImageState -ne 'IMAGE_STATE_GENERALIZE_RESEAL_TO_OOBE') {
-        Write-Output $imageState.ImageState
-        Start-Sleep -s 10 
-    }
-    Else {
-        Break
-    }
+# Determine whether the Citrix Virtual Desktop Agent is installed
+$CitrixVDA = Get-WmiObject -Class Win32_Product | `
+    Where-Object { $_.Vendor -like "Citrix Systems*" -and $_.Caption -like "Machine Identity Service Agent*" }
+If ($Null -ne $CitrixVDA) {
+    Write-Host " Citrix Virtual Desktop agent detected, skipping Sysprep."
 }
-$imageState = Get-ItemProperty $RegPath | Select-Object ImageState
-Write-Output $imageState.ImageState
-#endregion
-Write-Host " Complete: Sysprep."
+Else {
+
+    # Sysprep
+    #region Prepare
+    Write-Output " Run Sysprep"
+    If (Get-Service -Name "RdAgent" -ErrorAction "SilentlyContinue") { Set-Service -Name "RdAgent" -StartupType "Disabled" }
+    If (Get-Service -Name "WindowsAzureTelemetryService" -ErrorAction "SilentlyContinue") { Set-Service -Name "WindowsAzureTelemetryService" -StartupType "Disabled" }
+    If (Get-Service -Name "WindowsAzureGuestAgent" -ErrorAction "SilentlyContinue") { Set-Service -Name "WindowsAzureGuestAgent" -StartupType "Disabled" }
+    Remove-ItemProperty -Path 'HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Setup\\SysPrepExternal\\Generalize' -Name '*'
+    #endregion
+
+    #region Sysprep
+    $RegPath = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Setup\State"
+    & $env:SystemRoot\System32\Sysprep\Sysprep.exe /oobe /generalize /quiet /quit
+    While ($True) {
+        $imageState = Get-ItemProperty $RegPath | Select-Object ImageState
+        If ($imageState.ImageState -ne 'IMAGE_STATE_GENERALIZE_RESEAL_TO_OOBE') {
+            Write-Output $imageState.ImageState
+            Start-Sleep -s 10 
+        }
+        Else {
+            Break
+        }
+    }
+    $imageState = Get-ItemProperty $RegPath | Select-Object ImageState
+    Write-Output $imageState.ImageState
+    #endregion
+    Write-Host " Complete: Sysprep."
+}
