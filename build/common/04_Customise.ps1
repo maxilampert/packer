@@ -14,30 +14,29 @@ Param (
     [System.String] $InvokeScript = "Invoke-Scripts.ps1"
 )
 
-#region Script logic
 # Set $VerbosePreference so full details are sent to the log; Make Invoke-WebRequest faster
 $VerbosePreference = "Continue"
 $ProgressPreference = "SilentlyContinue"
 
-# Create target folder
+#region Script logic
 Write-Host " Start: Customise."
-New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
+$Script = Get-ChildItem -Path $Path -Filter $InvokeScript -Recurse | Select-Object -First 1
 
 # Validate customisation scripts; Run scripts
-If (Test-Path -Path $(Join-Path -Path $Path -ChildPath $InvokeScript)) {
+If ($Null -ne $Script) {
     try {
-        Push-Location -Path $Path
-        . ".\$InvokeScript" -Path $Path
+        Push-Location -Path $Script.DirectoryName
+        Write-Host " Running script: $($Script.FullName)."
+        . $Script.FullName -Path $Path
         Pop-Location
     }
     catch {
-        Write-Warning -Message " ERR: $InvokeScript error with: $($_.Exception.Message)."
+        Write-Warning -Message " ERR: $($Script.FullName) error with: $($_.Exception.Message)."
     }
 }
 Else {
-    Write-Warning -Message " ERR: Could not find: $(Join-Path -Path $Path -ChildPath $InvokeScript)."
+    Write-Warning -Message " ERR: Could not find $InvokeScript in $Path."
 }
 
-# If (Test-Path -Path $Path) { Remove-Item -Path $Path -Recurse -Confirm:$False -ErrorAction "SilentlyContinue" }
 Write-Host " Complete: Customise."
 #endregion

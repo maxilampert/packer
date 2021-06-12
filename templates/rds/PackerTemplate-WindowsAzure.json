@@ -92,9 +92,7 @@
             "type": "file",
             "direction": "upload",
             "max_retries": 2,
-            "sources": [
-                "{{user `working_directory`}}\\image-customise\\src\\"
-            ],
+            "source": "{{user `working_directory`}}\\image-customise\\src\\",
             "destination": "C:\\Apps\\image-customise"
         },
         {
@@ -168,9 +166,7 @@
             "type": "file",
             "direction": "upload",
             "max_retries": 2,
-            "sources": [
-                "{{user `working_directory`}}/tools/rds"
-            ],
+            "source": "{{user `working_directory`}}/tools/rds",
             "destination": "C:\\Apps\\Tools"
         },
         {

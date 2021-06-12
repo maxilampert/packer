@@ -35,7 +35,7 @@ If ($App) {
         Expand-Archive -Path $OutFile.FullName -DestinationPath $Path -Force -Verbose
     }
     catch {
-        Write-Error -Message "ERROR: Failed to unpack: $($OutFile.FullName)."
+        Write-Host "ERR:: Failed to unpack: $($OutFile.FullName)."
     }
     
     # Install
