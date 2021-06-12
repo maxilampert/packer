@@ -29,7 +29,7 @@ $Installer = Get-ChildItem -Path $Path -Filter "CitrixOptimizer.zip" -Recurse -E
 
 If ($Installer) {
     Write-Host "Found zip file: $($Installer.FullName)."
-    Expand-Archive -Path $Installer.FullName -DestinationPath $Path -Force -Verbose
+    Expand-Archive -Path $Installer.FullName -DestinationPath $Path -Force
 
     $Template = Get-ChildItem -Path $Path -Recurse -Filter $OptimizerTemplate
     If ($Template) {

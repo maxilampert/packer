@@ -32,7 +32,7 @@ If ($App) {
     # Unpack
     try {
         Write-Host " Unpacking: $($OutFile.FullName)."
-        Expand-Archive -Path $OutFile.FullName -DestinationPath $Path -Force -Verbose
+        Expand-Archive -Path $OutFile.FullName -DestinationPath $Path -Force
     }
     catch {
         Write-Host "ERR:: Failed to unpack: $($OutFile.FullName)."
