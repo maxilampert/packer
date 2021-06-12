@@ -93,9 +93,9 @@
             "direction": "upload",
             "max_retries": 2,
             "sources": [
-                "{{user `working_directory`}}\\image-customise"
+                "{{user `working_directory`}}\\image-customise\\src\\"
             ],
-            "destination": "C:\\Apps"
+            "destination": "C:\\Apps\\image-customise"
         },
         {
             "type": "powershell",
