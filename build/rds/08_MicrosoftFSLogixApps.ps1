@@ -22,7 +22,7 @@ $ProgressPreference = "SilentlyContinue"
 New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
 
 Write-Host " Microsoft FSLogix agent"
-$App = Get-EvergreenApp -Name "MicrosoftFSLogixApps" | Select-Object -First 1
+$App = Get-EvergreenApp -Name "MicrosoftFSLogixApps" | Where-Object { $_.Channel -eq "Production" } | Select-Object -First 1
 If ($App) {
     
     # Download
