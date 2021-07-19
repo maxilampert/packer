@@ -6,8 +6,8 @@ site_description: >-
   Application and update reports for Windows images built in Azure DevOps using Hashicorp Packer and Evergreen
 
 # Repository
-repo_name: aaronparker/packer
-repo_url: https://github.com/aaronparker/packer
+repo_name: "" #aaronparker/packer
+repo_url: "" #https://github.com/aaronparker/packer
 edit_uri: ""
 
 # Copyright
