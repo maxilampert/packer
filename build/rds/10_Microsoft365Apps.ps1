@@ -13,7 +13,7 @@ Param (
 
     [Parameter(Mandatory = $False)]
     [ValidateSet("Monthly (Targeted)", "Semi-Annual Channel (Targeted)", "Semi-Annual Channel", "Monthly", "Monthly Enterprise")]
-    [System.String] $Channel = "Monthly Enterprise"
+    [System.String] $Channel = "MonthlyEnterprise"
 )
 
 #region Script logic
