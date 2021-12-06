@@ -1,6 +1,7 @@
-# Variable Group 'Windows10Enterprise-enAU' was defined in the Variables tab
 # Variable Group 'WindowsVirtualDesktop-enAU' was defined in the Variables tab
 # Variable Group 'GitHub' was defined in the Variables tab
+# Variable Group 'Windows11Enterprise-enAU' was defined in the Variables tab
+# Agent Queue 'Azure Pipelines' was used with unrecognized Agent Specification, vmImage property must be specified to determine image - https://docs.microsoft.com/en-us/azure/devops/pipelines/agents/hosted?view=azure-devops&tabs=yaml#software
 name: $(Date:yyyyMMdd).$(Rev:rr)
 resources:
   repositories:
@@ -12,7 +13,7 @@ jobs:
   displayName: Packer build
   timeoutInMinutes: 120
   pool:
-    vmImage: windows-2019
+    name: Azure Pipelines
   steps:
   - checkout: self
     clean: true

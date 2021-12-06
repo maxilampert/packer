@@ -135,11 +135,6 @@ jobs:
       filePath: pipeline/Publish-MarkdownReport.ps1
       arguments: -Verbose
   - task: PowerShell@2
-    displayName: Update TOC markdown
-    inputs:
-      filePath: pipeline/Update-MarkdownToc.ps1
-      arguments: -Verbose
-  - task: PowerShell@2
     displayName: Commit changes
     inputs:
       filePath: pipeline/Push-Git.ps1
