@@ -106,36 +106,36 @@
                     "value": "MicrosoftWindowsDesktop"
                 },
                 "image_sku": {
-                    "value": "win11-21h2-ent"
+                    "value": "win11-21h2-avd"
                 },
                 "packages_url": {
                     "value": "https://stpyimgbuildaue.blob.core.windows.net/packages"
                 }
             },
             "type": "Vsts",
-            "name": "Windows11Enterprise-enAU",
-            "description": "Variables for Windows 11 Enterprise with en-AU",
-            "id": 7
+            "name": "Windows11MultiSession-enAU",
+            "description": "Variables for Windows 11 multi-session with en-AU",
+            "id": 8
         }
     ],
     "properties": {},
     "tags": [],
     "_links": {
         "self": {
-            "href": "https://dev.azure.com/stealthpuppyLab/43bf99ab-7b12-4015-9e5b-30c20cd7cd60/_apis/build/Definitions/8?revision=2"
+            "href": "https://dev.azure.com/stealthpuppyLab/43bf99ab-7b12-4015-9e5b-30c20cd7cd60/_apis/build/Definitions/9?revision=1"
         },
         "web": {
-            "href": "https://dev.azure.com/stealthpuppyLab/43bf99ab-7b12-4015-9e5b-30c20cd7cd60/_build/definition?definitionId=8"
+            "href": "https://dev.azure.com/stealthpuppyLab/43bf99ab-7b12-4015-9e5b-30c20cd7cd60/_build/definition?definitionId=9"
         },
         "editor": {
-            "href": "https://dev.azure.com/stealthpuppyLab/43bf99ab-7b12-4015-9e5b-30c20cd7cd60/_build/designer?id=8&_a=edit-build-definition"
+            "href": "https://dev.azure.com/stealthpuppyLab/43bf99ab-7b12-4015-9e5b-30c20cd7cd60/_build/designer?id=9&_a=edit-build-definition"
         },
         "badge": {
-            "href": "https://dev.azure.com/stealthpuppyLab/43bf99ab-7b12-4015-9e5b-30c20cd7cd60/_apis/build/status/8"
+            "href": "https://dev.azure.com/stealthpuppyLab/43bf99ab-7b12-4015-9e5b-30c20cd7cd60/_apis/build/status/9"
         }
     },
     "buildNumberFormat": "$(Date:yyyyMMdd).$(Rev:rr)",
-    "description": "Builds a Windows 10 Enterprise image for use with Windows Virtual Desktop",
+    "description": "Builds a Windows 10 multi-session image for use with Windows Virtual Desktop",
     "jobAuthorizationScope": 1,
     "jobTimeoutInMinutes": 120,
     "jobCancelTimeoutInMinutes": 5,
@@ -180,7 +180,7 @@
                             "targetType": "filePath",
                             "filePath": "pipeline/Get-PackerPlugins.ps1",
                             "arguments": "",
-                            "script": "$url = \"https://github.com/rgl/packer-provisioner-windows-update/releases/download/v0.9.0/packer-provisioner-windows-update-windows.zip\"\n$zip = \"$env:Temp\\packer-provisioner-windows-update-windows.zip\"\n$target = \"$env:AppData\\packer.d\\plugins\"\n$exe = \"packer-provisioner-windows-update.exe\"\nIf (Test-Path -Path (Join-Path -Path $target -ChildPath $exe)) {\n    Write-Host \"Windows Update Packer plugin exists.\" -ForegroundColor Cyan\n}\nElse {\n    Write-Host \"Downloading Windows Update Packer plugin.\" -ForegroundColor Cyan\n    Invoke-WebRequest -Uri $url -OutFile $zip -UseBasicParsing\n    Expand-Archive -Path $zip -DestinationPath $target\n    Remove-Item -Path $zip\n}",
+                            "script": "",
                             "errorActionPreference": "stop",
                             "warningPreference": "default",
                             "informationPreference": "default",
@@ -417,7 +417,7 @@
         ],
         "target": {
             "agentSpecification": {
-                "identifier": "windows-2022"
+                "identifier": "windows-latest"
             }
         },
         "type": 1
@@ -433,7 +433,7 @@
             "hasAdminPermissions": "False",
             "isFork": "False",
             "isPrivate": "False",
-            "lastUpdated": "12/06/2021 10:06:25",
+            "lastUpdated": "06/06/2021 04:03:42",
             "manageUrl": "https://github.com/aaronparker/packer",
             "nodeId": "MDEwOlJlcG9zaXRvcnkzMzM5NzAwNTU=",
             "ownerId": "8227455",
@@ -493,15 +493,15 @@
             "isHosted": true
         }
     },
-    "id": 8,
-    "name": "windows11-enterprise-wvd",
-    "url": "https://dev.azure.com/stealthpuppyLab/43bf99ab-7b12-4015-9e5b-30c20cd7cd60/_apis/build/Definitions/8?revision=2",
-    "uri": "vstfs:///Build/Definition/8",
+    "id": 9,
+    "name": "windows11-multisession-wvd",
+    "url": "https://dev.azure.com/stealthpuppyLab/43bf99ab-7b12-4015-9e5b-30c20cd7cd60/_apis/build/Definitions/9?revision=1",
+    "uri": "vstfs:///Build/Definition/9",
     "path": "\\",
     "type": 2,
     "queueStatus": 0,
-    "revision": 2,
-    "createdDate": "2021-12-06T10:50:55.570Z",
+    "revision": 1,
+    "createdDate": "2021-12-06T11:13:31.843Z",
     "project": {
         "id": "43bf99ab-7b12-4015-9e5b-30c20cd7cd60",
         "name": "Packer",
