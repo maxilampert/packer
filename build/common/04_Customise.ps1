@@ -20,6 +20,7 @@ $ProgressPreference = "SilentlyContinue"
 
 #region Script logic
 Write-Host " Start: Customise."
+Get-ChildItem -Path $Path
 $Script = Get-ChildItem -Path $Path -Filter $InvokeScript -Recurse | Select-Object -First 1
 
 # Validate customisation scripts; Run scripts
