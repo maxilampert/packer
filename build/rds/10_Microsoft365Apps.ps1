@@ -12,8 +12,8 @@ Param (
     [System.String] $Path = "$env:SystemDrive\Apps\Microsoft\Office",
 
     [Parameter(Mandatory = $False)]
-    [ValidateSet("Monthly (Targeted)", "Semi-Annual Channel (Targeted)", "Semi-Annual Channel", "Monthly", "Monthly Enterprise")]
-    [System.String] $Channel = "MonthlyEnterprise"
+    [ValidateSet("BetaChannel", "CurrentPreview", "Current", "MonthlyEnterprise", "PerpetualVL2021", "SemiAnnualPreview", "SemiAnnual", "PerpetualVL2019")]
+    [System.String] $Channel = "Current"
 )
 
 #region Script logic
