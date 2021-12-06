@@ -11,7 +11,7 @@ Param (
     [System.String] $Path = "$env:SystemDrive\Apps\image-customise",
 
     [Parameter(Mandatory = $False)]
-    [System.String] $InvokeScript = "Invoke-Scripts.ps1"
+    [System.String] $InvokeScript = "Install-Defaults.ps1"
 )
 
 # Set $VerbosePreference so full details are sent to the log; Make Invoke-WebRequest faster
