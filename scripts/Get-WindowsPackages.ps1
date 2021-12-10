@@ -1,7 +1,10 @@
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseDeclaredVarsMoreThanAssignments", "")]
+[CmdletBinding()]
+param()
+
 # irm -Uri "https://api.uupdump.net/listlangs.php"
 # irm -Uri "https://api.uupdump.net/listeditions.php"
 # "https://api.uupdump.net/listid.php?sortByDate=true"
-
 
 $Build = "19044"
 $Architecture = "amd64"

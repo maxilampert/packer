@@ -3,6 +3,7 @@
         Pushes commits back to GitHub
         Uses environment variables created inside the Azure DevOps environment
 #>
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingWriteHost", "")]
 [CmdletBinding()]
 Param (
     [Parameter(Position = 0)]

@@ -6,9 +6,6 @@
 [CmdletBinding()]
 Param (
     [Parameter(Mandatory = $False)]
-    [System.String] $LogPath = "$env:SystemRoot\Logs\Packer",
-
-    [Parameter(Mandatory = $False)]
     [System.String] $Path = "$env:SystemDrive\Apps\Citrix\VDA",
 
     [Parameter(Mandatory = $False)]

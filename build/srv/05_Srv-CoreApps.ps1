@@ -6,23 +6,11 @@
 [CmdletBinding()]
 Param (
     [Parameter(Mandatory = $False)]
-    [System.String] $Log = "$env:SystemRoot\Logs\PackerImagePrep.log",
-
-    [Parameter(Mandatory = $False)]
     [System.String] $Path = "$env:SystemDrive\Apps"
 )
 
 #region Functions
-Function Set-Repository {
-    # Trust the PSGallery for modules
-    If (Get-PSRepository | Where-Object { $_.Name -eq "PSGallery" -and $_.InstallationPolicy -ne "Trusted" }) {
-        Write-Verbose "Trusting the repository: PSGallery"
-        Install-PackageProvider -Name "NuGet" -MinimumVersion 2.8.5.208 -Force
-        Set-PSRepository -Name "PSGallery" -InstallationPolicy "Trusted"
-    }
-}
-
-Function Install-RequiredModules {
+Function Install-RequiredModule {
     Write-Host " Installing required modules"
     # Install the Evergreen module; https://github.com/aaronparker/Evergreen
     Install-Module -Name Evergreen -AllowClobber
@@ -31,7 +19,7 @@ Function Install-RequiredModules {
     Install-Module -Name VcRedist -AllowClobber
 }
 
-Function Install-VcRedistributables ($Path) {
+Function Install-VcRedistributable ($Path) {
     Write-Host " Microsoft Visual C++ Redistributables"
     If (!(Test-Path $Path)) { New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null }
     $VcList = Get-VcList -Release 2010, 2012, 2013, 2019
@@ -117,9 +105,15 @@ If (!(Test-Path $Path)) { New-Item -Path $Path -Type Directory -Force -ErrorActi
 New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
 
 # Run tasks/install apps
-Set-Repository
-Install-RequiredModules
-Install-VcRedistributables -Path "$Path\VcRedist"
+# Trust the PSGallery for modules
+If (Get-PSRepository | Where-Object { $_.Name -eq "PSGallery" -and $_.InstallationPolicy -ne "Trusted" }) {
+    Write-Verbose "Trusting the repository: PSGallery"
+    Install-PackageProvider -Name "NuGet" -MinimumVersion 2.8.5.208 -Force
+    Set-PSRepository -Name "PSGallery" -InstallationPolicy "Trusted"
+}
+    
+Install-RequiredModule
+Install-VcRedistributable -Path "$Path\VcRedist"
 Install-MicrosoftEdge -Path "$Path\Edge"
 Write-Host " Complete: $($MyInvocation.MyCommand)."
 #endregion

@@ -23,7 +23,7 @@ if ($userPath -like "*$env:ChocolateyInstall*") {
   # WARNING: This could cause issues after reboot where nothing is
   # found if something goes wrong. In that case, look at the backed up
   # files for PATH.
-  [System.Text.RegularExpressions.Regex]::Replace($userPath, [System.Text.RegularExpressions.Regex]::Escape("$env:ChocolateyInstall\bin") + '(?>;)?', '', [System.Text.RegularExpressions.RegexOptions]::IgnoreCase) | % { [System.Environment]::SetEnvironmentVariable('PATH', $_.Replace(";;", ";"), 'User') }
+  [System.Text.RegularExpressions.Regex]::Replace($userPath, [System.Text.RegularExpressions.Regex]::Escape("$env:ChocolateyInstall\bin") + '(?>;)?', '', [System.Text.RegularExpressions.RegexOptions]::IgnoreCase) | ForEach-Object { [System.Environment]::SetEnvironmentVariable('PATH', $_.Replace(";;", ";"), 'User') }
 }
   
 if ($machinePath -like "*$env:ChocolateyInstall*") {
@@ -31,7 +31,7 @@ if ($machinePath -like "*$env:ChocolateyInstall*") {
   # WARNING: This could cause issues after reboot where nothing is
   # found if something goes wrong. In that case, look at the backed up
   # files for PATH.
-  [System.Text.RegularExpressions.Regex]::Replace($machinePath, [System.Text.RegularExpressions.Regex]::Escape("$env:ChocolateyInstall\bin") + '(?>;)?', '', [System.Text.RegularExpressions.RegexOptions]::IgnoreCase) | % { [System.Environment]::SetEnvironmentVariable('PATH', $_.Replace(";;", ";"), 'Machine') }
+  [System.Text.RegularExpressions.Regex]::Replace($machinePath, [System.Text.RegularExpressions.Regex]::Escape("$env:ChocolateyInstall\bin") + '(?>;)?', '', [System.Text.RegularExpressions.RegexOptions]::IgnoreCase) | ForEach-Object { [System.Environment]::SetEnvironmentVariable('PATH', $_.Replace(";;", ";"), 'Machine') }
 }
   
 # Adapt for any services running in subfolders of ChocolateyInstall

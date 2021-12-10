@@ -21,6 +21,7 @@ $ProgressPreference = "SilentlyContinue"
 
 # Create target folder
 New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
+New-Item -Path $LogPath -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
 
 # Run tasks/install apps
 #region RTC service
@@ -36,7 +37,7 @@ If ($App) {
         Write-Host " Installing Microsoft Remote Desktop WebRTC Redirector Service"
         $params = @{
             FilePath     = "$env:SystemRoot\System32\msiexec.exe"
-            ArgumentList = "/package $($OutFile.FullName) ALLUSERS=1 /quiet"
+            ArgumentList = "/package $($OutFile.FullName) ALLUSERS=1 /quiet /Log $LogPath"
             WindowStyle  = "Hidden"
             Wait         = $True
             Verbose      = $True
@@ -68,7 +69,7 @@ If ($App) {
     try {
         $params = @{
             FilePath     = "$env:SystemRoot\System32\msiexec.exe"
-            ArgumentList = "/package $($OutFile.FullName) ALLUSERS=1 /quiet"
+            ArgumentList = "/package $($OutFile.FullName) ALLUSERS=1 /quiet /Log $LogPath"
             WindowStyle  = "Hidden"
             Wait         = $True
             Verbose      = $True

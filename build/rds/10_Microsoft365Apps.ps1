@@ -7,7 +7,7 @@
 [CmdletBinding()]
 Param (
     [Parameter(Mandatory = $False)]
-    [System.String] $LogPath = "$env:SystemRoot\Logs\Packer",
+    [System.String] $LogPath = "$env:SystemRoot\Logs\M365Apps",
 
     [Parameter(Mandatory = $False)]
     [System.String] $Path = "$env:SystemDrive\Apps\Microsoft\Office",
@@ -24,6 +24,7 @@ $ProgressPreference = "SilentlyContinue"
 
 # Create target folder
 New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
+New-Item -Path $LogPath -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
 
 # Run tasks/install apps
 $OfficeXml = @"
@@ -86,7 +87,7 @@ $OfficeXml = @"
         <User Key="software\microsoft\office\16.0\word\options" Name="defaultformat" Value="" Type="REG_SZ" App="word16" Id="L_SaveWordfilesas" />
     </AppSettings>
     <Display Level="None" AcceptEULA="TRUE" />
-    <Logging Level="Standard" Path="C:\Windows\Logs" />
+    <Logging Level="Standard" Path="$LogPath" />
 </Configuration>
 "@
 

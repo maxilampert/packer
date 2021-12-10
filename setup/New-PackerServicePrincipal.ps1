@@ -4,6 +4,7 @@
         Creates a service principal for use with Hashicorp Packer
 #>
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingWriteHost", "")]
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSReviewUnusedParameter", "")]
 [CmdletBinding()]
 param(
     [Parameter(Mandatory = $False)]
