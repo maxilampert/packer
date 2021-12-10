@@ -1,4 +1,4 @@
-<# 
+<#
     .SYNOPSIS
         Updates the doc/index.md table of contents
         Uses environment variables created inside the Azure DevOps environment
@@ -69,7 +69,7 @@ ForEach ($Level1Dir in $Level1Directories) {
             Write-Host " Add header: $($Level3Dir.FullName)."
             $markdown += New-MDHeader -Text $Level3Dir.BaseName -Level 3
             $markdown += "`n"
-    
+
             $params = @{
                 Path   = $Level3Dir.FullName
                 Filter = "*.md"

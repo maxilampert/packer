@@ -19,7 +19,7 @@
 
 .ICONURI
 
-.EXTERNALMODULEDEPENDENCIES 
+.EXTERNALMODULEDEPENDENCIES
 
 .REQUIREDSCRIPTS
 
@@ -32,8 +32,8 @@
 #>
 
 <#
-    .DESCRIPTION 
-    Install language support on Windows 10. 
+    .DESCRIPTION
+    Install language support on Windows 10.
 #>
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingWriteHost", "")]
 [CmdletBinding()]
@@ -99,7 +99,7 @@ Function Show-SupportedLanguage () {
 Function Save-File ($FileName, $Url, $OutFile) {
     #DownloadFile
     $ProgressPreference = "SilentlyContinue"
-    try {                    
+    try {
         $params = @{
             Uri             = $Url
             OutFile         = $OutFile
@@ -136,9 +136,9 @@ Function Save-LanguageFiles () {
         $OutFile = Join-Path -Path $Path -ChildPath (Split-Path -Path $Files[$FileName] -Leaf)
         If (Test-Path -Path $OutFile) { $Space -= 5 }
     }
-    
+
     # Download each ISO
-    $CDrive = Get-WmiObject -Class "Win32_LogicalDisk" -Filter "DeviceID='C:'"
+    $CDrive = Get-CimInstance -Class "Win32_LogicalDisk" -Filter "DeviceID='C:'"
     If ([System.Math]::Round($CDrive.FreeSpace / 1GB) -lt $Space) {
         Write-Warning -Message "Not enough capacity on $($env:SystemDrive) to install language support. $Space GB of free space required."
         Break Script
@@ -149,7 +149,7 @@ Function Save-LanguageFiles () {
         $OutFile = Join-Path -Path $Path -ChildPath (Split-Path -Path $Files[$FileName] -Leaf)
 
         If (Test-Path -Path $OutFile) {
-            # File exists   
+            # File exists
         }
         Else {
             Save-File -FileName $FileName -Url $FileUrl -OutFile $OutFile
@@ -180,7 +180,7 @@ Function Remove-LanguageFiles () {
     #CleanupLanguageFiles
     try { Remove-Item -Path $(Get-OutputFilePath -FileName "LanguagePack") -Force }
     catch { Write-Warning -Message "Failed to remove: $(Get-OutputFilePath -FileName "LanguagePack")." }
-    
+
     try { Remove-Item -Path $(Get-OutputFilePath -FileName "FOD") -Force }
     catch { Write-Warning -Message "Failed to remove: $(Get-OutputFilePath -FileName "FOD")." }
 
@@ -273,11 +273,11 @@ Function Install-InboxApps () { #InstallInboxApps
     $File = Get-OutputFilePath -FileName "InboxApps"
     $DriveLetter = Mount-File -FilePath $File
     $AppsContent = "$($DriveLetter):\amd64fre"
-    
+
     ForEach ($App in (Get-AppxProvisionedPackage -Online)) {
         $AppPath = "$($AppsContent)$($App.DisplayName)_$($App.PublisherId)"
         Write-Host "Handling $AppPath."
-        
+
         $LicFile = Get-Item -Path "$($AppPath)*.xml"
         If ($LicFile.Count -gt 0) {
             $Lic = $true
@@ -305,7 +305,7 @@ Function Install-InboxApps () { #InstallInboxApps
                 }
             }
             Else {
-                
+
                 try {
                     $params = @{
                         Online      = $True
@@ -326,7 +326,7 @@ Function Install-InboxApps () { #InstallInboxApps
 }
 
 Function Install-LanguageFiles ($LanguageCode) { #InstallLanguageFiles
-    
+
     $LanguagePackDriveLetter = Mount-File -FilePath (Get-OutputFilePath -FileName "LanguagePack")
     $FodDriveLetter = Mount-File -FilePath (Get-OutputFilePath -FileName "FOD")
 
@@ -352,7 +352,7 @@ Function Install() { #Install
 
     $languageCode = $languages[$languageNumber - 1]
 
-    DownloadLanguageFiles 
+    DownloadLanguageFiles
     InstallLanguageFiles $languageCode
     CleanupLanguageFiles
 }
@@ -363,7 +363,7 @@ If (!(test-path $downloadPath)) {
 
 $currentWindowsIdentity = [Security.Principal.WindowsIdentity]::GetCurrent()
 $currentWindowsPrincipal = [Security.Principal.WindowsPrincipal]$currentWindowsIdentity
- 
+
 if( -not $currentWindowsPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)){
     Write-Host "Script needs to be run as Administrator." -ForegroundColor red
     Break Script
@@ -375,16 +375,13 @@ if (!$winver) {
 }
 
 if (!$languageFiles[$winver]){
-    Write-Host "Languages installer is not supportd Windows $winver." -ForegroundColor red
+    Write-Host "Languages installer is not supported Windows $winver." -ForegroundColor red
     Break Script
 }
 
 ##Disable language pack cleanup##
 Disable-ScheduledTask -TaskPath "\Microsoft\Windows\AppxDeploymentClient\" -TaskName "Pre-staged app cleanup"
 
-Write-Output "Install Windows $winver languages:" 
+Write-Output "Install Windows $winver languages:"
 Install
 #endregion
-
-
-

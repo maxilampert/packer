@@ -1,5 +1,5 @@
 #Requires -Modules VcRedist
-<# 
+<#
     .SYNOPSIS
         Install evergreen core applications.
 #>
@@ -23,7 +23,7 @@ Write-Host " Downloading Microsoft Visual C++ Redistributables"
 Save-VcRedist -VcList (Get-VcList) -Path $Path > $Null
 
 Write-Host " Installing Microsoft Visual C++ Redistributables"
-$VcRedists = Install-VcRedist -VcList (Get-VcList) -Path $Path -Silent -Verbose
+Install-VcRedist -VcList (Get-VcList) -Path $Path -Silent -Verbose | Out-Null
 
 # If (Test-Path -Path $Path) { Remove-Item -Path $Path -Recurse -Confirm:$False -ErrorAction "SilentlyContinue" }
 Write-Host " Complete: VcRedists."

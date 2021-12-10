@@ -27,7 +27,7 @@ New-Item -Path $LogPath -ItemType "Directory" -Force -ErrorAction "SilentlyConti
 #region RTC service
 $App = Get-EvergreenApp -Name "MicrosoftWvdRtcService" | Where-Object { $_.Architecture -eq "x64"} | Select-Object -First 1
 If ($App) {
-    
+
     # Download
     Write-Host " Downloading Microsoft Remote Desktop WebRTC Redirector Service"
     $OutFile = Save-EvergreenApp -InputObject $App -Path $Path -WarningAction "SilentlyContinue"

@@ -1,4 +1,4 @@
-<# 
+<#
     .SYNOPSIS
         Install evergreen core applications.
 #>
@@ -111,7 +111,7 @@ If (Get-PSRepository | Where-Object { $_.Name -eq "PSGallery" -and $_.Installati
     Install-PackageProvider -Name "NuGet" -MinimumVersion 2.8.5.208 -Force
     Set-PSRepository -Name "PSGallery" -InstallationPolicy "Trusted"
 }
-    
+
 Install-RequiredModule
 Install-VcRedistributable -Path "$Path\VcRedist"
 Install-MicrosoftEdge -Path "$Path\Edge"

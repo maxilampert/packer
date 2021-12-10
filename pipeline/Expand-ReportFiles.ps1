@@ -1,4 +1,4 @@
-<# 
+<#
     .SYNOPSIS
         Expand the JSON report files from the archive file
 #>

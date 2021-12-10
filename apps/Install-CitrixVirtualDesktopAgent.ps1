@@ -3,21 +3,21 @@ Remove-MSIApplications -Name "Remote Desktop Agent Boot Loader"
 Remove-MSIApplications -Name "Remote Desktop WebRTC Redirector Service"
 
 
-## Install 
-Switch -Regex ((Get-WmiObject Win32_OperatingSystem).Caption) {
+## Install
+Switch -Regex ((Get-CimInstance -ClassName "CIM_OperatingSystem").Caption) {
     "Microsoft Windows Server*" {
         $FileName = "VDAServerSetup_2103.exe"
         Break
     }
-    "Microsoft Windows 10 Enterprise for Virtual Desktops" {
+    "Microsoft Windows 1* Enterprise for Virtual Desktops" {
         $FileName = "VDAServerSetup_2103.exe"
         Break
     }
-    "Microsoft Windows 10 Enterprise" {
+    "Microsoft Windows 1* Enterprise" {
         $FileName = "VDAWorkstationSetup_2103.exe"
         Break
     }
-    "Microsoft Windows 10*" {
+    "Microsoft Windows 1*" {
         $FileName = "VDAWorkstationSetup_2103.exe"
         Break
     }

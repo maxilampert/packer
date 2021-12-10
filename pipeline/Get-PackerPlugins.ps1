@@ -35,10 +35,10 @@ Function Get-GitHubRepoRelease {
         [System.String] $Filter = "\.zip$"
     )
 
-    # Retrieve the releases from the GitHub API 
-    try {        
+    # Retrieve the releases from the GitHub API
+    try {
         # Invoke the GitHub releases REST API
-        # Note that the API performs rate limiting. 
+        # Note that the API performs rate limiting.
         # https://docs.github.com/en/free-pro-team@latest/rest/reference/repos#get-the-latest-release
         $params = @{
             ContentType = "application/vnd.github.v3+json"

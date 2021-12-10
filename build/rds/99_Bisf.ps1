@@ -22,10 +22,10 @@ Write-Host "Using path: $Path."
 
 $App = Get-EvergreenApp -Name "BISF"
 If ($App) {
-    
+
     # Download the latest BIS-F
     $OutFile = Save-EvergreenApp -InputObject $App -Path $Path -WarningAction "SilentlyContinue"
-    
+
     # Install BIS-F
     try {
         Write-Host "Found MSI file: $($OutFile.FullName)."
@@ -46,7 +46,7 @@ If ($App) {
     $BisfInstall = Join-Path -Path ${env:ProgramFiles(x86)} -ChildPath "Base Image Script Framework (BIS-F)"
     Write-Host "BIS-F install path: $BisfInstall."
     If (Test-Path -Path $BisfInstall -ErrorAction "SilentlyContinue") {
-        
+
         # Remove Start menu shortcut if it exists
         Write-Host "Remove BIS-F Start menu shortcut."
         $params = @{
@@ -56,15 +56,15 @@ If ($App) {
             ErrorAction = "SilentlyContinue"
         }
         Remove-Item @params
-        
+
         # Copy BIS-F config files
         try {
             Write-Host "Copy BIS-F configuration files from: $Path to $BisfInstall."
-            Switch -Regex ((Get-WmiObject Win32_OperatingSystem).Caption) {
+            Switch -Regex ((Get-CimInstance -ClassName "CIM_OperatingSystem").Caption) {
                 "Microsoft Windows Server*" {
                     $Config = "BISFconfig_MicrosoftWindowsServer2019Standard_64-bit.json"
                 }
-                "Microsoft Windows 10*" {
+                "Microsoft Windows 1*" {
                     $Config = "BISFconfig_MicrosoftWindows10Enterprise_64-bit.json"
                 }
                 Default {
@@ -88,7 +88,7 @@ If ($App) {
         # Set BISFSharedConfig.json
         try {
             $json = [PSCustomObject] @{
-                ConfigFile = [System.IO.Path]::Combine(${env:ProgramFiles(x86)}, "Base Image Script Framework (BIS-F)", $ConfigFile) 
+                ConfigFile = [System.IO.Path]::Combine(${env:ProgramFiles(x86)}, "Base Image Script Framework (BIS-F)", $ConfigFile)
             }
             $params = @{
                 FilePath    = [System.IO.Path]::Combine(${env:ProgramFiles(x86)}, "Base Image Script Framework (BIS-F)", "BISFSharedConfig.json")

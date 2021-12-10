@@ -1,4 +1,4 @@
-<# 
+<#
     .SYNOPSIS
         Optimise and seal a Windows image.
 #>

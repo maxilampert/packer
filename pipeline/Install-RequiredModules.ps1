@@ -1,4 +1,4 @@
-<# 
+<#
     .SYNOPSIS
         Installs modules required for updating the markdown and committing changes
 #>
@@ -43,7 +43,7 @@ ForEach ($module in $Modules) {
     }
     catch {
         Throw $_
-        Break 
+        Break
     }
 }
 #endregion

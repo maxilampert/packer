@@ -1,4 +1,4 @@
-<# 
+<#
     .SYNOPSIS
         Set language/regional settings.
 #>
@@ -51,7 +51,7 @@ Function Set-RegionSettings ($Path, $Locale) {
     #region Variables
     $languageXML = Join-Path -Path "$env:SystemRoot\Setup\Scripts" -ChildPath "language.xml"
     $languageXmlContent = @"
-<gs:GlobalizationServices 
+<gs:GlobalizationServices
     xmlns:gs="urn:longhornGlobalizationUnattend">
     <!--User List-->
     <gs:UserList>

@@ -1,4 +1,4 @@
-<# 
+<#
     .SYNOPSIS
         Install evergreen core applications.
 #>

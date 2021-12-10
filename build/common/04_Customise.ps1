@@ -1,4 +1,4 @@
-<# 
+<#
     .SYNOPSIS
         Customise a Windows image for use as an WVD/XenApp VM in Azure.
 #>

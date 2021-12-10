@@ -23,7 +23,7 @@ $App = Get-EvergreenApp -Name "MicrosoftEdge" | Where-Object { $_.Architecture -
 | Sort-Object -Property @{ Expression = { [System.Version]$_.Version }; Descending = $true } | Select-Object -First 1
 
 If ($App) {
-    
+
     # Download
     Write-Host " Downloading Microsoft Edge"
     $OutFile = Save-EvergreenApp -InputObject $App -Path $Path -WarningAction "SilentlyContinue"
@@ -66,7 +66,7 @@ If ($App) {
             "system_level"                   = $True
         }
     }
-    $prefs | ConvertTo-Json | Set-Content -Path "${Env:ProgramFiles(x86)}\Microsoft\Edge\Application\master_preferences" -Force -Encoding utf8
+    $prefs | ConvertTo-Json | Set-Content -Path "${Env:ProgramFiles(x86)}\Microsoft\Edge\Application\master_preferences" -Force -Encoding "utf8"
     Remove-Item -Path "$env:Public\Desktop\Microsoft Edge*.lnk" -Force -ErrorAction SilentlyContinue
     $services = "edgeupdate", "edgeupdatem", "MicrosoftEdgeElevationService"
     ForEach ($service in $services) { Get-Service -Name $service | Set-Service -StartupType "Disabled" }

@@ -1,4 +1,4 @@
-<# 
+<#
     .SYNOPSIS
         Enable/disable Windows roles and features and set language/regional settings.
 #>
@@ -16,7 +16,7 @@ $VerbosePreference = "Continue"
 $ProgressPreference = "SilentlyContinue"
 
 # Run tasks
-Switch -Regex ((Get-WmiObject Win32_OperatingSystem).Caption) {
+Switch -Regex ((Get-CimInstance -ClassName "CIM_OperatingSystem").Caption) {
     "Microsoft Windows Server*" {
         # Add / Remove roles and features (requires reboot at end of deployment)
         try {
@@ -69,16 +69,16 @@ Switch -Regex ((Get-WmiObject Win32_OperatingSystem).Caption) {
                     Write-Warning -Message " ERR: Failed to set service properties with: $($_.Exception.Message)."
                 }
             }
-        } 
+        }
         Break
     }
-    "Microsoft Windows 10 Enterprise for Virtual Desktops" {
+    "Microsoft Windows 1* Enterprise for Virtual Desktops" {
         Break
     }
-    "Microsoft Windows 10 Enterprise" {
+    "Microsoft Windows 1* Enterprise" {
         Break
     }
-    "Microsoft Windows 10*" {
+    "Microsoft Windows 1*" {
         Break
     }
     Default {

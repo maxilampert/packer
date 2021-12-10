@@ -1,4 +1,4 @@
-<# 
+<#
     .SYNOPSIS
         Preps a RDS/WVD image for customisation.
 #>

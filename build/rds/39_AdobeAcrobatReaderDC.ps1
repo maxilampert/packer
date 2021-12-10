@@ -31,7 +31,7 @@ Write-Host " Adobe Acrobat Reader DC"
 $Reader = Get-EvergreenApp -Name "AdobeAcrobatReaderDC" | Where-Object { $_.Language -eq $Language -and $_.Architecture -eq $Architecture } | `
     Select-Object -First 1
 If ($Reader) {
-        
+
     # Download Adobe Acrobat Reader
     Write-Host " Download Adobe Acrobat Reader DC"
     $OutFile = Save-EvergreenApp -InputObject $Reader -Path $Path -WarningAction "SilentlyContinue"
@@ -45,16 +45,15 @@ If ($Reader) {
             ArgumentList = $ArgumentList
             WindowStyle  = "Hidden"
             Wait         = $True
-            PassThru     = $True
             Verbose      = $True
         }
-        $process = Start-Process @params
+        Start-Process @params
     }
     catch {
         Write-Warning -Message " ERR: Failed to install Adobe Acrobat Reader."
     }
 
-    
+
     # Get the latest update; Download the updater if the updater version is greater than the installer
     $Updater = Get-EvergreenApp -Name "AdobeAcrobat" | `
         Where-Object { $_.Product -eq "Reader" -and $_.Track -eq "DC" -and $_.Language -eq "Neutral" -and $_.Architecture -eq $Architecture } | `

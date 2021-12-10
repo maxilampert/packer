@@ -1,4 +1,4 @@
-<# 
+<#
     .SYNOPSIS
         Optimise and seal a Windows image.
 #>
@@ -204,7 +204,7 @@ Function Global:Clear-WinEvent {
 }
 #endregion
 
-#region 
+#region
 Function MicrosoftOptimizer {
     # https://github.com/The-Virtual-Desktop-Team/Virtual-Desktop-Optimization-Tool
     $Url = "https://github.com/The-Virtual-Desktop-Team/Virtual-Desktop-Optimization-Tool/archive/master.zip"

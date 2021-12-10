@@ -22,7 +22,7 @@ New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue
 Write-Host " Microsoft FSLogix agent"
 $App = Get-EvergreenApp -Name "MicrosoftFSLogixApps" | Where-Object { $_.Channel -eq "Production" } | Select-Object -First 1
 If ($App) {
-    
+
     # Download
     Write-Host " Microsoft FSLogix: $($App.Version)"
     $OutFile = Save-EvergreenApp -InputObject $App -Path $Path -WarningAction "SilentlyContinue"
@@ -35,7 +35,7 @@ If ($App) {
     catch {
         Write-Host "ERR:: Failed to unpack: $($OutFile.FullName)."
     }
-    
+
     # Install
     ForEach ($file in "FSLogixAppsSetup.exe", "FSLogixAppsRuleEditorSetup.exe") {
         $Installers = Get-ChildItem -Path $Path -Recurse -Include $file | Where-Object { $_.Directory -match "x64" }

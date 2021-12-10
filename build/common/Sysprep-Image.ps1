@@ -1,4 +1,4 @@
-<# 
+<#
     .SYNOPSIS
         Sysprep image.
 #>
@@ -8,6 +8,29 @@ Param (
     [Parameter(Mandatory = $False)]
     [System.String] $Path = "$env:SystemDrive\Apps"
 )
+
+#region Functions
+Function Get-InstalledApplication () {
+    $RegPath = @("HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*")
+    If (-not ([System.IntPtr]::Size -eq 4)) {
+        $RegPath += @("HKLM:\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*")
+    }
+    try {
+        $propertyNames = "DisplayName", "DisplayVersion", "Publisher", "UninstallString", "SystemComponent"
+        $Apps = Get-ItemProperty -Path $RegPath -Name $propertyNames -ErrorAction "SilentlyContinue" | `
+            . { process { If ($_.DisplayName) { $_ } } } | `
+            Where-Object { $_.SystemComponent -ne 1 } | `
+            Select-Object -Property "DisplayName", "DisplayVersion", "Publisher", "UninstallString", "PSPath" | `
+            Sort-Object -Property "DisplayName"
+    }
+    catch {
+        Throw $_.Exception.Message
+    }
+    Return $Apps
+}
+#endregion
+
+
 
 # Re-enable Defender
 Write-Output " Enable Windows Defender real time scan"
@@ -25,8 +48,7 @@ catch {
 }
 
 # Determine whether the Citrix Virtual Desktop Agent is installed
-$CitrixVDA = Get-WmiObject -Class Win32_Product | `
-    Where-Object { $_.Vendor -like "Citrix Systems*" -and $_.Caption -like "Machine Identity Service Agent*" }
+$CitrixVDA = Get-InstalledApplication | Where-Object { $_.DisplayName -like "*Machine Identity Service Agent*" }
 If ($Null -ne $CitrixVDA) {
     Write-Host " Citrix Virtual Desktop agent detected, skipping Sysprep."
 }
@@ -48,13 +70,13 @@ Else {
         $imageState = Get-ItemProperty $RegPath | Select-Object ImageState
         If ($imageState.ImageState -ne 'IMAGE_STATE_GENERALIZE_RESEAL_TO_OOBE') {
             Write-Output $imageState.ImageState
-            Start-Sleep -s 10 
+            Start-Sleep -s 10
         }
         Else {
             Break
         }
     }
-    $imageState = Get-ItemProperty $RegPath | Select-Object ImageState
+    $imageState = Get-ItemProperty $RegPath | Select-Object -Property "ImageState"
     Write-Output $imageState.ImageState
     #endregion
     Write-Host " Complete: Sysprep."

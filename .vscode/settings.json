@@ -6,9 +6,11 @@
     "cSpell.words": [
         "aaronparker",
         "australiaeast",
+        "AUTOACTIVATE",
         "Datacenter",
         "DEFAULTWORKINGDIRECTORY",
         "disableexperiencemetrics",
+        "DONOTCREATEDESKTOPSHORTCUT",
         "DWORD",
         "edgeupdate",
         "edgeupdatem",
@@ -30,9 +32,11 @@
         "pymdownx",
         "Roboto",
         "setvariable",
+        "Unattend",
         "virtualmachine",
         "vnet",
         "winrm",
-        "winrmuser"
+        "winrmuser",
+        "winver"
     ]
 }
