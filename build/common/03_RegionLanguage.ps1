@@ -2,6 +2,7 @@
     .SYNOPSIS
         Set language/regional settings.
 #>
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingWriteHost", "")]
 [CmdletBinding()]
 Param (
     [Parameter(Mandatory = $False)]

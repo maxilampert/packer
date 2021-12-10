@@ -1,9 +1,11 @@
+#Requires -RunAsAdministrator
+#Requires -PSEdition Desktop
 <#
     .SYNOPSIS
         Runs Pester tests against a Windows 10 VM to confirm a desired configuration
 #>
-#Requires -RunAsAdministrator
-#Requires -PSEdition Desktop
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingWriteHost", "")]
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseDeclaredVarsMoreThanAssignments", "")]
 [CmdletBinding()]
 Param()
 

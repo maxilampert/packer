@@ -2,6 +2,7 @@
     .SYNOPSIS
         Installs modules required for updating the markdown and committing changes
 #>
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingWriteHost", "")]
 [CmdletBinding()]
 Param (
     [Parameter()]

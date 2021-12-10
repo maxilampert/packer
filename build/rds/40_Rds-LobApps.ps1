@@ -3,6 +3,7 @@
         Install line-of-business applications from an Azure storage account
         Assumes applications are installed via the PSAppDeployToolkit
 #>
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingWriteHost", "")]
 [CmdletBinding()]
 Param (
     [Parameter(Mandatory = $False)]

@@ -3,6 +3,7 @@
         Creates markdown from JSON output generated from Azure DevOps builds
         Uses environment variables created inside the Azure DevOps environment
 #>
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingWriteHost", "")]
 [CmdletBinding()]
 Param (
     [Parameter()]

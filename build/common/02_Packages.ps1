@@ -2,6 +2,7 @@
     .SYNOPSIS
         Downloads packages from blob storage and applies to the local machine.
 #>
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingWriteHost", "")]
 [CmdletBinding()]
 Param (
     [Parameter(Mandatory = $False)]

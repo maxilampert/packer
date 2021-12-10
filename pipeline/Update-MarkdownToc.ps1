@@ -3,6 +3,7 @@
         Updates the doc/index.md table of contents
         Uses environment variables created inside the Azure DevOps environment
 #>
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingWriteHost", "")]
 [CmdletBinding()]
 Param (
     [Parameter()]

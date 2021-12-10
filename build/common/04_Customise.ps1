@@ -2,6 +2,7 @@
     .SYNOPSIS
         Customise a Windows image for use as an WVD/XenApp VM in Azure.
 #>
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingWriteHost", "")]
 [CmdletBinding()]
 Param (
     [Parameter(Mandatory = $False)]

@@ -2,6 +2,8 @@
     .SYNOPSIS
         Downloads Hashicorp Packer plugins
 #>
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingWriteHost", "")]
+[CmdletBinding()]
 param (
     [Parameter()]
     [System.String] $Path = "$env:AppData\packer.d\plugins"

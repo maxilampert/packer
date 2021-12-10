@@ -34,7 +34,8 @@
 <#
     .DESCRIPTION 
     Install language support on Windows 10. 
-#> 
+#>
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingWriteHost", "")]
 [CmdletBinding()]
 Param (
     [Parameter(Mandatory = $False)]

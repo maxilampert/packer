@@ -2,6 +2,7 @@
     .SYNOPSIS
         Preps a RDS/WVD image for customisation.
 #>
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingWriteHost", "")]
 [CmdletBinding()]
 Param (
     [Parameter(Mandatory = $False)]

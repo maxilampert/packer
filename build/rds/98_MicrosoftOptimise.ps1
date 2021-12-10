@@ -2,6 +2,7 @@
     .SYNOPSIS
         Optimise and seal a Windows image.
 #>
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingWriteHost", "")]
 [CmdletBinding()]
 Param (
     [Parameter(Mandatory = $False)]

@@ -1,5 +1,6 @@
 <#
 #>
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingWriteHost", "")]
 [CmdletBinding()]
 param (
     [Parameter()]

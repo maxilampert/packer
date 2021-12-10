@@ -2,6 +2,7 @@
     .SYNOPSIS
         Enable/disable Windows roles and features and set language/regional settings.
 #>
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingWriteHost", "")]
 [CmdletBinding()]
 Param (
     [Parameter(Mandatory = $False)]

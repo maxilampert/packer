@@ -3,6 +3,7 @@
     .SYNOPSIS
         Downloads / installs the Windows Virtual Desktop agents and services
 #>
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingWriteHost", "")]
 [CmdletBinding()]
 Param (
     [Parameter(Mandatory = $False)]
