@@ -3,6 +3,7 @@
         Set language/regional settings.
 #>
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingWriteHost", "")]
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseShouldProcessForStateChangingFunctions", "")]
 [CmdletBinding()]
 Param (
     [Parameter(Mandatory = $False)]
@@ -10,7 +11,7 @@ Param (
 )
 
 #region Functions
-Function Set-RegionSettings ($Path, $Locale) {
+Function Set-RegionSetting ($Path, $Locale) {
     If (!(Test-Path $Path)) { New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" }
 
     # Select the locale
@@ -210,6 +211,6 @@ Else {
     Write-Output " Can't find passed parameter, setting Locale to en-AU."
     $Locale = "en-AU"
 }
-Set-RegionSettings -Path $Path -Locale $Locale
+Set-RegionSetting -Path $Path -Locale $Locale
 #Install-LanguageCapability -Locale $Locale
 Write-Host " Complete: RegionLanguage."

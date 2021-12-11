@@ -3,6 +3,7 @@
         Optimise and seal a Windows image.
 #>
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingWriteHost", "")]
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseShouldProcessForStateChangingFunctions", "")]
 [CmdletBinding()]
 Param (
     [Parameter(Mandatory = $False)]
@@ -18,7 +19,7 @@ Function Invoke-WindowsDefender {
     # Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\RemovalTools\MRT" -Name "GUID" -Value ""
 }
 
-Function Disable-ScheduledTasks {
+Function Disable-ScheduledTask {
     <#
         - NOTE:           Original script details here:
         - TITLE:          Microsoft Windows 1909  VDI/WVD Optimization Script
@@ -68,7 +69,7 @@ Function Disable-ScheduledTasks {
     #endregion
 }
 
-Function Disable-WindowsTraces {
+Function Disable-WindowsTrace {
     #region Disable Windows Traces
     Write-Host "Disabling Windows traces."
     $DisableAutologgers = @(
@@ -258,8 +259,8 @@ New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue
 
 #region Manual seal image tasks
 Invoke-WindowsDefender
-Disable-ScheduledTasks
-Disable-WindowsTraces
+Disable-ScheduledTask
+Disable-WindowsTrace
 Disable-SystemRestore
 Disable-Service
 Optimize-Network

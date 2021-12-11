@@ -6,9 +6,6 @@
 [CmdletBinding()]
 Param (
     [Parameter(Mandatory = $False)]
-    [System.String] $LogPath = "$env:SystemRoot\Logs\Packer",
-
-    [Parameter(Mandatory = $False)]
     [System.String] $Path = "$env:SystemDrive\Apps\Packages"
 )
 
@@ -120,7 +117,7 @@ Function Install-LanguageCapability ($Locale) {
     }
 }
 
-Function Install-Package ($Path, $PackagesUrl) {
+Function Install-ImagePackage ($Path, $PackagesUrl) {
 
     [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
@@ -168,5 +165,5 @@ $ProgressPreference = "SilentlyContinue"
 New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
 
 # Run tasks
-Install-Package -Path $Path -PackagesUrl $Env:PackagesUrl
+Install-ImagePackage -Path $Path -PackagesUrl $Env:PackagesUrl
 Write-Host " Complete: Packages."

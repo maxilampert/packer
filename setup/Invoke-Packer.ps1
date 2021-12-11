@@ -123,9 +123,8 @@ Write-Host "Variables file: $newVariablesFile" -ForegroundColor Green
 # Validate template
 $Template = Resolve-Path -Path $TemplateFile
 $Arguments = "-var-file $newVariablesFile -var 'image_date=$($Date)' $Template"
-$Validate = "& packer.exe validate $Arguments"
 Write-Host "Validate template: 'packer.exe validate $Arguments'." -ForegroundColor Cyan
-Invoke-Expression -Command $Validate
+& packer.exe validate $Arguments
 
 # Run Packer
 Write-Host "Packer command line sent to the clipboard. Paste here to run." -ForegroundColor Cyan

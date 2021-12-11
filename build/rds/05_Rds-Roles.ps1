@@ -4,11 +4,7 @@
 #>
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingWriteHost", "")]
 [CmdletBinding()]
-Param (
-    [Parameter(Mandatory = $False)]
-    [System.String] $Path = "$env:SystemDrive\Apps\Roles"
-)
-
+param ()
 
 #region Script logic
 # Set $VerbosePreference so full details are sent to the log; Make Invoke-WebRequest faster
