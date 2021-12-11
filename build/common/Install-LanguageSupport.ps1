@@ -36,6 +36,7 @@
     Install language support on Windows 10.
 #>
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingWriteHost", "")]
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSReviewUnusedParameter", "")]
 [CmdletBinding()]
 Param (
     [Parameter(Mandatory = $False)]
@@ -126,7 +127,7 @@ Function Get-WinVer {
     Return $WinVer
 }
 
-Function Save-LanguageFiles () {
+Function Save-LanguageFile () {
     #DownloadLanguageFiles
     $Files = $languageFiles[(Get-WinVer)]
     $Space = 20 #Total space required to download and install
@@ -176,7 +177,7 @@ Function Dismount-File ($FilePath) { #DismountFile
     Dismount-DiskImage -ImagePath $FilePath | Out-Null
 }
 
-Function Remove-LanguageFiles () {
+Function Remove-LanguageFile () {
     #CleanupLanguageFiles
     try { Remove-Item -Path $(Get-OutputFilePath -FileName "LanguagePack") -Force }
     catch { Write-Warning -Message "Failed to remove: $(Get-OutputFilePath -FileName "LanguagePack")." }
@@ -267,7 +268,7 @@ Function Update-LanguageList ($LanguageCode) { #UpdateLanguageList
     Set-WinUserLanguageList -LanguageList $LanguageList -Force
 }
 
-Function Install-InboxApps () { #InstallInboxApps
+Function Install-InboxApp () { #InstallInboxApps
     Write-Host "Installing InboxApps"
 
     $File = Get-OutputFilePath -FileName "InboxApps"
@@ -325,7 +326,7 @@ Function Install-InboxApps () { #InstallInboxApps
     DismountFile $file
 }
 
-Function Install-LanguageFiles ($LanguageCode) { #InstallLanguageFiles
+Function Install-LanguageFile ($LanguageCode) { #InstallLanguageFiles
 
     $LanguagePackDriveLetter = Mount-File -FilePath (Get-OutputFilePath -FileName "LanguagePack")
     $FodDriveLetter = Mount-File -FilePath (Get-OutputFilePath -FileName "FOD")
@@ -337,7 +338,7 @@ Function Install-LanguageFiles ($LanguageCode) { #InstallLanguageFiles
     Dismount-File -FilePath $(Get-OutputFilePath -FileName "LanguagePack")
     Dismount-File -FilePath $(Get-OutputFilePath -FileName "FOD")
 
-    Install-InboxApps
+    Install-InboxApp
 }
 
 Function Install() { #Install

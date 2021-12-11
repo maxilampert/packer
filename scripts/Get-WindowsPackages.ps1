@@ -31,7 +31,7 @@ ForEach ($File in $LanguageFiles) {
 }
 
 
-Get-ChildItem -Path . -Filter *.cab | % { Add-WindowsPackage -Online -PackagePath $_.FullName }
+Get-ChildItem -Path . -Filter *.cab | ForEach-Object { Add-WindowsPackage -Online -PackagePath $_.FullName }
 
 $LanguageList = Get-WinUserLanguageList
 $LanguageList.Add("en-GB")
@@ -39,4 +39,4 @@ Set-WinUserLanguageList $LanguageList -Force
 
 # English (United Kingdom) Local Experience Pack
 # https://www.microsoft.com/en-au/p/english-united-kingdom-local-experience-pack/9nt52vq39bvn
-# http://tlu.dl.delivery.mp.microsoft.com/filestreamingservice/files/41681637-f0cd-4e95-8a79-b626c45d14a5?P1=1634431641&P2=404&P3=2&P4=a1jzG0dP%2bVDwriduZevqoeGNXxV43POxr%2bfy%2fV%2f%2fSzGj18WCtxx4Vkh8Go7fq9rVdnNwqdxhmGVznvYeUfBtvA%3d%3d
+# http://tlu.dl.delivery.mp.microsoft.com/filestreamingservice/files/41681637-f0cd-4e95-8a79-b626c45d14a5?P1=1634431641&P2=404&P3=2&P4=a1jzG0dPForEach-Object2bVDwriduZevqoeGNXxV43POxrForEach-Object2bfyForEach-Object2fVForEach-Object2fForEach-Object2fSzGj18WCtxx4Vkh8Go7fq9rVdnNwqdxhmGVznvYeUfBtvAForEach-Object3dForEach-Object3d

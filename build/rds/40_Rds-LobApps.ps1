@@ -83,7 +83,7 @@ Function Get-AzureBlobItem {
     end {}
 }
 
-Function Install-LobApps ($Path, $AppsUrl) {
+Function Install-LobApp ($Path, $AppsUrl) {
     # Get the list of items from blob storage
     try {
         $Items = Get-AzureBlobItem -Uri "$($AppsUrl)?comp=list" | Where-Object { $_.Name -match "zip?" }
@@ -129,7 +129,7 @@ New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue
 
 # Run tasks
 If (Test-Path -Path env:AppsUrl) {
-    Install-LobApps -Path $Path -AppsUrl $env:AppsUrl
+    Install-LobApp -Path $Path -AppsUrl $env:AppsUrl
 }
 Write-Host " Complete: LoBApps."
 #endregion

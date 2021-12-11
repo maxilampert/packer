@@ -4,6 +4,7 @@
         Install evergreen core applications.
 #>
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingWriteHost", "")]
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSReviewUnusedParameter", "")]
 [CmdletBinding()]
 Param (
     [Parameter(Mandatory = $False)]

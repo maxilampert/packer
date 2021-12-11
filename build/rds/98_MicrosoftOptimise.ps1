@@ -88,7 +88,7 @@ Function Disable-WindowsTraces {
     #endregion
 }
 
-Function Disable-Services {
+Function Disable-Service {
     #region Disable Services
     #################### BEGIN: DISABLE SERVICES section ###########################
     Write-Host "Disabling services."
@@ -170,7 +170,7 @@ Function Invoke-Cleanmgr {
     #endregion
 }
 
-Function Remove-TempFiles {
+Function Remove-TempFile {
     #region
     # ADDITIONAL DISK CLEANUP
     # Delete not in-use files in locations C:\Windows\Temp and %temp%
@@ -198,7 +198,9 @@ Function Global:Clear-WinEvent {
             try {
                 [System.Diagnostics.Eventing.Reader.EventLogSession]::GlobalSession.ClearLog("$LogName")
             }
-            catch { }
+            catch {
+                Write-Error -Message "Failed to clear log: $LogName."
+            }
         }
     }
 }
@@ -259,10 +261,10 @@ Invoke-WindowsDefender
 Disable-ScheduledTasks
 Disable-WindowsTraces
 Disable-SystemRestore
-Disable-Services
+Disable-Service
 Optimize-Network
 # Invoke-Cleanmgr
-Remove-TempFiles
+Remove-TempFile
 Get-WinEvent -ListLog * | ForEach-Object { Clear-WinEvent $_.LogName -Confirm:$False }
 #endregion
 

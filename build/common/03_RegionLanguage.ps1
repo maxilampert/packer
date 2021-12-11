@@ -6,9 +6,6 @@
 [CmdletBinding()]
 Param (
     [Parameter(Mandatory = $False)]
-    [System.String] $LogPath = "$env:SystemRoot\Logs\Packer",
-
-    [Parameter(Mandatory = $False)]
     [System.String] $Path = "$env:SystemDrive\Apps\Locale"
 )
 
@@ -88,10 +85,12 @@ Set-TimeZone -Id $Timezone -Verbose
 & $env:SystemRoot\System32\control.exe "intl.cpl,,/f:$languageXML"
 "@
 
+<#
     $setupCompleteCMD = Join-Path -Path "$env:SystemRoot\Setup\Scripts" -ChildPath "SetupComplete.cmd"
     $setupCompleteContent = @"
 $env:SystemRoot\System32\WindowsPowerShell\v1.0\powershell.exe -NonInteractive -WindowStyle Hidden -ExecutionPolicy Bypass -File $languagePS1
 "@
+#>
     #endregion
 
     #region Set regional settings
