@@ -120,7 +120,7 @@ Function Install-LanguageCapability ($Locale) {
     }
 }
 
-Function Install-Packages ($Path, $PackagesUrl) {
+Function Install-Package ($Path, $PackagesUrl) {
 
     [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
@@ -168,5 +168,5 @@ $ProgressPreference = "SilentlyContinue"
 New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
 
 # Run tasks
-Install-Packages -Path $Path -PackagesUrl $Env:PackagesUrl
+Install-Package -Path $Path -PackagesUrl $Env:PackagesUrl
 Write-Host " Complete: Packages."
