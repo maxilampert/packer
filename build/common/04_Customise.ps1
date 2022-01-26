@@ -6,7 +6,7 @@
 [CmdletBinding()]
 Param (
     [Parameter(Mandatory = $False)]
-    [System.String] $Path = "$env:SystemDrive\Apps\image-customise",
+    [System.String] $Path = "$env:SystemDrive\Apps\image-customise\src",
 
     [Parameter(Mandatory = $False)]
     [System.String] $InvokeScript = "Install-Defaults.ps1"
@@ -24,7 +24,7 @@ $Script = Get-ChildItem -Path $Path -Filter $InvokeScript -Recurse | Select-Obje
 # Validate customisation scripts; Run scripts
 If ($Null -ne $Script) {
     try {
-        Push-Location -Path $Script.DirectoryName
+        Push-Location -Path $Path
         Write-Host " Running script: $($Script.FullName)."
         . $Script.FullName -Path $Path
         Pop-Location
