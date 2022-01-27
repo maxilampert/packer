@@ -124,6 +124,7 @@ $Latest = Get-GitHubRepoRelease -Uri "https://api.github.com/repos/rgl/packer-pl
     Where-Object { $_.Platform -eq "Windows" } | Select-Object -First 1
 
 # Temporarily use 0.11.0
+<#
 $Latest = [PSCustomObject]@{
     Version = "0.14.0"
     URI     = "https://github.com/rgl/packer-plugin-windows-update/releases/download/v0.14.0/packer-plugin-windows-update_v0.14.0_x5.0_windows_amd64.zip"
@@ -132,6 +133,7 @@ $Latest = [PSCustomObject]@{
     Version = "0.11.0"
     URI     = "https://github.com/rgl/packer-plugin-windows-update/releases/download/v0.11.0/packer-provisioner-windows-update_0.11.0_windows_amd64.zip"
 }
+#>
 
 If ($Null -ne $Latest) {
     Write-Host " Found version: $($Latest.Version)."
