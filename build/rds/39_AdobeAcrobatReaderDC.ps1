@@ -59,31 +59,34 @@ If ($Reader) {
     $Updater = Get-EvergreenApp -Name "AdobeAcrobat" | `
         Where-Object { $_.Product -eq "Reader" -and $_.Track -eq "DC" -and $_.Language -eq "Neutral" -and $_.Architecture -eq $Architecture } | `
         Select-Object -First 1
-    If ($Updater.Version -gt $Reader.Version) {
-        $UpdateOutFile = Save-EvergreenApp -InputObject $Updater -Path $Path -WarningAction "SilentlyContinue"
-    }
 
     # Run post install actions
     Write-Host " Post install configuration Reader"
+    Write-Host " Getting Acrobat updates"
     $Executables = "$env:ProgramFiles\Adobe\Acrobat DC\Acrobat\Acrobat.exe", `
         "${env:ProgramFiles(x86)}\Adobe\Acrobat DC\Acrobat\Acrobat.exe", `
         "${env:ProgramFiles(x86)}\Adobe\Acrobat Reader DC\Reader\AcroRd32.exe"
     If (Test-Path -Path $Executables) {
 
-        # Update Adobe Acrobat Reader
-        try {
-            Write-Host " Installing update: $($msp.FullName)."
-            $params = @{
-                FilePath     = "$env:SystemRoot\System32\msiexec.exe"
-                ArgumentList = "/update $($UpdateOutFile.FullName) /quiet /qn"
-                WindowStyle  = "Hidden"
-                Wait         = $True
-                Verbose      = $True
+        # Update
+        If ([System.Version]$Updater.Version -gt [System.Version]$Reader.Version) {
+            $UpdateOutFile = Save-EvergreenApp -InputObject $Updater -Path $Path -WarningAction "SilentlyContinue"
+
+            # Update Adobe Acrobat Reader
+            try {
+                Write-Host " Installing update: $($UpdateOutFile.FullName)."
+                $params = @{
+                    FilePath     = "$env:SystemRoot\System32\msiexec.exe"
+                    ArgumentList = "/update $($UpdateOutFile.FullName) /quiet /qn"
+                    WindowStyle  = "Hidden"
+                    Wait         = $True
+                    Verbose      = $True
+                }
+                Start-Process @params
             }
-            Start-Process @params
-        }
-        catch {
-            Write-Warning -Message " ERR: Failed to update Adobe Acrobat Reader."
+            catch {
+                Write-Warning -Message " ERR: Failed to update Adobe Acrobat Reader."
+            }
         }
 
         # Configure update tasks
