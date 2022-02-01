@@ -33,9 +33,9 @@ Function Get-InstalledApplication () {
 
 
 # Re-enable Defender
-Write-Output " Enable Windows Defender real time scan"
+Write-Host " Enable Windows Defender real time scan"
 Set-MpPreference -DisableRealtimeMonitoring $false
-Write-Output " Enable Windows Store updates"
+Write-Host " Enable Windows Store updates"
 reg delete HKLM\Software\Policies\Microsoft\Windows\CloudContent /v DisableWindowsConsumerFeatures /f
 reg delete HKLM\Software\Policies\Microsoft\WindowsStore /v AutoDownload /f
 
@@ -56,7 +56,7 @@ Else {
 
     # Sysprep
     #region Prepare
-    Write-Output " Run Sysprep"
+    Write-Host " Run Sysprep"
     If (Get-Service -Name "RdAgent" -ErrorAction "SilentlyContinue") { Set-Service -Name "RdAgent" -StartupType "Disabled" }
     If (Get-Service -Name "WindowsAzureTelemetryService" -ErrorAction "SilentlyContinue") { Set-Service -Name "WindowsAzureTelemetryService" -StartupType "Disabled" }
     If (Get-Service -Name "WindowsAzureGuestAgent" -ErrorAction "SilentlyContinue") { Set-Service -Name "WindowsAzureGuestAgent" -StartupType "Disabled" }

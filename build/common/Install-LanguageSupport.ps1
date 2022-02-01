@@ -384,6 +384,6 @@ if (!$languageFiles[$winver]){
 ##Disable language pack cleanup##
 Disable-ScheduledTask -TaskPath "\Microsoft\Windows\AppxDeploymentClient\" -TaskName "Pre-staged app cleanup"
 
-Write-Output "Install Windows $winver languages:"
+Write-Host "Install Windows $winver languages:"
 Install
 #endregion
