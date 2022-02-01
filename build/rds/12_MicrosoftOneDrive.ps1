@@ -34,10 +34,14 @@ If ($App) {
             FilePath     = $OutFile.FullName
             ArgumentList = "/ALLUSERS"
             WindowStyle  = "Hidden"
-            Wait         = $True
+            Wait         = $False
             Verbose      = $True
         }
         Start-Process @params
+        Do {
+            Start-Sleep -Seconds 10
+        } While (Get-Process -Name "OneDriveSetup")
+        Get-Process -Name "OneDrive" | Stop-Process -Force
     }
     catch {
         Write-Warning -Message " ERR: Failed to install Microsoft OneDrive."
