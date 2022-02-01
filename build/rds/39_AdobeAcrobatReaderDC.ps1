@@ -34,7 +34,7 @@ $Reader = Get-EvergreenApp -Name "AdobeAcrobatReaderDC" | Where-Object { $_.Lang
 If ($Reader) {
 
     # Download Adobe Acrobat Reader
-    Write-Host " Download Adobe Acrobat Reader DC"
+    Write-Host " Download Adobe Acrobat Reader DC: $($Reader.Version)."
     $OutFile = Save-EvergreenApp -InputObject $Reader -Path $Path -WarningAction "SilentlyContinue"
 
     # Install Adobe Acrobat Reader
@@ -48,10 +48,10 @@ If ($Reader) {
             Wait         = $True
             Verbose      = $True
         }
-        Start-Process @params
+        $Result = Start-Process @params
     }
     catch {
-        Write-Warning -Message " ERR: Failed to install Adobe Acrobat Reader."
+        Write-Warning -Message " ERR: Failed to install Adobe Acrobat Reader with: $($Result.ExitCode)."
     }
 
 

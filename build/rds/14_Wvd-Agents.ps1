@@ -34,7 +34,7 @@ If ($App) {
 
     # Install RTC
     try {
-        Write-Host " Installing Microsoft Remote Desktop WebRTC Redirector Service"
+        Write-Host " Installing Microsoft Remote Desktop WebRTC Redirector Service: $($App.Version)."
         $params = @{
             FilePath     = "$env:SystemRoot\System32\msiexec.exe"
             ArgumentList = "/package $($OutFile.FullName) ALLUSERS=1 /quiet /Log $LogPath"
@@ -65,7 +65,7 @@ If ($App) {
     $OutFile = Save-EvergreenApp -InputObject $App -Path $Path -WarningAction "SilentlyContinue"
 
     # Install
-    Write-Host " Installing Microsoft Windows Virtual Desktop Agent Bootloader"
+    Write-Host " Installing Microsoft Windows Virtual Desktop Agent Bootloader: $($App.Version)."
     try {
         $params = @{
             FilePath     = "$env:SystemRoot\System32\msiexec.exe"
@@ -92,7 +92,7 @@ $App = Get-EvergreenApp -Name "MicrosoftWvdInfraAgent" | Where-Object { $_.Archi
 If ($App) {
 
     # Download
-    Write-Host " Downloading Microsoft WVD Infrastructure Agent"
+    Write-Host " Downloading Microsoft WVD Infrastructure Agent: $($App.Version)."
     $OutFile = Save-EvergreenApp -InputObject $App -Path $Path -WarningAction "SilentlyContinue"
 
     # Install

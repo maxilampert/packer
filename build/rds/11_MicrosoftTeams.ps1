@@ -28,7 +28,7 @@ If ($App) {
 
     # Install
     try {
-        Write-Host " Installing Microsoft Teams"
+        Write-Host " Installing Microsoft Teams: $($App.Version)."
         REG add "HKLM\SOFTWARE\Microsoft\Teams" /v "IsWVDEnvironment" /t REG_DWORD /d 1 /f 2> $Null
         REG add "HKLM\SOFTWARE\Citrix\PortICA" /v "IsWVDEnvironment" /t REG_DWORD /d 1 /f 2> $Null
 
@@ -39,10 +39,10 @@ If ($App) {
             Wait         = $True
             Verbose      = $True
         }
-        Start-Process @params
+        $Result = Start-Process @params
     }
     catch {
-        Write-Warning -Message " ERR: Failed to install Microsoft Teams."
+        Write-Warning -Message " ERR: Failed to install Microsoft Teams with: $($Result.ExitCode)."
     }
 }
 Else {

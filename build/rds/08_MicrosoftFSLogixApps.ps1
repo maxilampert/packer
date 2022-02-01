@@ -19,12 +19,12 @@ $ProgressPreference = "SilentlyContinue"
 # Create target folder
 New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
 
-Write-Host " Microsoft FSLogix agent"
+Write-Host " Microsoft FSLogix Apps agent"
 $App = Get-EvergreenApp -Name "MicrosoftFSLogixApps" | Where-Object { $_.Channel -eq "Production" } | Select-Object -First 1
 If ($App) {
 
     # Download
-    Write-Host " Microsoft FSLogix: $($App.Version)"
+    Write-Host " Microsoft FSLogix Apps agent: $($App.Version)."
     $OutFile = Save-EvergreenApp -InputObject $App -Path $Path -WarningAction "SilentlyContinue"
 
     # Unpack
@@ -49,10 +49,11 @@ If ($App) {
                     Wait         = $True
                     Verbose      = $True
                 }
-                Start-Process @params
+                $Result = Start-Process @params
             }
             catch {
                 Write-Warning -Message " ERR: Failed to install: $($installer.FullName)."
+                Write-Warning -Message "Exit code: $($Result.ExitCode)."
             }
         }
     }

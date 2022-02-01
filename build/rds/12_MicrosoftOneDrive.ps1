@@ -29,22 +29,22 @@ If ($App) {
 
     # Install
     try {
-        Write-Host " Installing Microsoft OneDrive"
+        Write-Host " Installing Microsoft OneDrive: $($App.Version)."
         $params = @{
             FilePath     = $OutFile.FullName
             ArgumentList = "/ALLUSERS"
-            WindowStyle  = "Hidden"
+            #WindowStyle  = "Hidden"
             Wait         = $False
             Verbose      = $True
         }
-        Start-Process @params
+        $Result = Start-Process @params
         Do {
             Start-Sleep -Seconds 10
         } While (Get-Process -Name "OneDriveSetup")
         Get-Process -Name "OneDrive" | Stop-Process -Force
     }
     catch {
-        Write-Warning -Message " ERR: Failed to install Microsoft OneDrive."
+        Write-Warning -Message " ERR: Failed to install Microsoft OneDrive with: $($Result.ExitCode)."
     }
 }
 Else {

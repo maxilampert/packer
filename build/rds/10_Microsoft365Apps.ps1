@@ -101,7 +101,7 @@ If ($App) {
 
     try {
         # Download Office package, Setup fails to exit, so wait 9-10 mins for Office install to complete
-        Write-Host " Installing Microsoft 365 Apps"
+        Write-Host " Installing Microsoft 365 Apps: $($App.Version)."
         $XmlFile = Join-Path -Path $Path -ChildPath "Office.xml"
         Out-File -FilePath $XmlFile -InputObject $OfficeXml -Encoding "utf8"
 
@@ -113,11 +113,11 @@ If ($App) {
             Verbose      = $True
         }
         Push-Location -Path $Path
-        Start-Process @params
+        $Result = Start-Process @params
         Pop-Location
     }
     catch {
-        Write-Warning -Message " ERR: Failed to install Microsoft 365 Apps."
+        Write-Warning -Message " ERR: Failed to install Microsoft 365 Apps with: $($Result.ExitCode)."
     }
 }
 Else {

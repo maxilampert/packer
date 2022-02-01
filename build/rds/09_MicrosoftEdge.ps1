@@ -25,7 +25,7 @@ $App = Get-EvergreenApp -Name "MicrosoftEdge" | Where-Object { $_.Architecture -
 If ($App) {
 
     # Download
-    Write-Host " Downloading Microsoft Edge"
+    Write-Host " Microsoft Edge: $($App.Version)."
     $OutFile = Save-EvergreenApp -InputObject $App -Path $Path -WarningAction "SilentlyContinue"
 
     # Install
@@ -38,10 +38,10 @@ If ($App) {
             Wait         = $True
             Verbose      = $True
         }
-        Start-Process @params
+        $Result = Start-Process @params
     }
     catch {
-        Write-Warning -Message " ERR: Failed to install Microsoft Edge."
+        Write-Warning -Message " ERR: Failed to install Microsoft Edge with: $($Result.ExitCode)."
     }
 
     # Post install configuration
