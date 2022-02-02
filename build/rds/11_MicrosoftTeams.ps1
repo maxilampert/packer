@@ -37,6 +37,7 @@ If ($App) {
             ArgumentList = "/package $($OutFile.FullName) OPTIONS=`"noAutoStart=true`" ALLUSER=1 ALLUSERS=1 /quiet"
             WindowStyle  = "Hidden"
             Wait         = $True
+            PassThru     = $True
             Verbose      = $True
         }
         $Result = Start-Process @params

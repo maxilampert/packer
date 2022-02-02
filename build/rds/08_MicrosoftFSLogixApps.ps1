@@ -47,6 +47,7 @@ If ($App) {
                     ArgumentList = "/install /quiet /norestart"
                     WindowStyle  = "Hidden"
                     Wait         = $True
+                    PassThru     = $True
                     Verbose      = $True
                 }
                 $Result = Start-Process @params

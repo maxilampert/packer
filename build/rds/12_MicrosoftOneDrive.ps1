@@ -35,6 +35,7 @@ If ($App) {
             ArgumentList = "/ALLUSERS"
             #WindowStyle  = "Hidden"
             Wait         = $False
+            PassThru     = $True
             Verbose      = $True
         }
         $Result = Start-Process @params

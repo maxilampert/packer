@@ -40,6 +40,7 @@ If ($App) {
             ArgumentList = "/package $($OutFile.FullName) ALLUSERS=1 /quiet /Log $LogPath"
             WindowStyle  = "Hidden"
             Wait         = $True
+            PassThru     = $True
             Verbose      = $True
         }
         Start-Process @params
@@ -72,6 +73,7 @@ If ($App) {
             ArgumentList = "/package $($OutFile.FullName) ALLUSERS=1 /quiet /Log $LogPath"
             WindowStyle  = "Hidden"
             Wait         = $True
+            PassThru     = $True
             Verbose      = $True
         }
         Start-Process @params

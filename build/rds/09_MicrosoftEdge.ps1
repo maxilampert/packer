@@ -36,6 +36,7 @@ If ($App) {
             ArgumentList = "/package $($OutFile.FullName) /quiet /norestart DONOTCREATEDESKTOPSHORTCUT=true"
             WindowStyle  = "Hidden"
             Wait         = $True
+            PassThru     = $True
             Verbose      = $True
         }
         $Result = Start-Process @params

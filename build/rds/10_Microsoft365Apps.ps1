@@ -110,6 +110,7 @@ If ($App) {
             ArgumentList = "/configure $XmlFile"
             WindowStyle  = "Hidden"
             Wait         = $True
+            PassThru     = $True
             Verbose      = $True
         }
         Push-Location -Path $Path

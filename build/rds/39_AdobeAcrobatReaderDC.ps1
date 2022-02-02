@@ -46,6 +46,7 @@ If ($Reader) {
             ArgumentList = $ArgumentList
             WindowStyle  = "Hidden"
             Wait         = $True
+            PassThru     = $True
             Verbose      = $True
         }
         $Result = Start-Process @params
