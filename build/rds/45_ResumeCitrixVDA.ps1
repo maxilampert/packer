@@ -10,7 +10,7 @@ Param (
 )
 
 If (Test-Path -Path $FilePath) {
-    Write-Host " Citrix VDA found. Starting resume..."
+    Write-Host "Citrix VDA found. Starting resume..."
     try {
         $params = @{
             FilePath     = "$Env:ProgramData\Citrix\XenDesktopSetup\XenDesktopVdaSetup.exe"
@@ -23,14 +23,14 @@ If (Test-Path -Path $FilePath) {
     }
     catch {
         If ($process.ExitCode -ne 0) {
-            Write-Host " Err: Citrix VDA Setup exited with: $($process.ExitCode)."
+            Write-Host "`tErr: Citrix VDA Setup exited with: $($process.ExitCode)."
         }
         Else {
-            Write-Host " Citrix VDA Setup exited with: $($process.ExitCode)."
+            Write-Host "`tCitrix VDA Setup exited with: $($process.ExitCode)."
         }
     }
-    Write-Host " Citrix VDA resume complete with: $($process.ExitCode)."
+    Write-Host "`tCitrix VDA resume complete with: $($process.ExitCode)."
 }
 Else {
-    Write-Host " Citrix VDA not found. Skipping resume."
+    Write-Host "Citrix VDA not found. Skipping resume."
 }

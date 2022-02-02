@@ -19,7 +19,7 @@ $ProgressPreference = "SilentlyContinue"
 New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
 
 # Run tasks/install apps
-Write-Host " Microsoft Teams"
+Write-Host "Microsoft Teams"
 $App = Get-EvergreenApp -Name "MicrosoftTeams" | Where-Object { $_.Architecture -eq "x64" -and $_.Ring -eq "General" -and $_.Type -eq "msi" } | Select-Object -First 1
 If ($App) {
 
@@ -28,7 +28,7 @@ If ($App) {
 
     # Install
     try {
-        Write-Host " Installing Microsoft Teams: $($App.Version)."
+        Write-Host "`tInstalling Microsoft Teams: $($App.Version)."
         REG add "HKLM\SOFTWARE\Microsoft\Teams" /v "IsWVDEnvironment" /t REG_DWORD /d 1 /f 2> $Null
         REG add "HKLM\SOFTWARE\Citrix\PortICA" /v "IsWVDEnvironment" /t REG_DWORD /d 1 /f 2> $Null
 
@@ -43,11 +43,11 @@ If ($App) {
         $Result = Start-Process @params
     }
     catch {
-        Write-Warning -Message " ERR: Failed to install Microsoft Teams with: $($Result.ExitCode)."
+        Write-Warning -Message "`tERR: Failed to install Microsoft Teams with: $($Result.ExitCode)."
     }
 }
 Else {
-    Write-Host " Failed to retrieve Microsoft Teams"
+    Write-Host "`tFailed to retrieve Microsoft Teams."
 }
 
 # Teams JSON files
@@ -63,7 +63,7 @@ ForEach ($Path in $ConfigFiles) {
             $Json | ConvertTo-Json | Set-Content -Path $Path -Force
         }
         catch {
-            Write-Warning -Message " ERR: Failed to set Teams autostart file: $Path."
+            Write-Warning -Message "`tERR: Failed to set Teams autostart file: $Path."
         }
     }
 }
@@ -72,5 +72,5 @@ ForEach ($Path in $ConfigFiles) {
 REG delete "HKLM\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Run" /v "Teams" /f 2> $Null
 
 # If (Test-Path -Path $Path) { Remove-Item -Path $Path -Recurse -Confirm:$False -ErrorAction "SilentlyContinue" }
-Write-Host " Complete: Microsoft Teams."
+Write-Host "Complete: Microsoft Teams."
 #endregion

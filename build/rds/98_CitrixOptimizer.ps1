@@ -22,16 +22,17 @@ $ProgressPreference = "SilentlyContinue"
 New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
 
 #region Citrix Optimizer
-Write-Host "Using path: $Path."
+Write-Host "Citrix Optimizer."
+Write-Host "`tUsing path: $Path."
 $Installer = Get-ChildItem -Path $Path -Filter "CitrixOptimizer.zip" -Recurse -ErrorAction "SilentlyContinue"
 
 If ($Installer) {
-    Write-Host "Found zip file: $($Installer.FullName)."
+    Write-Host "`tFound zip file: $($Installer.FullName)."
     Expand-Archive -Path $Installer.FullName -DestinationPath $Path -Force
 
     $Template = Get-ChildItem -Path $Path -Recurse -Filter $OptimizerTemplate
     If ($Template) {
-        Write-Host "Found template file: $($Template.FullName)."
+        Write-Host "`tFound template file: $($Template.FullName)."
         try {
             $OptimizerBin = Get-ChildItem -Path $Path -Recurse -Filter "CtxOptimizerEngine.ps1"
             Push-Location -Path $OptimizerBin.Directory
@@ -49,18 +50,18 @@ If ($Installer) {
             Pop-Location
         }
         catch {
-            Write-Warning -Message " ERR: Citrix Optimizer exited with: $($_.Exception.Message)."
+            Write-Warning -Message "`tERR: Citrix Optimizer exited with: $($_.Exception.Message)."
         }
     }
     Else {
-        Write-Warning -Message " ERR: Failed to find Citrix Optimizer template: $OptimizerTemplate in $Path."
+        Write-Warning -Message "`tERR: Failed to find Citrix Optimizer template: $OptimizerTemplate in $Path."
     }
 }
 Else {
-    Write-Warning -Message " ERR: Failed to find Citrix Optimizer in: $Path."
+    Write-Warning -Message "`tERR: Failed to find Citrix Optimizer in: $Path."
 }
 #endregion
 
 # If (Test-Path -Path $Path) { Remove-Item -Path $Path -Recurse -Confirm:$False -ErrorAction "SilentlyContinue" }
-Write-Host " Complete: Citrix Optimizer."
+Write-Host "Complete: Citrix Optimizer."
 #endregion

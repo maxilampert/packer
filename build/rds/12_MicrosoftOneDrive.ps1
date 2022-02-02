@@ -19,7 +19,7 @@ $ProgressPreference = "SilentlyContinue"
 New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
 
 # Run tasks/install apps
-Write-Host " Microsoft OneDrive"
+Write-Host "Microsoft OneDrive"
 $App = Get-EvergreenApp -Name "MicrosoftOneDrive" | Where-Object { $_.Ring -eq "Production" -and $_.Type -eq "Exe" -and $_.Architecture -eq "AMD64" } | `
     Sort-Object -Property @{ Expression = { [System.Version]$_.Version }; Descending = $true } | Select-Object -First 1
 If ($App) {
@@ -29,7 +29,7 @@ If ($App) {
 
     # Install
     try {
-        Write-Host " Installing Microsoft OneDrive: $($App.Version)."
+        Write-Host "`tInstalling Microsoft OneDrive: $($App.Version)."
         $params = @{
             FilePath     = $OutFile.FullName
             ArgumentList = "/ALLUSERS"
@@ -45,13 +45,13 @@ If ($App) {
         Get-Process -Name "OneDrive" | Stop-Process -Force
     }
     catch {
-        Write-Warning -Message " ERR: Failed to install Microsoft OneDrive with: $($Result.ExitCode)."
+        Write-Warning -Message "`tERR: Failed to install Microsoft OneDrive with: $($Result.ExitCode)."
     }
 }
 Else {
-    Write-Warning -Message " ERR: Failed to retrieve Microsoft OneDrive"
+    Write-Warning -Message "`tERR: Failed to retrieve Microsoft OneDrive"
 }
 
 # If (Test-Path -Path $Path) { Remove-Item -Path $Path -Recurse -Confirm:$False -ErrorAction "SilentlyContinue" }
-Write-Host " Complete: Microsoft OneDrive."
+Write-Host "Complete: Microsoft OneDrive."
 #endregion

@@ -18,14 +18,14 @@ $ProgressPreference = "SilentlyContinue"
 # Create target folder
 New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
 
-Write-Host " Microsoft Edge"
+Write-Host "`tMicrosoft Edge"
 $App = Get-EvergreenApp -Name "MicrosoftEdge" | Where-Object { $_.Architecture -eq "x64" -and $_.Channel -eq "Stable" -and $_.Release -eq "Enterprise" } `
 | Sort-Object -Property @{ Expression = { [System.Version]$_.Version }; Descending = $true } | Select-Object -First 1
 
 If ($App) {
 
     # Download
-    Write-Host " Microsoft Edge: $($App.Version)."
+    Write-Host "`tMicrosoft Edge: $($App.Version)."
     $OutFile = Save-EvergreenApp -InputObject $App -Path $Path -WarningAction "SilentlyContinue"
 
     # Install
@@ -42,7 +42,7 @@ If ($App) {
         $Result = Start-Process @params
     }
     catch {
-        Write-Warning -Message " ERR: Failed to install Microsoft Edge with: $($Result.ExitCode)."
+        Write-Warning -Message "`tERR: Failed to install Microsoft Edge with: $($Result.ExitCode)."
     }
 
     # Post install configuration
@@ -75,9 +75,9 @@ If ($App) {
     Write-Host " Done"
 }
 Else {
-    Write-Warning -Message " ERR: Failed to retrieve Microsoft Edge"
+    Write-Warning -Message "`tERR: Failed to retrieve Microsoft Edge"
 }
 
 # If (Test-Path -Path $Path) { Remove-Item -Path $Path -Recurse -Confirm:$False -ErrorAction "SilentlyContinue" }
-Write-Host " Complete: MicrosoftEdge."
+Write-Host "Complete: Microsoft Edge."
 #endregion

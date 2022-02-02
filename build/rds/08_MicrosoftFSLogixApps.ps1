@@ -19,21 +19,21 @@ $ProgressPreference = "SilentlyContinue"
 # Create target folder
 New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
 
-Write-Host " Microsoft FSLogix Apps agent"
+Write-Host "Microsoft FSLogix Apps agent"
 $App = Get-EvergreenApp -Name "MicrosoftFSLogixApps" | Where-Object { $_.Channel -eq "Production" } | Select-Object -First 1
 If ($App) {
 
     # Download
-    Write-Host " Microsoft FSLogix Apps agent: $($App.Version)."
+    Write-Host "`tMicrosoft FSLogix Apps agent: $($App.Version)."
     $OutFile = Save-EvergreenApp -InputObject $App -Path $Path -WarningAction "SilentlyContinue"
 
     # Unpack
     try {
-        Write-Host " Unpacking: $($OutFile.FullName)."
+        Write-Host "`tUnpacking: $($OutFile.FullName)."
         Expand-Archive -Path $OutFile.FullName -DestinationPath $Path -Force
     }
     catch {
-        Write-Host "ERR:: Failed to unpack: $($OutFile.FullName)."
+        Write-Host "`tERR:: Failed to unpack: $($OutFile.FullName)."
     }
 
     # Install
@@ -53,15 +53,15 @@ If ($App) {
                 $Result = Start-Process @params
             }
             catch {
-                Write-Warning -Message " ERR: Failed to install: $($installer.FullName)."
-                Write-Warning -Message "Exit code: $($Result.ExitCode)."
+                Write-Warning -Message "`tERR: Failed to install: $($installer.FullName)."
+                Write-Warning -Message "`tExit code: $($Result.ExitCode)."
             }
         }
     }
 }
 Else {
-    Write-Host " Failed to retrieve Microsoft FSLogix Apps"
+    Write-Host "`tFailed to retrieve Microsoft FSLogix Apps."
 }
 # If (Test-Path -Path $Path) { Remove-Item -Path $Path -Recurse -Confirm:$False -ErrorAction "SilentlyContinue" }
-Write-Host " Complete: FSLogix."
+Write-Host "Complete: Microsoft FSLogix Apps."
 #endregion

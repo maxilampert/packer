@@ -92,7 +92,7 @@ $OfficeXml = @"
 "@
 
 # Get Office version
-Write-Host " Microsoft 365 Apps: $Channel"
+Write-Host "Microsoft 365 Apps: $Channel"
 $App = Get-EvergreenApp -Name "Microsoft365Apps" | Where-Object { $_.Channel -eq $Channel } | Select-Object -First 1
 If ($App) {
 
@@ -101,7 +101,7 @@ If ($App) {
 
     try {
         # Download Office package, Setup fails to exit, so wait 9-10 mins for Office install to complete
-        Write-Host " Installing Microsoft 365 Apps: $($App.Version)."
+        Write-Host "`tInstalling Microsoft 365 Apps: $($App.Version)."
         $XmlFile = Join-Path -Path $Path -ChildPath "Office.xml"
         Out-File -FilePath $XmlFile -InputObject $OfficeXml -Encoding "utf8"
 
@@ -118,13 +118,13 @@ If ($App) {
         Pop-Location
     }
     catch {
-        Write-Warning -Message " ERR: Failed to install Microsoft 365 Apps with: $($Result.ExitCode)."
+        Write-Warning -Message "`tERR: Failed to install Microsoft 365 Apps with: $($Result.ExitCode)."
     }
 }
 Else {
-    Write-Host " Failed to retrieve Microsoft 365 Apps setup."
+    Write-Host "`tFailed to retrieve Microsoft 365 Apps setup."
 }
 
 # # If (Test-Path -Path $Path) { Remove-Item -Path $Path -Recurse -Confirm:$False -ErrorAction "SilentlyContinue" }
-Write-Host " Complete: Microsoft 365 Apps."
+Write-Host "Complete: Microsoft 365 Apps."
 #endregion

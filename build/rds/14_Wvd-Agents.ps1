@@ -25,16 +25,17 @@ New-Item -Path $LogPath -ItemType "Directory" -Force -ErrorAction "SilentlyConti
 
 # Run tasks/install apps
 #region RTC service
+Write-Host "Microsoft WvdAgents."
 $App = Get-EvergreenApp -Name "MicrosoftWvdRtcService" | Where-Object { $_.Architecture -eq "x64"} | Select-Object -First 1
 If ($App) {
 
     # Download
-    Write-Host " Downloading Microsoft Remote Desktop WebRTC Redirector Service"
+    Write-Host "`tDownloading Microsoft Remote Desktop WebRTC Redirector Service"
     $OutFile = Save-EvergreenApp -InputObject $App -Path $Path -WarningAction "SilentlyContinue"
 
     # Install RTC
     try {
-        Write-Host " Installing Microsoft Remote Desktop WebRTC Redirector Service: $($App.Version)."
+        Write-Host "`tInstalling Microsoft Remote Desktop WebRTC Redirector Service: $($App.Version)."
         $params = @{
             FilePath     = "$env:SystemRoot\System32\msiexec.exe"
             ArgumentList = "/package $($OutFile.FullName) ALLUSERS=1 /quiet /Log $LogPath"
@@ -46,27 +47,26 @@ If ($App) {
         Start-Process @params
     }
     catch {
-        Write-Warning -Message " ERR: Failed to install Microsoft Remote Desktop WebRTC Redirector Service."
+        Write-Warning -Message "`tERR: Failed to install Microsoft Remote Desktop WebRTC Redirector Service."
     }
-    Write-Host " Done"
 }
 Else {
-    Write-Warning -Message " ERR: Failed to retrieve Microsoft Remote Desktop WebRTC Redirector Service"
+    Write-Warning -Message "`tERR: Failed to retrieve Microsoft Remote Desktop WebRTC Redirector Service"
 }
 #endregion
 
 #region Boot Loader
-Write-Host " Microsoft Windows Virtual Desktop Agent Bootloader"
+Write-Host "`tMicrosoft Windows Virtual Desktop Agent Bootloader"
 $App = Get-EvergreenApp -Name "MicrosoftWvdBootLoader" | Where-Object { $_.Architecture -eq "x64"} | Select-Object -First 1
 If ($App) {
     If (!(Test-Path $Path)) { New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null }
 
     # Download
-    Write-Host " Downloading Microsoft Windows Virtual Desktop Agent Bootloader"
+    Write-Host "`tDownloading Microsoft Windows Virtual Desktop Agent Bootloader"
     $OutFile = Save-EvergreenApp -InputObject $App -Path $Path -WarningAction "SilentlyContinue"
 
     # Install
-    Write-Host " Installing Microsoft Windows Virtual Desktop Agent Bootloader: $($App.Version)."
+    Write-Host "`tInstalling Microsoft Windows Virtual Desktop Agent Bootloader: $($App.Version)."
     try {
         $params = @{
             FilePath     = "$env:SystemRoot\System32\msiexec.exe"
@@ -79,22 +79,21 @@ If ($App) {
         Start-Process @params
     }
     catch {
-        Write-Warning -Message " ERR: Failed to install Microsoft Windows Virtual Desktop Agent Bootloader"
+        Write-Warning -Message "`tERR: Failed to install Microsoft Windows Virtual Desktop Agent Bootloader"
     }
-    Write-Host " Done"
 }
 Else {
-    Write-Warning -Message " ERR: Failed to Microsoft Windows Virtual Desktop Agent Bootloader"
+    Write-Warning -Message "`tERR: Failed to Microsoft Windows Virtual Desktop Agent Bootloader"
 }
 #endregion
 
 #region Infra agent
-Write-Host " Microsoft WVD Infrastructure Agent"
+Write-Host "`tMicrosoft WVD Infrastructure Agent"
 $App = Get-EvergreenApp -Name "MicrosoftWvdInfraAgent" | Where-Object { $_.Architecture -eq "x64"}
 If ($App) {
 
     # Download
-    Write-Host " Downloading Microsoft WVD Infrastructure Agent: $($App.Version)."
+    Write-Host "`tDownloading Microsoft WVD Infrastructure Agent: $($App.Version)."
     $OutFile = Save-EvergreenApp -InputObject $App -Path $Path -WarningAction "SilentlyContinue"
 
     # Install
@@ -118,10 +117,10 @@ If ($App) {
     #>
 }
 Else {
-    Write-Warning -Message " ERR: Failed to retrieve Microsoft WVD Infrastructure Agent"
+    Write-Warning -Message "`tERR: Failed to retrieve Microsoft WVD Infrastructure Agent"
 }
 #endregion
 
 # If (Test-Path -Path $Path) { Remove-Item -Path $Path -Recurse -Confirm:$False -ErrorAction "SilentlyContinue" }
-Write-Host " Complete: WvdAgents."
+Write-Host "Complete: Microsoft WvdAgents."
 #endregion
