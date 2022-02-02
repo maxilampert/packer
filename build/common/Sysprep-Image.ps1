@@ -24,7 +24,7 @@ Function Get-InstalledApplication () {
             Sort-Object -Property "DisplayName"
     }
     catch {
-        Throw $_.Exception.Message
+        $_.Exception.Message
     }
     Return $Apps
 }

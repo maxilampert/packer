@@ -16,7 +16,7 @@ If (Get-PSRepository | Where-Object { $_.Name -eq $Repository -and $_.Installati
         Set-PSRepository -Name $Repository -InstallationPolicy "Trusted"
     }
     catch {
-        Throw $_
+        $_.Exception.Message
     }
 }
 

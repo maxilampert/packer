@@ -18,7 +18,7 @@ $ProgressPreference = "SilentlyContinue"
 # Create target folder
 New-Item -Path $Path -ItemType "Directory" -Force -ErrorAction "SilentlyContinue" > $Null
 
-Write-Host "`tMicrosoft Edge"
+Write-Host "Microsoft Edge"
 $App = Get-EvergreenApp -Name "MicrosoftEdge" | Where-Object { $_.Architecture -eq "x64" -and $_.Channel -eq "Stable" -and $_.Release -eq "Enterprise" } `
 | Sort-Object -Property @{ Expression = { [System.Version]$_.Version }; Descending = $true } | Select-Object -First 1
 
@@ -29,7 +29,7 @@ If ($App) {
     $OutFile = Save-EvergreenApp -InputObject $App -Path $Path -WarningAction "SilentlyContinue"
 
     # Install
-    Write-Host " Installing Microsoft Edge"
+    Write-Host "`tInstalling Microsoft Edge"
     try {
         $params = @{
             FilePath     = "$env:SystemRoot\System32\msiexec.exe"
@@ -46,7 +46,7 @@ If ($App) {
     }
 
     # Post install configuration
-    Write-Host " Post-install config"
+    Write-Host "`tPost-install config"
     $prefs = @{
         "homepage"               = "https://www.office.com"
         "homepage_is_newtabpage" = $False
@@ -72,7 +72,6 @@ If ($App) {
     $services = "edgeupdate", "edgeupdatem", "MicrosoftEdgeElevationService"
     ForEach ($service in $services) { Get-Service -Name $service | Set-Service -StartupType "Disabled" }
     ForEach ($task in (Get-ScheduledTask -TaskName *Edge*)) { Unregister-ScheduledTask -TaskName $Task -Confirm:$False -ErrorAction SilentlyContinue }
-    Write-Host " Done"
 }
 Else {
     Write-Warning -Message "`tERR: Failed to retrieve Microsoft Edge"

@@ -41,7 +41,7 @@ If ($App) {
         $Installers = Get-ChildItem -Path $Path -Recurse -Include $file | Where-Object { $_.Directory -match "x64" }
         ForEach ($installer in $Installers) {
             try {
-                Write-Host " Installing: $($installer.FullName)."
+                Write-Host "`tInstalling: $($installer.FullName)."
                 $params = @{
                     FilePath     = $installer.FullName
                     ArgumentList = "/install /quiet /norestart"

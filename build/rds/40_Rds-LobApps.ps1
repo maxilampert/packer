@@ -59,7 +59,7 @@ Function Get-AzureBlobItem {
         }
         catch [System.Exception] {
             Write-Warning -Message "$($MyInvocation.MyCommand): failed to download: $Uri."
-            Throw $_.Exception.Message
+            $_.Exception.Message
         }
         If ($Null -ne $list) {
             [System.Xml.XmlDocument] $xml = $list.Content.Substring($list.Content.IndexOf("<?xml", 0))

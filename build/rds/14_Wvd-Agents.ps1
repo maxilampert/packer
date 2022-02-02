@@ -111,7 +111,7 @@ If ($App) {
         $process = Start-Process @params
     }
     catch {
-        Throw "Failed to install Microsoft WVD Infrastructure Agent."
+        Write-Warning -Message "`tERR: Failed to install Microsoft WVD Infrastructure Agent."
     }
     Write-Host " Done"
     #>
