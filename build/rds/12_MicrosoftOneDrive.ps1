@@ -33,7 +33,6 @@ If ($App) {
         $params = @{
             FilePath     = $OutFile.FullName
             ArgumentList = "/ALLUSERS"
-            #WindowStyle  = "Hidden"
             Wait         = $False
             PassThru     = $True
             Verbose      = $True

@@ -92,8 +92,13 @@ If ($Reader) {
 
         # Configure update tasks
         Write-Host "`tConfigure Adobe Acrobat Reader services"
-        Get-Service -Name "AdobeARMservice" -ErrorAction "SilentlyContinue" | Set-Service -StartupType "Disabled" -ErrorAction "SilentlyContinue"
-        Get-ScheduledTask "Adobe Acrobat Update Task*" | Unregister-ScheduledTask -Confirm:$False -ErrorAction "SilentlyContinue"
+        try {
+            Get-Service -Name "AdobeARMservice" -ErrorAction "SilentlyContinue" | Set-Service -StartupType "Disabled" -ErrorAction "SilentlyContinue"
+            Get-ScheduledTask "Adobe Acrobat Update Task*" | Unregister-ScheduledTask -Confirm:$False -ErrorAction "SilentlyContinue"
+        }
+        catch {
+            Write-Warning -Message "`tERR: $($_.Exception.Message)."
+        }
     }
     Else {
         Write-Warning -Message "`tERR: Cannot find Adobe Acrobat Reader install"
