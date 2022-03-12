@@ -4,10 +4,7 @@
 #>
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingWriteHost", "")]
 [CmdletBinding()]
-Param (
-    [Parameter(Mandatory = $False)]
-    [System.String] $Path = "$env:SystemDrive\Apps\Packages"
-)
+param ()
 
 if (!$env:ChocolateyInstall) {
   Write-Warning "The ChocolateyInstall environment variable was not found. `n Chocolatey is not detected as installed. Nothing to do"
