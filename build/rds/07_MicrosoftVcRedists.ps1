@@ -3,6 +3,7 @@
     .SYNOPSIS
         Install evergreen core applications.
 #>
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseDeclaredVarsMoreThanAssignments", "")]
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingWriteHost", "")]
 [CmdletBinding()]
 Param (
@@ -11,8 +12,7 @@ Param (
 )
 
 #region Script logic
-# Set $VerbosePreference so full details are sent to the log; Make Invoke-WebRequest faster
-$VerbosePreference = "Continue"
+# Make Invoke-WebRequest faster
 $ProgressPreference = "SilentlyContinue"
 
 # Run tasks/install apps
@@ -23,7 +23,7 @@ Write-Host "`tDownloading Microsoft Visual C++ Redistributables"
 Save-VcRedist -VcList (Get-VcList) -Path $Path > $Null
 
 Write-Host "`tInstalling Microsoft Visual C++ Redistributables"
-Install-VcRedist -VcList (Get-VcList) -Path $Path -Silent -Verbose | Out-Null
+$Installed = Install-VcRedist -VcList (Get-VcList) -Path $Path -Silent -Verbose | Out-Null
 
 # If (Test-Path -Path $Path) { Remove-Item -Path $Path -Recurse -Confirm:$False -ErrorAction "SilentlyContinue" }
 Write-Host "Complete: VcRedists."

@@ -12,8 +12,7 @@ Param (
     [System.String] $InvokeScript = "Install-Defaults.ps1"
 )
 
-# Set $VerbosePreference so full details are sent to the log; Make Invoke-WebRequest faster
-$VerbosePreference = "Continue"
+# Make Invoke-WebRequest faster
 $ProgressPreference = "SilentlyContinue"
 
 #region Script logic

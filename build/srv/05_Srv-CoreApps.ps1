@@ -94,8 +94,7 @@ Function Install-MicrosoftEdge ($Path) {
 
 
 #region Script logic
-# Set $VerbosePreference so full details are sent to the log; Make Invoke-WebRequest faster
-$VerbosePreference = "Continue"
+# Make Invoke-WebRequest faster
 $ProgressPreference = "SilentlyContinue"
 
 If (!(Test-Path $Path)) { New-Item -Path $Path -Type Directory -Force -ErrorAction SilentlyContinue }

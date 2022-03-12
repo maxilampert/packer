@@ -13,8 +13,7 @@ Param (
 )
 
 #region Script logic
-# Set $VerbosePreference so full details are sent to the log; Make Invoke-WebRequest faster
-$VerbosePreference = "Continue"
+# Make Invoke-WebRequest faster
 $ProgressPreference = "SilentlyContinue"
 
 # Set TLS to 1.2; Create target folder
