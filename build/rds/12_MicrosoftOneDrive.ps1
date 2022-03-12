@@ -39,8 +39,8 @@ If ($App) {
         $Result = Start-Process @params
         Do {
             Start-Sleep -Seconds 10
-        } While (Get-Process -Name "OneDriveSetup")
-        Get-Process -Name "OneDrive" | Stop-Process -Force
+        } While (Get-Process -Name "OneDriveSetup" -ErrorAction "SilentlyContinue")
+        Get-Process -Name "OneDrive" | Stop-Process -Force -ErrorAction "SilentlyContinue"
     }
     catch {
         Write-Warning -Message "`tERR: Failed to install Microsoft OneDrive with: $($Result.ExitCode)."

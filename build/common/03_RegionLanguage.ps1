@@ -82,7 +82,7 @@ Import-Module -Name "International"
 Set-WinSystemLocale -SystemLocale $Locale
 Set-WinUserLanguageList -LanguageList $Locale -Force
 Set-WinHomeLocation -GeoId $GeoId
-Set-TimeZone -Id $Timezone -Verbose
+Set-TimeZone -Id $Timezone
 & $env:SystemRoot\System32\control.exe "intl.cpl,,/f:$languageXML"
 "@
 
@@ -99,7 +99,7 @@ $env:SystemRoot\System32\WindowsPowerShell\v1.0\powershell.exe -NonInteractive -
         Import-Module -Name "International"
         Set-WinSystemLocale -SystemLocale $Locale
         Set-WinHomeLocation -GeoId $GeoId
-        Set-TimeZone -Id $Timezone -Verbose
+        Set-TimeZone -Id $Timezone
 
         $LanguageList = Get-WinUserLanguageList
         $LanguageList.Add($Language)
