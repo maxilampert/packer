@@ -1,5 +1,9 @@
-# Scripts
+# Pipeline scripts
 
-Scripts used in building Windows Server and Windows 10 images - called from the Packer template.
+Scripts used in Azure DevOps / GitHub Actions pipelines etc.
 
-These scripts also leverage the Windows 10 / Windows Server image customisation scripts found here: [https://github.com/aaronparker/image-customise](https://github.com/aaronparker/image-customise)
+* `Get-PackerPlugins.ps1` - download additional Packer plugins used during build
+* `Install-RequiredModules.ps1` - installs required PowerShell modules
+* `Publish-MarkdownReport.ps1` - creates a markdown report for the build
+* `Update-MarkdownToc.ps1` - updates the markdown table of contents for `/docs`
+* `Push-Git.ps1` - commits and pushes the changes to the repo
