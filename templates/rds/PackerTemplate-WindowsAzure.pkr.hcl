@@ -52,7 +52,7 @@ variable "destination_gallery_name" {
   default = "sigWindowsVirtualDesktop"
 }
 
-variable "destination_gallery_resource_group" {
+variable "destination_resource_group_name" {
   type    = string
   default = "rg-Images-AustraliaEast"
 }
@@ -85,6 +85,11 @@ variable "source_image_publisher" {
 variable "source_image_sku" {
   type    = string
   default = "20h2-ent"
+}
+
+variable "location" {
+  type    = string
+  default = "AustraliaEast"
 }
 
 variable "locale" {
@@ -127,6 +132,11 @@ variable "tag_type" {
   default = "WindowsVirtualDesktop"
 }
 
+variable "tag_build_source_repo" {
+  type    = string
+  default = ""
+}
+
 variable "azure_tenant_id" {
   type    = string
   default = ""
@@ -159,7 +169,7 @@ source "azure-arm" "microsoft-windows" {
     Function        = "${var.tag_function}"
     OperatingSystem = "${local.managed_image_name}"
     Owner           = "${var.tag_owner}"
-    Source          = "${var.build_source_repo}"
+    Source          = "${var.tag_build_source_repo}"
     Type            = "${var.tag_function}"
   }
   build_key_vault_name                   = "${var.build_key_vault}"
@@ -167,6 +177,14 @@ source "azure-arm" "microsoft-windows" {
   client_id                              = "${var.client_id}"
   client_secret                          = "${var.client_secret}"
   communicator                           = "winrm"
+  shared_image_gallery_destination {
+      subscription = "${var.azure_subscription_id}"
+      resource_group = "${var.destination_resource_group_name}"
+      gallery_name = "${var.destination_image_gallery_name}"
+      image_name = "${var.destination_image_name}"
+      image_version = "${var.destination_image_version}"
+      replication_regions = [ "${var.location}" ]
+  }
   source_image_offer                     = "${var.image_offer}"
   source_image_publisher                 = "${var.image_publisher}"
   source_image_sku                       = "${var.image_sku}"

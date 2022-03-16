@@ -5,9 +5,8 @@ on:
     branches:
       - main
     paths:
-      - .github/workflows/windows11-avd.yml
+#      - .github/workflows/windows11-avd.yml
       - templates/rds/PackerTemplate-WindowsAzure.pkr.hcl
-      - templates/rds/PackerTemplate-WindowsAzure.pkr.json
       - build/rds/**.ps1
       - build/rds/**.xml
   workflow_dispatch:
@@ -45,7 +44,6 @@ env:
   TAG_TYPE: 'Azure Virtual Desktop'
   VM_SIZE: 'Standard_D2as_v4'
 #  WINRMUSER: 'winrm'
-  WORKING_DIRECTORY: '$GITHUB_WORKSPACE'
 
 jobs:
   prepare-image-gallery:
@@ -90,7 +88,7 @@ jobs:
         include:
           - image_id: Windows-11-Evd
             packer_file: "templates/rds/PackerTemplate-WindowsAzure.pkr.hcl"
-            destination_image_name: 'MicrosoftWindowsDesktop-Windows-11-win10-21h2-evd'
+#            destination_image_name: 'MicrosoftWindowsDesktop-Windows-11-win10-21h2-evd'
             destination_image_description: "Windows 11 Enterprise 21H2"
             source_image_publisher: MicrosoftWindowsDesktop
             source_image_offer: Windows-11
@@ -101,7 +99,7 @@ jobs:
 
           - image_id: Windows-11-Avd
             packer_file: "templates/rds/PackerTemplate-WindowsAzure.pkr.hcl"
-            destination_image_name: 'MicrosoftWindowsDesktop-Windows-11-win10-21h2-avd'
+#            destination_image_name: 'MicrosoftWindowsDesktop-Windows-11-win10-21h2-avd'
             destination_image_description: "Windows 11 Enterprise 21H2"
             source_image_publisher: MicrosoftWindowsDesktop
             source_image_offer: Windows-11
@@ -111,7 +109,7 @@ jobs:
             destination_sku: win11-21h2-avd
     env:
       PACKER_FILE: ${{ matrix.packer_file }}
-      DESTINATION_IMAGE_NAME: ${{ matrix.destination_image_name }}
+#      DESTINATION_IMAGE_NAME: ${{ matrix.destination_image_name }}
       DESTINATION_IMAGE_DESCRIPTION: ${{ matrix.destination_image_description }}
       SOURCE_IMAGE_PUBLISHER: ${{ matrix.source_image_publisher }}
       SOURCE_IMAGE_OFFER: ${{ matrix.source_image_offer }}
@@ -163,7 +161,7 @@ jobs:
         uses: hashicorp/packer-github-actions@master
         with:
           command: build
-          arguments: "-color=true -on-error=abort -var apps_url=${{ env.APPS_URL }} -var azure_subscription_id=${{ env.AZURE_SUBSCRIPTION_ID }} -var azure_tenant_id=${{ env.AZURE_TENANT_ID }} -var azure_client_id=${{ env.AZURE_CLIENT_ID }} -var azure_client_secret=${{ env.AZURE_CLIENT_SECRET }} -var build_resource_group=${{ env.BUILD_RESOURCE_GROUP }} -var build_vnet=${{ env.BUILD_VNET}} -var build_subnet=${{ env.BUILD_SUBNET }} -var build_source_repo=${{ github.repository }} -var destination_gallery_resource_group=${{ env.DESTINATION_GALLERY_RESOURCE_GROUP }} -var destination_replication_regions=${{ env.LOCATION }} -var destination_resource_group=${{ env.DESTINATION_RESOURCE_GROUP_NAME }} -var destination_gallery_name=${{ env.DESTINATION_GALLERY_NAME }} -var destination_image_name=${{ env.DESTINATION_IMAGE_NAME }} -var destination_image_version=${{ env.DESTINATION_IMAGE_VERSION }} -var image_date='${{ steps.date.outputs.date }}.${{ github.run_number }}' -var managed_image_resource_group_name=${{ env.MANAGED_IMAGE_RESOURCE_GROUP_NAME }} -var location=${{ env.LOCATION }} -var packages_url=${{ env.PACKAGES_URL }} -var source_image_publisher=${{ env.SOURCE_IMAGE_PUBLISHER }} -var source_image_offer=${{ env.SOURCE_IMAGE_OFFER }} -var source_image_sku=${{ env.SOURCE_IMAGE_SKU }} -var tag_owner=${{ env.TAG_OWNER }} -var tag_created_date='${{ steps.date.outputs.date }}.${{ github.run_number }}' -var vm_size=${{ env.VM_SIZE }}"
+          arguments: "-color=true -on-error=abort -var apps_url=${{ env.APPS_URL }} -var azure_subscription_id=${{ env.AZURE_SUBSCRIPTION_ID }} -var azure_tenant_id=${{ env.AZURE_TENANT_ID }} -var azure_client_id=${{ env.AZURE_CLIENT_ID }} -var azure_client_secret=${{ env.AZURE_CLIENT_SECRET }} -var build_resource_group=${{ env.BUILD_RESOURCE_GROUP }} -var build_vnet=${{ env.BUILD_VNET }} -var build_subnet=${{ env.BUILD_SUBNET }} -var destination_gallery_resource_group=${{ env.DESTINATION_GALLERY_RESOURCE_GROUP }} -var destination_replication_regions=${{ env.LOCATION }} -var destination_gallery_name=${{ env.DESTINATION_GALLERY_NAME }} -var destination_image_version=${{ env.DESTINATION_IMAGE_VERSION }} -var image_date='${{ steps.date.outputs.date }}.${{ github.run_number }}' -var managed_image_resource_group_name=${{ env.MANAGED_IMAGE_RESOURCE_GROUP_NAME }} -var location=${{ env.LOCATION }} -var packages_url=${{ env.PACKAGES_URL }} -var source_image_publisher=${{ env.SOURCE_IMAGE_PUBLISHER }} -var source_image_offer=${{ env.SOURCE_IMAGE_OFFER }} -var source_image_sku=${{ env.SOURCE_IMAGE_SKU }} -var tag_owner=${{ env.TAG_OWNER }} -var tag_created_date='${{ steps.date.outputs.date }}.${{ github.run_number }}' -var tag_build_source_repo=${{ github.repository }} -var vm_size=${{ env.VM_SIZE }} -var working_directory=$GITHUB_WORKSPACE"
           target: ${{ env.PACKER_FILE }}
         env:
           PACKER_LOG: 1
