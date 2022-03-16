@@ -1,10 +1,11 @@
-name: windows11-avd
+name: build-windows11-templates
 
 on:
   push:
     branches:
       - main
     paths:
+      - .github/workflows/windows11-avd.yml
       - templates/rds/PackerTemplate-WindowsAzure.pkr.hcl
       - templates/rds/PackerTemplate-WindowsAzure.pkr.json
       - build/rds/**.ps1
