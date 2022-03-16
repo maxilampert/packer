@@ -71,6 +71,7 @@ jobs:
           inlineScript: |
             az account show
             az deployment sub create \
+              --subscription ${{ env.AZURE_SUBSCRIPTION_ID }} \
               --name "imageGallery-${{ steps.date.outputs.date }}" \
               --location $LOCATION \
               --template-file bicep/main.bicep \
@@ -151,6 +152,7 @@ jobs:
           inlineScript: |
             az account show
             az deployment group create \
+              --subscription ${{ env.AZURE_SUBSCRIPTION_ID }} \
               --name "${DESTINATION_IMAGE_NAME}-${{ steps.date.outputs.date }}" \
               --resource-group $DESTINATION_RESOURCE_GROUP_NAME \
               --template-file bicep/modules/imageDefinition.bicep \
