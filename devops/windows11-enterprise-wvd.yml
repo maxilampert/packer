@@ -1,0 +1,125 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+parameters:
+- name: image
+  displayName: Pool Image
+  type: string
+  default: ubuntu-latest
+  values:
+  - windows-latest
+  - ubuntu-latest
+  - macOS-latest
+
+trigger:
+- none
+
+jobs:
+- job: build
+  displayName: build
+  pool: 
+    vmImage: ${{ parameters.image }}
+
+  steps:
+  - checkout: self  # self represents the repo where the initial Pipelines YAML file was found
+    clean: 'true'
+    submodules: 'true'
+
+  - task: riezebosch.Packer.PackerTool.PackerTool@0
+    displayName: 'Install Packer'
+    inputs:
+      version: '1.8.0'
+
+  - task: Packer@1
+    displayName: 'Validate Packer template'
+    inputs:
+      connectedServiceType: 'azure'
+      azureSubscription: 'Visual Studio Enterprise Subscription(63e8f660-f6a4-4ac5-ad4e-623268509f20)'
+      templatePath: 'templates/rds/PackerTemplate-WindowsAzure.json'
+      command: 'validate'
+      variables: |
+        image_publisher=$(image_publisher)
+        image_offer=$(image_offer)
+        image_sku=$(image_sku)
+        image_date=$(Build.BuildNumber)
+        managed_image_resource_group_name=$(managed_image_resource_group_name)
+        vm_size=$(vm_size)
+        tag_owner=$(owner)
+        tag_created_date=$(Build.BuildNumber)
+        apps_url=$(apps_url)
+        packages_url=$(packages_url)
+        build_key_vault=$(build_key_vault)
+        build_resource_group=$(build_resource_group)
+        build_vnet=$(build_vnet)
+        build_subnet=$(build_subnet)
+        build_source_repo=$(build_source_repo)
+        destination_gallery_resource_group=$(destination_gallery_resource_group)
+        destination_gallery_name=$(destination_gallery_name)
+        destination_image_version=1.0.$(Build.BuildId)
+        destination_replication_regions=$(destination_replication_regions)
+
+  - task: Packer@1
+    displayName: 'Build Packer template'
+    inputs:
+      connectedServiceType: 'azure'
+      azureSubscription: 'Visual Studio Enterprise Subscription(63e8f660-f6a4-4ac5-ad4e-623268509f20)'
+      templatePath: 'templates/rds/PackerTemplate-WindowsAzure.json'
+      command: 'build'
+      variables: |
+        image_publisher=$(image_publisher)
+        image_offer=$(image_offer)
+        image_sku=$(image_sku)
+        image_date=$(Build.BuildNumber)
+        managed_image_resource_group_name=$(managed_image_resource_group_name)
+        vm_size=$(vm_size)
+        tag_owner=$(owner)
+        tag_created_date=$(Build.BuildNumber)
+        apps_url=$(apps_url)
+        packages_url=$(packages_url)
+        build_key_vault=$(build_key_vault)
+        build_resource_group=$(build_resource_group)
+        build_vnet=$(build_vnet)
+        build_subnet=$(build_subnet)
+        build_source_repo=$(build_source_repo)
+        destination_gallery_resource_group=$(destination_gallery_resource_group)
+        destination_gallery_name=$(destination_gallery_name)
+        destination_image_version=1.0.$(Build.BuildId)
+        destination_replication_regions=$(destination_replication_regions)
+
+  - task: ExtractFiles@1
+    displayName: 'Extract report archive'
+    inputs:
+      archiveFilePatterns: '$(System.DefaultWorkingDirectory)/Installed.zip'
+      destinationFolder: '$(System.DefaultWorkingDirectory)/reports'
+      cleanDestinationFolder: true
+      overwriteExistingFiles: true
+
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish image-details'
+    inputs:
+      PathtoPublish: '$(System.DefaultWorkingDirectory)/reports'
+      ArtifactName: 'image-details'
+  - task: PowerShell@2
+    displayName: 'Install PowerShell modules'
+    inputs:
+      targetType: 'inline'
+      script: |
+        Install-Module -Name "MarkdownPS"
+        Install-Module -Name "powershell-yaml"
+        Install-Module -Name "posh-git"
+
+  - task: PowerShell@2
+    displayName: 'Publish report markdown'
+    inputs:
+      targetType: filePath
+      filePath: './pipeline/Publish-MarkdownReport.ps1'
+      arguments: '-Verbose'
+
+  - task: PowerShell@2
+    displayName: 'Commit changes'
+    inputs:
+      targetType: filePath
+      filePath: './pipeline/Push-Git.ps1'
+      arguments: '$(GitHubKey)'

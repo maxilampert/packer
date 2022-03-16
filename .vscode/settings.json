@@ -8,8 +8,10 @@
         "ALLUSER",
         "australiaeast",
         "AUTOACTIVATE",
+        "azcliversion",
         "Cleanmgr",
         "codeql",
+        "creds",
         "Datacenter",
         "DEFAULTWORKINGDIRECTORY",
         "disableexperiencemetrics",
@@ -33,14 +35,23 @@
         "noreboot",
         "noresume",
         "pymdownx",
+        "riezebosch",
         "Roboto",
         "sarif",
         "setvariable",
+        "stpyimageaustraliaeast",
         "Unattend",
         "virtualmachine",
         "vnet",
         "winrm",
         "winrmuser",
         "winver"
-    ]
+    ],
+    "pester.autoRunOnSave": false,
+    "yaml.schemas": {
+        "https://raw.githubusercontent.com/microsoft/azure-pipelines-vscode/master/service-schema.json": [
+            "file:///Users/aaron/projects/packer/devops/windows11-enterprise-wvd.yml"
+        ],
+        "https://json.schemastore.org/github-workflow.json": "untitled:Untitled-1"
+    }
 }
