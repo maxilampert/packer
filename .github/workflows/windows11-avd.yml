@@ -167,3 +167,64 @@ jobs:
         env:
           PACKER_LOG: 1
           IMAGE_DATE: "${{ steps.date.outputs.date }}.${{ github.run_number }}"
+
+      - name: Unzip report files
+        uses: montudor/action-zip@v1
+        with:
+          args: unzip -qq "${{ github.workspace }}/Installed.zip" -d "${{ github.workspace }}/reports"
+
+      # Push tag
+      - name: Remove zip file
+        id: delete-zip
+        shell: bash
+        run: |
+          rm -f "${{ github.workspace }}/Installed.zip"
+
+      - name: Install and cache PowerShell modules
+        id: psmodulecache
+        uses: potatoqualitee/psmodulecache@v4.5
+        with:
+          modules-to-cache: MarkdownPS, powershell-yaml
+          shell: powershell
+
+      - name: Publish markdown report
+        id: publish-report
+        shell: pwsh
+        run: |
+          $params = @{
+            Path            = "${{ github.workspace }}/reports"
+            ImagePublisher  = ${{ env.SOURCE_IMAGE_PUBLISHER }}
+            ImageOffer      = ${{ env.SOURCE_IMAGE_OFFER }}
+            ImageSku        = ${{ env.SOURCE_IMAGE_SKU }}
+            Version         = "${{ steps.date.outputs.date }}.${{ github.run_number }}"
+            DestinationPath = "${{ github.workspace }}/docs"
+          }
+          . ${{ github.workspace }}/pipeline/Publish-MarkdownReport.ps1 @params
+
+      # Import GPG key
+      - name: Import GPG key
+        id: import_gpg
+        uses: crazy-max/ghaction-import-gpg@v4
+        with:
+          gpg_private_key: ${{ secrets.GPGKEY }}
+          passphrase: ${{ secrets.GPGPASSPHRASE }}
+          git_user_signingkey: true
+          git_commit_gpgsign: true
+          git_config_global: true
+          git_tag_gpgsign: true
+          git_push_gpgsign: false
+          git_committer_name: ${{ secrets.COMMIT_USER }}
+          git_committer_email: ${{ secrets.COMMIT_EMAIL }}
+
+      # Push tag
+      - name: Commit and push
+        id: push
+        shell: bash
+        run: |
+          git pull origin main
+          git add --all
+          git status
+          git commit -s -m "$DESTINATION_IMAGE_NAME $IMAGE_DATE"
+          git push origin main
+        env:
+          IMAGE_DATE: "${{ steps.date.outputs.date }}.${{ github.run_number }}"

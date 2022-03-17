@@ -280,8 +280,4 @@ build {
   provisioner "powershell" {
     scripts = ["build/rds/Sysprep-Image.ps1"]
   }
-
-  post-processor "manifest" {
-    output = "packer-manifest-${var.source_image_publisher}-${var.source_image_offer}-${var.source_image_sku}-${var.image_date}.json"
-  }
 }
