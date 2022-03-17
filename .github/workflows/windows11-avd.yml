@@ -88,7 +88,7 @@ jobs:
         include:
           - image_id: Windows-11-Evd
             packer_file: "templates/rds/PackerTemplate-WindowsAzure.pkr.hcl"
-#            destination_image_name: 'MicrosoftWindowsDesktop-Windows-11-win10-21h2-evd'
+            destination_image_name: 'MicrosoftWindowsDesktop-Windows-11-win10-21h2-evd'
             destination_image_description: "Windows 11 Enterprise 21H2"
             source_image_publisher: MicrosoftWindowsDesktop
             source_image_offer: Windows-11
@@ -99,7 +99,7 @@ jobs:
 
           - image_id: Windows-11-Avd
             packer_file: "templates/rds/PackerTemplate-WindowsAzure.pkr.hcl"
-#            destination_image_name: 'MicrosoftWindowsDesktop-Windows-11-win10-21h2-avd'
+            destination_image_name: 'MicrosoftWindowsDesktop-Windows-11-win10-21h2-avd'
             destination_image_description: "Windows 11 Enterprise 21H2"
             source_image_publisher: MicrosoftWindowsDesktop
             source_image_offer: Windows-11
@@ -109,7 +109,7 @@ jobs:
             destination_sku: win11-21h2-avd
     env:
       PACKER_FILE: ${{ matrix.packer_file }}
-#      DESTINATION_IMAGE_NAME: ${{ matrix.destination_image_name }}
+      DESTINATION_IMAGE_NAME: ${{ matrix.destination_image_name }}
       DESTINATION_IMAGE_DESCRIPTION: ${{ matrix.destination_image_description }}
       SOURCE_IMAGE_PUBLISHER: ${{ matrix.source_image_publisher }}
       SOURCE_IMAGE_OFFER: ${{ matrix.source_image_offer }}

@@ -212,8 +212,8 @@ build {
     environment_vars = ["Locale=${var.locale}",
                         "PackagesUrl=${var.packages_url}"]
     scripts          = ["build/rds/01_Rds-PrepImage.ps1",
-                        "build/common/02_Packages.ps1",
-                        "build/common/03_RegionLanguage.ps1",
+                        "build/rds/02_Packages.ps1",
+                        "build/rds/03_RegionLanguage.ps1",
                         "build/rds/05_Rds-Roles.ps1"]
   }
 
@@ -229,7 +229,7 @@ build {
   }
 
   provisioner "powershell" {
-    scripts = ["build/common/04_Customise.ps1"]
+    scripts = ["build/rds/04_Customise.ps1"]
   }
 
   provisioner "windows-update" {
@@ -239,7 +239,7 @@ build {
   }
 
   provisioner "powershell" {
-    scripts = ["build/common/06_SupportFunctions.ps1",
+    scripts = ["build/rds/06_SupportFunctions.ps1",
                 "build/rds/07_MicrosoftVcRedists.ps1",
                 "build/rds/08_MicrosoftFSLogixApps.ps1",
                 "build/rds/09_MicrosoftEdge.ps1",
@@ -281,7 +281,7 @@ build {
   provisioner "powershell" {
     scripts = ["build/rds/98_CitrixOptimizer.ps1",
                 "build/rds/99_Bisf.ps1",
-                "build/common/Get-Installed.ps1"]
+                "build/rds/Get-Installed.ps1"]
   }
 
   provisioner "file" {
@@ -295,7 +295,7 @@ build {
   }
 
   provisioner "powershell" {
-    scripts = ["build/common/Sysprep-Image.ps1"]
+    scripts = ["build/rds/Sysprep-Image.ps1"]
   }
 
   post-processor "manifest" {
