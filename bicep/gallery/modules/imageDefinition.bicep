@@ -8,7 +8,6 @@ param sku string
 
 @allowed([
   'Windows'
-  'Linux'
 ])
 param osType string
 
@@ -29,6 +28,6 @@ resource imageDefinition 'Microsoft.Compute/galleries/images@2020-09-30' = {
     }
     osState: 'Generalized'
     osType: osType
-    hyperVGeneration: 'V1'
+    hyperVGeneration: 'V2'
   }
 }

@@ -72,7 +72,7 @@ jobs:
               --subscription ${{ env.AZURE_SUBSCRIPTION_ID }} \
               --name "imageGallery-${{ steps.date.outputs.date }}" \
               --location $LOCATION \
-              --template-file bicep/main.bicep \
+              --template-file bicep/gallery/main.bicep \
               --parameters location="$LOCATION" resourceGroupName="$DESTINATION_RESOURCE_GROUP_NAME" imageGalleryName="$DESTINATION_GALLERY_NAME"
 
   build-image:
@@ -155,12 +155,8 @@ jobs:
               --subscription ${{ env.AZURE_SUBSCRIPTION_ID }} \
               --name "${DESTINATION_IMAGE_NAME}-${{ steps.date.outputs.date }}" \
               --resource-group $DESTINATION_RESOURCE_GROUP_NAME \
-              --template-file bicep/modules/imageDefinition.bicep \
+              --template-file bicep/gallery/modules/imageDefinition.bicep \
               --parameters location="$LOCATION" imageGalleryName="$DESTINATION_GALLERY_NAME" imageDefinitionName="$DESTINATION_IMAGE_NAME" osType="$DESTINATION_OS_TYPE" imageDescription="$DESTINATION_IMAGE_DESCRIPTION" publisher="$DESTINATION_PUBLISHER" offer="$DESTINATION_OFFER" sku="$DESTINATION_SKU"
-
-      - name: List image-customise
-        id: list
-        run: ls -l "/home/runner/work/packer/packer/image-customise/src/"
 
       - name: Build Image Definition
         uses: hashicorp/packer-github-actions@master
