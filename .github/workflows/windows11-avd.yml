@@ -83,18 +83,18 @@ jobs:
       # Limit parallel builds so don't use all Azure core quota
       max-parallel: 2
       matrix:
-        image_id: [Windows-11-Evd, Windows-11-Avd]
+        image_id: [Windows-11-Ent, Windows-11-Avd]
         include:
-          - image_id: Windows-11-Evd
+          - image_id: Windows-11-Ent
             packer_file: "templates/rds/PackerTemplate-WindowsAzure-Test.pkr.hcl"
-            destination_image_name: 'MicrosoftWindowsDesktop-Windows-11-win11-21h2-evd'
+            destination_image_name: 'MicrosoftWindowsDesktop-Windows-11-win11-21h2-ent'
             destination_image_description: "Windows 11 Enterprise 21H2"
             source_image_publisher: MicrosoftWindowsDesktop
             source_image_offer: Windows-11
-            source_image_sku: win11-21h2-evd
+            source_image_sku: win11-21h2-ent
             destination_os_type: Windows
             destination_offer: Windows-11
-            destination_sku: win11-21h2-evd
+            destination_sku: win11-21h2-ent
 
           - image_id: Windows-11-Avd
             packer_file: "templates/rds/PackerTemplate-WindowsAzure-Test.pkr.hcl"
