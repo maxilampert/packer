@@ -222,10 +222,10 @@ build {
   }
 
   provisioner "file" {
-    destination = "C:\\Apps\\image-customise"
+    destination = "C:\Apps\image-customise"
     direction   = "upload"
     max_retries = "2"
-    source      = "${var.working_directory}\\image-customise\\src\\"
+    source      = "${var.working_directory}\image-customise\src\"
   }
 
   provisioner "powershell" {
@@ -249,8 +249,7 @@ build {
                 "build/rds/14_Wvd-Agents.ps1"]
   }
 
-  provisioner "windows-restart" {
-  }
+  provisioner "windows-restart" {}
 
   provisioner "powershell" {
     environment_vars = ["AppsUrl=${var.apps_url}"]
@@ -258,8 +257,7 @@ build {
                         "build/rds/40_Rds-LobApps.ps1"]
   }
 
-  provisioner "windows-restart" {
-  }
+  provisioner "windows-restart" {}
 
   provisioner "windows-update" {
     filters         = ["exclude:$_.Title -like '*Silverlight*'", "exclude:$_.Title -like '*Preview*'", "include:$true"]
@@ -272,7 +270,7 @@ build {
   }
 
   provisioner "file" {
-    destination = "C:\\Apps\\Tools"
+    destination = "C:\Apps\Tools"
     direction   = "upload"
     max_retries = "2"
     source      = "${var.working_directory}/tools/rds"
@@ -285,14 +283,13 @@ build {
   }
 
   provisioner "file" {
-    destination = "${var.working_directory}\\reports\\Installed.zip"
+    destination = "${var.working_directory}\reports\Installed.zip"
     direction   = "download"
     max_retries = "1"
-    source      = "C:\\Windows\\Temp\\Reports\\Installed.zip"
+    source      = "C:\Windows\Temp\Reports\Installed.zip"
   }
 
-  provisioner "windows-restart" {
-  }
+  provisioner "windows-restart" {}
 
   provisioner "powershell" {
     scripts = ["build/rds/Sysprep-Image.ps1"]
