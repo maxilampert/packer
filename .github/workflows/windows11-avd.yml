@@ -158,10 +158,6 @@ jobs:
       #         --template-file bicep/modules/imageDefinition.bicep \
       #         --parameters location="$LOCATION" imageGalleryName="$DESTINATION_GALLERY_NAME" imageDefinitionName="$DESTINATION_IMAGE_NAME" osType="$DESTINATION_OS_TYPE" imageDescription="$DESTINATION_IMAGE_DESCRIPTION" publisher="$DESTINATION_PUBLISHER" offer="$DESTINATION_OFFER" sku="$DESTINATION_SKU"
 
-      - name: List image-customise
-        id: list
-        run: ls -l "/home/runner/work/packer/packer/image-customise/"
-
       - name: Build Image Definition
         uses: hashicorp/packer-github-actions@master
         with:
