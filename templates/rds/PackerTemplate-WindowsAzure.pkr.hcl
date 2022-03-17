@@ -185,9 +185,9 @@ source "azure-arm" "microsoft-windows" {
       image_version = "${var.destination_image_version}"
       replication_regions = [ "${var.location}" ]
   }
-  source_image_offer                     = "${var.image_offer}"
-  source_image_publisher                 = "${var.image_publisher}"
-  source_image_sku                       = "${var.image_sku}"
+  image_offer                            = "${var.source_image_offer}"
+  image_publisher                        = "${var.source_image_publisher}"
+  image_sku                              = "${var.source_image_sku}"
   image_version                          = "latest"
   managed_image_name                     = "${local.managed_image_name}"
   managed_image_resource_group_name      = "${var.managed_image_resource_group_name}"
