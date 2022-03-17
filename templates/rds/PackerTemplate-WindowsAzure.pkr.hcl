@@ -222,10 +222,10 @@ build {
   }
 
   provisioner "file" {
-    destination = "C:\Apps\image-customise"
+    destination = "C:\\Apps\\image-customise"
     direction   = "upload"
     max_retries = "2"
-    source      = "${var.working_directory}\image-customise\src\"
+    source      = "${var.working_directory}\\image-customise\\src\\"
   }
 
   provisioner "powershell" {
@@ -270,7 +270,7 @@ build {
   }
 
   provisioner "file" {
-    destination = "C:\Apps\Tools"
+    destination = "C:\\Apps\\Tools"
     direction   = "upload"
     max_retries = "2"
     source      = "${var.working_directory}/tools/rds"
@@ -283,10 +283,10 @@ build {
   }
 
   provisioner "file" {
-    destination = "${var.working_directory}\reports\Installed.zip"
+    destination = "${var.working_directory}\\reports\\Installed.zip"
     direction   = "download"
     max_retries = "1"
-    source      = "C:\Windows\Temp\Reports\Installed.zip"
+    source      = "C:\\Windows\\Temp\\Reports\\Installed.zip"
   }
 
   provisioner "windows-restart" {}
