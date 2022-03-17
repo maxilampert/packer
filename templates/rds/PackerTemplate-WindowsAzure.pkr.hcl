@@ -158,8 +158,8 @@ variable "working_directory" {
 }
 
 locals {
-  destination_image_name = "${var.image_publisher}-${var.image_offer}-${var.image_sku}"
-  managed_image_name     = "${var.image_offer}-${var.image_sku}-${var.image_date}"
+  destination_image_name = "${var.source_image_publisher}-${var.source_image_offer}-${var.source_image_sku}"
+  managed_image_name     = "${var.source_image_offer}-${var.source_image_sku}-${var.image_date}"
 }
 
 source "azure-arm" "microsoft-windows" {
