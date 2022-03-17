@@ -87,7 +87,7 @@ jobs:
         include:
           - image_id: Windows-11-Evd
             packer_file: "templates/rds/PackerTemplate-WindowsAzure-Test.pkr.hcl"
-            destination_image_name: 'MicrosoftWindowsDesktop-Windows-11-win10-21h2-evd'
+            destination_image_name: 'MicrosoftWindowsDesktop-Windows-11-win11-21h2-evd'
             destination_image_description: "Windows 11 Enterprise 21H2"
             source_image_publisher: MicrosoftWindowsDesktop
             source_image_offer: Windows-11
@@ -98,7 +98,7 @@ jobs:
 
           - image_id: Windows-11-Avd
             packer_file: "templates/rds/PackerTemplate-WindowsAzure-Test.pkr.hcl"
-            destination_image_name: 'MicrosoftWindowsDesktop-Windows-11-win10-21h2-avd'
+            destination_image_name: 'MicrosoftWindowsDesktop-Windows-11-win11-21h2-avd'
             destination_image_description: "Windows 11 Enterprise 21H2"
             source_image_publisher: MicrosoftWindowsDesktop
             source_image_offer: Windows-11
@@ -145,18 +145,18 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      # - name: Deploy Image Definition
-      #   uses: azure/CLI@v1
-      #   with:
-      #     azcliversion: 2.34.1
-      #     inlineScript: |
-      #       az account show
-      #       az deployment group create \
-      #         --subscription ${{ env.AZURE_SUBSCRIPTION_ID }} \
-      #         --name "${DESTINATION_IMAGE_NAME}-${{ steps.date.outputs.date }}" \
-      #         --resource-group $DESTINATION_RESOURCE_GROUP_NAME \
-      #         --template-file bicep/modules/imageDefinition.bicep \
-      #         --parameters location="$LOCATION" imageGalleryName="$DESTINATION_GALLERY_NAME" imageDefinitionName="$DESTINATION_IMAGE_NAME" osType="$DESTINATION_OS_TYPE" imageDescription="$DESTINATION_IMAGE_DESCRIPTION" publisher="$DESTINATION_PUBLISHER" offer="$DESTINATION_OFFER" sku="$DESTINATION_SKU"
+      - name: Deploy Image Definition
+        uses: azure/CLI@v1
+        with:
+          azcliversion: 2.34.1
+          inlineScript: |
+            az account show
+            az deployment group create \
+              --subscription ${{ env.AZURE_SUBSCRIPTION_ID }} \
+              --name "${DESTINATION_IMAGE_NAME}-${{ steps.date.outputs.date }}" \
+              --resource-group $DESTINATION_RESOURCE_GROUP_NAME \
+              --template-file bicep/modules/imageDefinition.bicep \
+              --parameters location="$LOCATION" imageGalleryName="$DESTINATION_GALLERY_NAME" imageDefinitionName="$DESTINATION_IMAGE_NAME" osType="$DESTINATION_OS_TYPE" imageDescription="$DESTINATION_IMAGE_DESCRIPTION" publisher="$DESTINATION_PUBLISHER" offer="$DESTINATION_OFFER" sku="$DESTINATION_SKU"
 
       - name: List image-customise
         id: list
