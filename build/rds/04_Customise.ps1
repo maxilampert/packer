@@ -6,7 +6,7 @@
 [CmdletBinding()]
 Param (
     [Parameter(Mandatory = $False)]
-    [System.String] $Path = "$env:SystemDrive\Apps\image-customise\src",
+    [System.String] $Path = "$env:SystemDrive\Apps\image-customise",
 
     [Parameter(Mandatory = $False)]
     [System.String] $InvokeScript = "Install-Defaults.ps1"

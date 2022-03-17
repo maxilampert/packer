@@ -222,7 +222,7 @@ build {
   }
 
   provisioner "file" {
-    source      = "/home/runner/work/packer/packer/image-customise/src/"
+    source      = "${var.working_directory}/image-customise/src/"
     destination = "C:\\Apps\\image-customise"
     direction   = "upload"
     max_retries = "2"
