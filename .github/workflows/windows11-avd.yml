@@ -131,7 +131,7 @@ jobs:
           command: init
           target: ${{ env.PACKER_FILE }}
 
-      - name: Validate Template
+      - name: Validate Packer Template
         uses: hashicorp/packer-github-actions@master
         with:
           command: validate

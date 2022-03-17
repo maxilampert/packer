@@ -181,7 +181,7 @@ source "azure-arm" "microsoft-windows" {
       subscription = "${var.azure_subscription_id}"
       resource_group = "${var.destination_resource_group_name}"
       gallery_name = "${var.destination_gallery_name}"
-      image_name = "${var.destination_image_name}"
+      image_name = "${local.destination_image_name}"
       image_version = "${var.destination_image_version}"
       replication_regions = [ "${var.location}" ]
   }
