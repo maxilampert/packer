@@ -86,7 +86,7 @@ jobs:
         image_id: [Windows-11-Evd, Windows-11-Avd]
         include:
           - image_id: Windows-11-Evd
-            packer_file: "templates/rds/PackerTemplate-WindowsAzure.pkr.hcl"
+            packer_file: "templates/rds/PackerTemplate-WindowsAzure-Test.pkr.hcl"
             destination_image_name: 'MicrosoftWindowsDesktop-Windows-11-win10-21h2-evd'
             destination_image_description: "Windows 11 Enterprise 21H2"
             source_image_publisher: MicrosoftWindowsDesktop
@@ -97,7 +97,7 @@ jobs:
             destination_sku: win11-21h2-evd
 
           - image_id: Windows-11-Avd
-            packer_file: "templates/rds/PackerTemplate-WindowsAzure.pkr.hcl"
+            packer_file: "templates/rds/PackerTemplate-WindowsAzure-Test.pkr.hcl"
             destination_image_name: 'MicrosoftWindowsDesktop-Windows-11-win10-21h2-avd'
             destination_image_description: "Windows 11 Enterprise 21H2"
             source_image_publisher: MicrosoftWindowsDesktop
