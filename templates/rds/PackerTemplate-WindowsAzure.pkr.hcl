@@ -17,6 +17,26 @@ variable "apps_url" {
   default = ""
 }
 
+variable "azure_client_id" {
+  type    = string
+  default = ""
+}
+
+variable "azure_client_secret" {
+  type    = string
+  default = ""
+}
+
+variable "azure_subscription_id" {
+  type    = string
+  default = "{00000000-0000-0000-0000-00000000000}"
+}
+
+variable "azure_tenant_id" {
+  type    = string
+  default = ""
+}
+
 variable "build_key_vault" {
   type    = string
   default = "stpyimageaustraliaeast"
@@ -35,16 +55,6 @@ variable "build_subnet" {
 variable "build_vnet" {
   type    = string
   default = "vnet-ImageBuild-AustraliaEast"
-}
-
-variable "azure_client_id" {
-  type    = string
-  default = ""
-}
-
-variable "azure_client_secret" {
-  type    = string
-  default = ""
 }
 
 variable "destination_gallery_name" {
@@ -72,21 +82,6 @@ variable "image_date" {
   default = ""
 }
 
-variable "source_image_offer" {
-  type    = string
-  default = "Windows-10"
-}
-
-variable "source_image_publisher" {
-  type    = string
-  default = "MicrosoftWindowsDesktop"
-}
-
-variable "source_image_sku" {
-  type    = string
-  default = "20h2-ent"
-}
-
 variable "location" {
   type    = string
   default = "AustraliaEast"
@@ -107,9 +102,19 @@ variable "packages_url" {
   default = ""
 }
 
-variable "azure_subscription_id" {
+variable "source_image_offer" {
   type    = string
-  default = "{00000000-0000-0000-0000-00000000000}"
+  default = "Windows-10"
+}
+
+variable "source_image_publisher" {
+  type    = string
+  default = "MicrosoftWindowsDesktop"
+}
+
+variable "source_image_sku" {
+  type    = string
+  default = "20h2-ent"
 }
 
 variable "tag_created_date" {
@@ -133,11 +138,6 @@ variable "tag_type" {
 }
 
 variable "tag_build_source_repo" {
-  type    = string
-  default = ""
-}
-
-variable "azure_tenant_id" {
   type    = string
   default = ""
 }
@@ -174,13 +174,13 @@ source "azure-arm" "microsoft-windows" {
   }
   build_key_vault_name                   = "${var.build_key_vault}"
   build_resource_group_name              = "${var.build_resource_group}"
-  client_id                              = "${var.client_id}"
-  client_secret                          = "${var.client_secret}"
+  client_id                              = "${var.azure_client_id}"
+  client_secret                          = "${var.azure_client_secret}"
   communicator                           = "winrm"
   shared_image_gallery_destination {
       subscription = "${var.azure_subscription_id}"
       resource_group = "${var.destination_resource_group_name}"
-      gallery_name = "${var.destination_image_gallery_name}"
+      gallery_name = "${var.destination_gallery_name}"
       image_name = "${var.destination_image_name}"
       image_version = "${var.destination_image_version}"
       replication_regions = [ "${var.location}" ]
@@ -193,8 +193,8 @@ source "azure-arm" "microsoft-windows" {
   managed_image_resource_group_name      = "${var.managed_image_resource_group_name}"
   os_type                                = "Windows"
   private_virtual_network_with_public_ip = true
-  subscription_id                        = "${var.subscription_id}"
-  tenant_id                              = "${var.tenant_id}"
+  subscription_id                        = "${var.azure_subscription_id}"
+  tenant_id                              = "${var.azure_tenant_id}"
   virtual_network_name                   = "${var.build_vnet}"
   virtual_network_resource_group_name    = "${var.build_resource_group}"
   virtual_network_subnet_name            = "${var.build_subnet}"
