@@ -16,4 +16,7 @@ Reports are created in markdown format for basic tracking of image updates.
 |:--|:--|
 | Windows 10 Enterprise | [![Build Status](https://dev.azure.com/stealthpuppyLab/Packer/_apis/build/status/windows10-enterprise-wvd?branchName=main)](https://dev.azure.com/stealthpuppyLab/Packer/_build/latest?definitionId=2&branchName=main) |
 | Windows 10 multi-session | [![Build Status](https://dev.azure.com/stealthpuppyLab/Packer/_apis/build/status/windows10-multisession-wvd?branchName=main)](https://dev.azure.com/stealthpuppyLab/Packer/_build/latest?definitionId=2&branchName=main) |
-| Windows Server 2019 | [![Build Status](https://dev.azure.com/stealthpuppyLab/Packer/_apis/build/status/windowsserver2019-wvd?branchName=main)](https://dev.azure.com/stealthpuppyLab/Packer/_build/latest?definitionId=2&branchName=main) |
+| Windows 11 Enterprise | [![Build Status](https://dev.azure.com/stealthpuppyLab/Packer/_apis/build/status/windows11-enterprise-wvd?branchName=main)](https://dev.azure.com/stealthpuppyLab/Packer/_build/latest?definitionId=2&branchName=main) |
+| Windows 11 multi-session | [![Build Status](https://dev.azure.com/stealthpuppyLab/Packer/_apis/build/status/windows11-multisession-wvd?branchName=main)](https://dev.azure.com/stealthpuppyLab/Packer/_build/latest?definitionId=2&branchName=main) |
+| Windows Server 2022 | [![Build Status](https://dev.azure.com/stealthpuppyLab/Packer/_apis/build/status/windowsserver2022-wvd?branchName=main)](https://dev.azure.com/stealthpuppyLab/Packer/_build/latest?definitionId=2&branchName=main) |
+| Windows 11 (GitHub Workflow) | [![build-windows11-templates](https://github.com/aaronparker/packer/actions/workflows/windows11-avd.yml/badge.svg)](https://github.com/aaronparker/packer/actions/workflows/windows11-avd.yml) |
